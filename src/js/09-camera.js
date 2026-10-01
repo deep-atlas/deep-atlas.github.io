@@ -114,6 +114,7 @@ function updateFlight(dt) {
 // ---- the free camera
 function letGo() {
   if (VIEW.mode === 'free') return;
+  if (JOURNEY.on) endJourney(true);
   VIEW.last = VIEW.focus || VIEW.last;
   VIEW.mode = 'free'; VIEW.flight = null; VIEW.trans = null;
   VIEW.free.yaw = yawOf(CAM.fwd); VIEW.free.pitch = pitchOf(CAM.fwd);
@@ -147,6 +148,7 @@ const FREE_DEPTH = { target:null, dragging:false };
 function updateCamera(dt) {
   for (const o of OBJS) if (o.motion.type !== 'still' || o.motion.fn || !o._placed) { moveObj(o, simTime); o._placed = true; }
   VIEW.manualT += dt;
+  if (VIEW.mode === 'journey') { updateJourney(dt); return; }
   if (VIEW.mode === 'flight') { updateFlight(dt); return; }
   if (VIEW.mode === 'free') { updateFree(dt); return; }
   const o = VIEW.focus; if (!o) return;

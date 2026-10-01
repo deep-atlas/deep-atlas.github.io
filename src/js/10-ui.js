@@ -51,6 +51,7 @@ const TOURS = [
     stops:['spidercrab', 'coelacanth', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
     stops:['isopod', 'vents', 'tubeworms', 'yeticrab', 'whalefall', 'abyss', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'snailfish', 'amphipods', 'challenger'] },
+  { id:'sizes', name:'from a whale to a microbe', blurb:'One long zoom through size: every animal at its true size beside the last, from a 25 m blue whale to a single cell under a thousandth of a millimetre.', journey:true },
   { id:'random', name:'a random swim', blurb:'Anywhere in the atlas, places you have not seen first.', random:true },
 ];
 const TOUR = { id:null, i:0, playing:false, last:null, views:0, list:[] };
@@ -62,6 +63,8 @@ function tourStops(t) {
 }
 function startTour(id, i = 0) {
   const t = TOURS.find(t => t.id === id); if (!t) return;
+  if (t.journey) { startJourney(); renderTours(); return; }
+  endJourney(true);
   stopRide(true);
   TOUR.id = id; TOUR.list = (TOUR.last && TOUR.last.id === id && TOUR.last.list) ? TOUR.last.list : tourStops(t);
   TOUR.i = clamp(i, 0, TOUR.list.length - 1); TOUR.playing = true; TOUR.last = null; TOUR.views = 0;
@@ -76,6 +79,7 @@ function leaveTour() {
   renderTours(); updatePlay();
 }
 function tourStep(dir) {
+  if (JOURNEY.on) { journeyStep(dir); return; }
   if (TOUR.id) { const n = TOUR.i + dir; if (n < 0 || n >= TOUR.list.length) { if (n >= TOUR.list.length) toast('the end of the tour'); return; } TOUR.i = n; TOUR.views = 0; flyTo(TOUR.list[n]); }
   else if (TOUR.last) startTour(TOUR.last.id, TOUR.last.i + dir);
   else startTour('dive', 0);
@@ -104,6 +108,7 @@ function onViewDone(o) {
 // ---- going somewhere because the user asked
 function userGo(o, vi = 0) {
   if (!o) return;
+  if (JOURNEY.on) endJourney(true);
   if (o.key === 'nautile') { startRide(); return; }
   stopRide(true);
   if (TOUR.id && TOUR.list[TOUR.i] !== o) leaveTour();
@@ -117,6 +122,7 @@ function renderInfo() {
   const mode = $('mode');
   mode.className = 'mode';
   if (RIDE.on) { mode.textContent = 'riding'; mode.classList.add('m-ride'); }
+  else if (JOURNEY.on) { mode.textContent = 'size journey'; mode.classList.add('m-tour'); }
   else if (VIEW.mode === 'free') { mode.textContent = 'free camera'; mode.classList.add('m-free'); }
   else if (TOUR.id) { mode.textContent = curTour().name; mode.classList.add('m-tour'); }
   else if (VIEW.mode === 'flight') mode.textContent = 'en route';
@@ -204,15 +210,16 @@ $('btnPoke').onclick = () => triggerReact(VIEW.focus);
 // ---- play, pause and the way back
 function updatePlay() {
   const b = $('btnPlay'), s = b.querySelector('span');
-  b.classList.toggle('paused', !VIEW.auto || VIEW.mode === 'free');
+  b.classList.toggle('paused', JOURNEY.on ? JOURNEY.paused : (!VIEW.auto || VIEW.mode === 'free'));
   if (VIEW.mode === 'free' && VIEW.last) s.textContent = 'back to ' + VIEW.last.label;
-  else s.textContent = VIEW.auto ? 'pause' : 'play';
+  else s.textContent = (JOURNEY.on ? !JOURNEY.paused : VIEW.auto) ? 'pause' : 'play';
   $('btnResume').hidden = !(TOUR.last && !TOUR.id);
   $('btnTourPause').textContent = TOUR.id && TOUR.playing ? 'pause tour' : 'play tour';
   $('btnTourPause').setAttribute('aria-pressed', String(!!(TOUR.id && !TOUR.playing)));
   $('btnFree').setAttribute('aria-pressed', String(VIEW.mode === 'free'));
 }
 function togglePlay() {
+  if (JOURNEY.on) { JOURNEY.paused = !JOURNEY.paused; VIEW.manualT = 99; updatePlay(); toast(JOURNEY.paused ? 'paused · space to play' : 'playing'); return; }
   if (VIEW.mode === 'free') { if (VIEW.last) userGo(VIEW.last); return; }
   VIEW.auto = !VIEW.auto;
   if (TOUR.id) TOUR.playing = VIEW.auto;
@@ -338,10 +345,10 @@ function renderTours() {
   const L = $('tourList'); L.innerHTML = '';
   for (const t of TOURS) {
     const b = document.createElement('button'); b.className = 'trow';
-    const n = t.random ? 'endless' : `${t.stops.length} stops`;
+    const n = t.random ? 'endless' : t.journey ? `${JOURNEY_KEYS.length} sizes` : `${t.stops.length} stops`;
     b.innerHTML = '<b></b><small></small><em></em>';
     b.children[0].textContent = t.name; b.children[1].textContent = t.blurb; b.children[2].textContent = n;
-    b.setAttribute('aria-current', String(TOUR.id === t.id));
+    b.setAttribute('aria-current', String(TOUR.id === t.id || (t.journey && JOURNEY.on)));
     b.onclick = () => { startTour(t.id, 0); openPanel('tours', false); };
     L.appendChild(b);
   }
@@ -582,7 +589,7 @@ function endCompare() {
   CMP.obj = null; $('caption').hidden = true;
 }
 $('btnCompare').onclick = openCompare;
-$('capBtn').onclick = () => { endCompare(); VIEW.auto = true; goView(VIEW.vi); updatePlay(); };
+$('capBtn').onclick = () => { if (JOURNEY.on) { endJourney(); return; } endCompare(); VIEW.auto = true; goView(VIEW.vi); updatePlay(); };
 
 // ---- riding along with Nautile
 const RIDE = { on:false, status:'' };
@@ -708,6 +715,7 @@ $('subMark').onclick = () => userGo(BYKEY.nautile);
 function turnBy(dx, dy) {
   VIEW.manualT = 0;
   if (RIDE.on) return;
+  if (VIEW.mode === 'journey') { JOURNEY.yaw += dx * 0.006; JOURNEY.pitch = clamp((JOURNEY.pitch ?? 0.14) + dy * 0.005, -1.3, 1.3); return; }
   if (VIEW.mode === 'free') { VIEW.free.yaw += dx * 0.004; VIEW.free.pitch = clamp(VIEW.free.pitch - dy * 0.004, -1.5, 1.5); return; }
   if (VIEW.mode === 'flight') return;
   VIEW.trans = null;
@@ -757,6 +765,7 @@ window.addEventListener('keydown', e => {
     case 'escape':
       if (!$('help').hidden) { $('help').hidden = true; break; }
       if (PHOTO.on) { photo(false); break; }
+      if (JOURNEY.on) { endJourney(); break; }
       if (CMP.obj) { $('capBtn').click(); break; }
       if ([...Object.keys(PANELS)].some(p => !$(p).hidden)) { openPanel(null); break; }
       if (RIDE.on) { stopRide(); break; }
