@@ -1,0 +1,121 @@
+# deepatlas
+
+An explorable atlas of the real ocean, drawn entirely in ASCII characters.
+
+Swim from the sunlit surface to the floor of the Challenger Deep, 10,935 m down, and zoom from a 25 m blue whale to a
+single 0.6 µm cell. Creatures swim, jellies pulse, kelp sways, marine snow drifts, and the light changes with depth and the time of day.
+
+More light means a denser character. Colour comes from the physics: water absorbs sunlight colour by colour (red is gone
+by about 10 m, blue reaches 1,000 m), the view adapts as an eye would, and below the twilight zone the only light is a
+submersible's lamps and the animals' own bioluminescence. Depths and sizes are real; the look of each creature is an artist's model.
+
+Zero dependencies. One HTML file, WebGL 2.
+
+## Run it
+
+```bash
+node serve.mjs
+```
+
+Then open http://localhost:5173. The server rebuilds the page on every reload, so edits in `src/` show up immediately.
+To build once without serving: `node build.mjs`, which writes `dist/index.html`. That file is self-contained apart from the
+Google Fonts link, and works opened straight from disk too.
+
+## What's in it
+
+- **74 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+  the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
+  plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
+  siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
+  black-smoker vents with giant tube worms, a whale fall, the Titanic's bow, dumbo octopus, the abyssal plain with sea pigs,
+  xenophyophores, tripod fish and grenadiers, the Mariana Trench, snailfish, hadal amphipods and the Challenger Deep.
+  Also the odd ones: blobfish, oarfish (upright, as they hang), coelacanth, goblin shark, frilled shark, fangtooth,
+  Greenland shark, lionfish, parrotfish, moray eel, and flying fish gliding over the waves. From the deep: colossal squid,
+  bigfin squid, glass squid, black dragonfish, stoplight loosejaw, ghost shark, giant isopod, Japanese spider crab, yeti crabs
+  at the vents and the swimming sea cucumber (the "headless chicken monster").
+- **Nautile**, Ifremer's real yellow deep submersible (8 m long, rated to 6,000 m, dived on the Titanic in 1987), modelled to its
+  true size; it roams the atlas down to its rated depth, keeping clear of everything, and you can ride along with it (B).
+- **Above the waves**: swim up (R) through Snell's window and out of the water to see the sky, the clouds and the sea from above,
+  with the reef glowing through it. The grand dive starts up there.
+- **Where you are**: swimming freely, the info panel names the place you have reached (the coral reef, the kelp forest...) with a
+  button to lock on to it.
+- **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, weird and wonderful,
+  life without the sun, and an endless random swim. Screensaver mode (Z).
+- **Time of day**: sunlight, dusk and night, and the nightly vertical migration (lanternfish rise from 450 m to 60 m).
+- **Interface** modelled on gcdatlas: info panel (name, type, depth, fact, live readout of pressure, temperature and
+  sunlight, ruler, angle bar), search, atlas (sort, filter, seen), tours, settings, help, a depth ladder you can drag
+  to dive, labels, today's discovery, photo mode (save a PNG or copy the view as ASCII text), share links, compare size,
+  and a generative underwater soundscape.
+
+## Controls
+
+| | |
+|---|---|
+| drag | swim round what you're locked on |
+| scroll, pinch, + - | zoom |
+| right-drag, W A S D R F | let go and swim freely (shift: faster); keep rising with R to come out above the waves |
+| click | swim there and lock on |
+| depth ladder | drag to dive, or click a name |
+| / | search (names, kinds, or a depth like `4000 m`) |
+| space | pause / play |
+| [ ] | previous / next tour stop |
+| ← → | previous / next place by depth |
+| H | home (the reef) |
+| B, P, Z, I | ride along with Nautile, photo, screensaver, info panel |
+| V, Y, G, L, M | detail, travel speed, glow, labels, sound |
+
+## How it renders
+
+1. **Scene pass** into a half-float target at 4 x 6 samples per character cell: a water background (scattered light,
+   Snell's window, light shafts, lamp haze), an endless seafloor around the camera, procedural creature meshes,
+   instanced schools whose paths are computed on the GPU, marine snow, and vent smoke. Everything is drawn relative to
+   the camera in double precision on the CPU, and depth is written linearly to a float buffer, so a 1 µm cell and a
+   100 km trench share one scene.
+2. **Cell pass**: each cell's light is averaged and tone-mapped. Brightness picks a glyph from a ramp ordered by
+   measured ink (` .':;*oaO0@`). A strong edge across a cell picks `- / | \` instead. Faint light is dithered so dim
+   water shimmers.
+3. **Glow and final pass**: glyphs from a font atlas, coloured per cell, over a soft blur of the scene's light.
+
+## The ocean model
+
+- `KD` (sunlight attenuation per metre, red/green/blue) and `BEAM` (line of sight) in `src/js/02-ocean.js` follow clear
+  open-ocean water. Display brightness adapts with depth down to the end of sunlight near 1,000 m.
+- The eye's colour adaptation is modelled as a white balance with a cap, so reef colours read in the shallows and red is
+  still gone below about 20 m. In lamp-lit scenes the balance follows the lamps, as an ROV camera's would.
+- For wide views (a whale from 30 m) the haze is thinned so the largest animals stay readable. Small scenes keep the
+  water's true clarity.
+- The seafloor is one function, `floorDepth(x, z)`, implemented identically in JavaScript and GLSL with integer hashing,
+  so animals and wrecks sit exactly on the GPU-drawn floor. Flat pads under the Titanic, the vents, the whale fall and
+  the deep sites keep them level.
+
+**What is not real:** the horizontal layout is a compressed continental margin (shore, reef and kelp, shelf edge, slope,
+abyssal plain, trench), arranged so every zone is a swim from the next; a tropical reef and a temperate kelp forest
+would not share a coast. Swimming speeds and pulses are adjusted to be seen. Nautile is real, but its route here is invented, and its
+yellow hull is given a faint glow (its own work lights) so it reads as yellow at any depth.
+
+## Code
+
+`src/head.html` (styles), `src/body.html` (markup), and `src/js/` in load order:
+
+| file | |
+|---|---|
+| `00-core.js` | the bundle's scope, maths, settings, WebGL helpers, shared GLSL noise |
+| `01-ascii.js` | glyph atlas, cell pass, glow, final pass, text export |
+| `02-ocean.js` | water optics, zones, the seafloor profile and noise (JS + GLSL), lighting GLSL |
+| `03-mesh.js` | mesh builders: loft, fin, tube, ellipsoid, ribbon |
+| `04-render.js` | camera uniforms, creature and school shaders, terrain, background, marine snow |
+| `05-models.js` | fish, sharks, rays, turtles, whales, deep-sea fish |
+| `06-models2.js` | jellies, squid, octopus, plankton, microbes, floor life, Nautile, a diver |
+| `06c-models4.js` | the vampire squid and ten more deep-sea animals (squids, dragonfish, loosejaw, chimaera, isopod, crabs, sea cucumber) |
+| `06b-models3.js` | blobfish, oarfish, coelacanth, goblin, frilled and Greenland sharks, fangtooth, lionfish, parrotfish, moray, flying fish |
+| `07-scenes.js` | the reef, kelp forest, vents, whale fall, Titanic, abyssal and hadal floors, schools |
+| `08-world.js` | the object system, motions, drawing, and the catalogue of places |
+| `09-camera.js` | orbit, angle loop, flights, free swimming, picking |
+| `10-ui.js` | the interface, tours, atlas, search, ladder, labels, photo, compare, ride, screensaver |
+| `11-sound.js` | the generative soundscape |
+| `99-main.js` | the frame loop and test hooks (`window.__deep`; `__deep.save(name)` posts a PNG of the canvas to the dev server, which writes it to `.shots/`) |
+
+## Credits
+
+Inspired by [gcdatlas](https://github.com/eshin087/gcdatlas), whose interface this follows. That repository has no
+licence, so no code was taken from it; everything here is written from scratch.

@@ -1,0 +1,167 @@
+<canvas id="view" tabindex="0" aria-label="Animated ASCII ocean. Drag to orbit, scroll or pinch to zoom, tap a creature to swim to it."></canvas>
+<div id="labels" class="labels"></div>
+<button id="subMark" class="submark" hidden tabindex="-1" aria-label="Follow Nautile"><i></i><i></i><i></i><i></i><span>Nautile</span></button>
+
+<div class="brand" id="brand" role="button" tabindex="0" title="Home: back to the reef (H)">deepatlas</div>
+
+<section class="info" id="info" aria-live="polite">
+  <div class="stop"><span class="stopl"><span id="stopInfo"></span><span id="mode" class="mode">locked on</span></span>
+    <span class="itools"><button class="itool" id="infoMore" aria-expanded="true">less</button><button class="itool" id="infoHide" title="Hide this panel (I)">hide</button></span></div>
+  <div class="title">
+    <h1 id="objName">the reef</h1>
+    <button class="nav" id="prevObj" aria-label="Previous place" title="Previous place">&lsaquo;</button><button class="nav" id="nextObj" aria-label="Next place" title="Next place">&rsaquo;</button>
+    <button class="gonext" id="goNext" hidden><span id="goNextTxt"></span><b aria-hidden="true">&rsaquo;</b></button>
+  </div>
+  <div class="acts"><button class="act" id="btnShare" title="Copy a link to exactly this view">share</button><button class="act" id="btnCompare" title="Put another creature beside this one at true scale">compare size</button><button class="act" id="btnLock" hidden title="Lock on to the place you are at">lock on</button><button class="act" id="btnRideI" title="Ride along with Nautile">ride along</button><button class="act" id="btnPhoto" title="Photo mode: save a picture or copy the view as ASCII text (P)">photo</button></div>
+  <div id="objType" class="type"></div>
+  <div id="objDist" class="where"></div>
+  <p id="objFact" class="fact"></p>
+  <div id="readout" class="readout"></div>
+  <div class="scale" title="A ruler for what you are looking at: at the distance of this creature, the bar's length on screen equals the length written next to it.">
+    <span class="rlab">ruler</span><span id="scaleBar" class="bar"></span><span id="scaleTxt"></span>
+  </div>
+  <div id="progress" class="progress"></div>
+</section>
+<button id="infoPill" class="info-pill" hidden title="Show the info panel (I)"><b aria-hidden="true">i</b><span id="infoPillName"></span></button>
+
+<nav class="controls" id="controls" aria-label="View controls">
+  <label class="search"><span class="sr">Search the ocean</span>
+    <input id="search" type="search" placeholder="search the ocean" autocomplete="off" spellcheck="false"><kbd>/</kbd>
+    <div id="suggest" class="suggest" hidden></div>
+  </label>
+  <button class="btn primary" id="btnAtlas" aria-expanded="false" aria-controls="atlas">atlas</button>
+  <div class="tours-pair" role="group" aria-label="Tours"><button class="btn" id="tourPrev" title="Previous stop ([)">&lsaquo;</button><button class="btn" id="btnTours" aria-expanded="false" aria-controls="tours">tours</button><button class="btn" id="tourNext" title="Next stop (])">&rsaquo;</button></div>
+  <button class="btn" id="btnTime" aria-expanded="false" aria-controls="timem">time</button>
+  <button class="btn" id="btnSub" aria-pressed="false" title="Show where Nautile is">sub</button>
+  <button class="btn" id="btnRide" aria-pressed="false" title="Ride along with Nautile, a real deep submersible">ride</button>
+  <button class="btn" id="btnSound" aria-pressed="false" title="Sound (M)">sound</button>
+  <button class="btn" id="btnSettings" aria-expanded="false" aria-controls="settings">settings</button>
+  <button class="btn" id="btnHelp" title="Controls help (?)">?</button>
+  <button class="btn play" id="btnPlay" title="Pause the camera (space)"><b aria-hidden="true"></b><span>pause</span></button>
+  <button class="btn resume" id="btnResume" hidden>&#9656; resume tour</button>
+  <div class="seg mini" data-key="travel" role="radiogroup" aria-label="Travel speed" title="How fast you swim between places (Y)"><span class="seg-l">travel</span><button data-v="slow" role="radio">slow</button><button data-v="quick" role="radio">quick</button><button data-v="warp" role="radio">warp</button></div>
+</nav>
+
+<aside id="atlas" class="atlas" aria-label="Ocean atlas" hidden>
+  <div class="atlas-head"><span class="ptitle">atlas</span><span id="atlasCount" class="pcount"></span><button class="btn" id="atlasClose">close</button></div>
+  <div class="atlas-tools">
+    <div class="atl-row"><span class="lbl">sort</span>
+      <div class="sortseg" id="atlasSort" role="radiogroup"><button role="radio" data-sort="kind">kind</button><button role="radio" data-sort="depth">depth</button><button role="radio" data-sort="size">size</button><button role="radio" data-sort="name">name</button></div>
+      <button class="dirbtn" id="atlasDir"><b aria-hidden="true">&#8645;</b><span></span></button>
+    </div>
+    <div class="atl-row"><span class="lbl">show</span><button class="unseen" id="atlasUnseen" role="checkbox" aria-checked="false"><b>[ ]</b> not seen yet</button></div>
+    <div class="cats" id="atlasCats" role="radiogroup"></div>
+  </div>
+  <div id="atlasList" class="atlas-list" role="listbox" aria-label="Places"></div>
+  <div class="afoot"><span>seen <b id="seenCount"></b></span><span class="sf-bar" id="seenBar"></span></div>
+</aside>
+
+<aside id="tours" class="panel" aria-label="Tours" hidden>
+  <div class="panel-head"><span class="ptitle">tours</span><button class="btn" id="toursClose">close</button></div>
+  <div class="opt tog"><button id="btnTourPause" aria-pressed="false">pause tour</button><button id="btnFree" aria-pressed="false">free camera</button></div>
+  <div class="opt"><div class="opt-l">time at each stop</div>
+    <div class="seg" data-key="dwell" role="radiogroup"><button data-v="short" role="radio">short</button><button data-v="normal" role="radio">normal</button><button data-v="long" role="radio">long</button></div></div>
+  <div id="tourList" class="tour-list"></div>
+  <div class="opt"><button class="btn" id="btnSaver">&#9635; screensaver mode</button><span class="opt-note tm-sub" style="margin-left:0">full screen, the interface fades away and an endless random swim plays (Z). Move the mouse or press a key to come back.</span></div>
+  <div class="panel-foot">space pauses or resumes · [ ] step between stops</div>
+</aside>
+
+<aside id="timem" class="panel" aria-label="Time of day" hidden>
+  <div class="panel-head"><span class="ptitle">time of day</span><button class="btn" id="timeClose">close</button></div>
+  <div class="opt">
+    <div class="tm-date"><span id="tmClock">10:30</span><button class="btn" id="tmNow">now</button></div>
+    <span class="opt-note tm-sub" id="tmSub"></span>
+    <input id="tmSlider" type="range" min="0" max="1440" step="1" aria-label="Time of day">
+  </div>
+  <div class="opt"><div class="opt-l">clock <span class="opt-note">per second</span></div>
+    <div class="seg" data-key="clock" role="radiogroup"><button data-v="0" role="radio">pause</button><button data-v="1" role="radio">real</button><button data-v="60" role="radio">1 min</button><button data-v="600" role="radio">10 min</button><button data-v="3600" role="radio">1 hr</button></div></div>
+  <div class="opt"><div class="opt-l">what changes</div>
+    <span class="opt-note tm-sub" style="margin-left:0">Sunlight and moonlight at the surface, and the light that reaches each depth. At dusk the lanternfish and their kin rise from the twilight zone to feed near the surface, and sink again before dawn: the largest migration on Earth, every night.</span></div>
+  <div class="panel-foot">sunlight is absorbed colour by colour: red is gone by about 10 m, blue reaches 1,000 m</div>
+</aside>
+
+<aside id="settings" class="panel" aria-label="Settings" hidden>
+  <div class="panel-head"><span class="ptitle">settings</span><button class="btn" id="settingsHelp">help</button><button class="btn" id="settingsClose">close</button></div>
+  <div class="opt"><div class="opt-l">detail <span id="detailInfo" class="opt-note"></span></div>
+    <div class="seg" data-key="detail" role="radiogroup"><button data-v="0" role="radio">ultra</button><button data-v="1" role="radio">fine</button><button data-v="2" role="radio">normal</button><button data-v="3" role="radio">bold</button></div></div>
+  <div class="opt"><div class="opt-l">travel <span class="opt-note">how fast you swim between places</span></div>
+    <div class="seg" data-key="travel" role="radiogroup"><button data-v="slow" role="radio">slow</button><button data-v="quick" role="radio">quick</button><button data-v="warp" role="radio">warp</button></div></div>
+  <div class="opt"><div class="opt-l">tour stops <span class="opt-note">how long a tour lingers</span></div>
+    <div class="seg" data-key="dwell" role="radiogroup"><button data-v="short" role="radio">short</button><button data-v="normal" role="radio">normal</button><button data-v="long" role="radio">long</button></div></div>
+  <div class="opt"><div class="opt-l">text size <span class="opt-note" id="tsTxt"></span></div><input id="textSize" type="range" min="0.85" max="1.6" step="0.05" aria-label="Text size"></div>
+  <div class="opt"><div class="opt-l">interface <span class="opt-note">fades when you leave it alone</span></div>
+    <div class="seg" data-key="fadeUI" role="radiogroup"><button data-v="off" role="radio">never fade</button><button data-v="slow" role="radio">slowly</button><button data-v="quick" role="radio">quickly</button></div></div>
+  <div class="opt"><div class="opt-l">motion <span class="opt-note">swimming, drifting, pulsing</span></div>
+    <div class="seg" data-key="time" role="radiogroup"><button data-v="0" role="radio">pause</button><button data-v="0.25" role="radio">0.25x</button><button data-v="1" role="radio">1x</button><button data-v="3" role="radio">3x</button></div></div>
+  <div class="opt"><div class="opt-l">show</div>
+    <div class="tog"><button data-key="glow" aria-pressed="true">glow</button><button data-key="labels" aria-pressed="true">labels</button><button data-key="snow" aria-pressed="true">marine snow</button><button data-key="shimmer" aria-pressed="true">shimmer</button><button data-key="outline" aria-pressed="true">outlines</button><button data-key="subMark" aria-pressed="false">sub marker</button></div></div>
+  <div class="opt"><div class="opt-l">colour <span class="opt-note">how the light is drawn</span></div>
+    <div class="seg" data-key="palette" role="radiogroup"><button data-v="true" role="radio">true colour</button><button data-v="vivid" role="radio">vivid</button><button data-v="mono" role="radio">mono</button></div></div>
+  <div class="opt"><div class="opt-l">sound <span class="opt-note">an ocean made live in your browser</span></div>
+    <div class="tog sound-row"><button data-key="sound" aria-pressed="false">sound</button><input id="volume" type="range" min="0" max="1" step="0.05" aria-label="Volume"></div>
+    <div class="now-playing">now: <b id="nowPlaying">silent</b></div></div>
+  <div class="panel-foot">keys: H home · ? help · V detail · Y travel · G glow · L labels · M sound · P photo · I info · B ride · Z screensaver</div>
+</aside>
+
+<div id="ladder" class="ladder" aria-label="Depth ladder: drag to dive, click a name to go there">
+  <div class="lad-cap">depth</div>
+  <div id="ladTrack" class="lad-track"></div>
+  <div id="ladMark" class="ladmark" role="slider" tabindex="0" aria-label="Depth"><span id="ladTxt"></span></div>
+</div>
+
+<aside id="daily" class="daily" hidden aria-label="Today's discovery">
+  <div class="d-top"><span class="d-lbl">today's discovery</span><button class="d-x" id="dailyClose" aria-label="Dismiss">&times;</button></div>
+  <div class="d-name" id="dailyName"></div><div class="d-type" id="dailyType"></div>
+  <div class="d-acts"><button class="act" id="dailyGo">swim there</button><button class="act" id="dailyShare">share</button></div>
+</aside>
+
+<div id="saverHud" class="saver-hud" hidden aria-hidden="true"><div class="sv-time" id="svTime"></div><div class="sv-obj" id="svObj"></div><div class="sv-fact" id="svFact"></div></div>
+<div id="photoBar" class="photo-bar" hidden><span class="pb-l">photo mode</span><button class="btn" id="phSave">save picture</button><button class="btn" id="phText">copy as text</button><button class="btn" id="phFreeze" aria-pressed="false">freeze</button><button class="btn" id="phLabels" aria-pressed="false">labels</button><button class="btn" id="phClose">done</button></div>
+<div id="caption" class="caption" hidden aria-live="polite"><span id="capText"></span><button class="btn" id="capBtn" hidden>end compare</button></div>
+
+<aside id="cmpPanel" class="panel" aria-label="Compare size" hidden>
+  <div class="panel-head"><span class="ptitle">compare size</span><button class="btn" id="cmpClose">close</button></div>
+  <div class="opt-note tm-sub" style="padding:8px 12px 0;margin:0">put this beside the one in view, at true scale</div>
+  <div id="cmpList" class="atlas-list cmp-list"></div>
+</aside>
+
+<div class="strip">
+  <div id="toast" class="toast" role="status"></div>
+  <div id="hint" class="hint">drag to orbit · scroll to zoom from a whale down to a single cell · drag the depth ladder on the right to dive · tap anything to swim there · press / to search</div>
+</div>
+
+<div id="help" class="help" hidden>
+  <div class="help-card" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-top"><h2 id="helpTitle">controls</h2><button class="btn" id="helpClose">close</button></div>
+    <p class="lede">The real ocean, its creatures at their true depths and sizes, drawn only in ASCII. Denser characters mean more light.</p>
+    <div class="help-cols">
+      <section><h3>look</h3><dl>
+        <dt>drag</dt><dd>swim round it</dd>
+        <dt>scroll · + -</dt><dd>zoom, a whale to a cell</dd>
+        <dt>pinch</dt><dd>zoom on a touch screen</dd>
+        <dt>right-drag</dt><dd>let go and look freely</dd>
+        <dt>W A S D R F</dt><dd>swim freely (shift: faster); rise with R to come out above the waves</dd>
+        <dt>‹ ›</dt><dd>previous / next place</dd>
+      </dl></section>
+      <section><h3>go</h3><dl>
+        <dt>click</dt><dd>swim there and lock on</dd>
+        <dt>/ · search</dt><dd>names, kinds or depths</dd>
+        <dt>depth ladder</dt><dd>drag to dive, or pick a name</dd>
+        <dt>tours</dt><dd>guided dives</dd>
+        <dt>space</dt><dd>pause or play</dd>
+        <dt>H</dt><dd>back to the reef</dd>
+        <dt>[ ]</dt><dd>previous / next stop</dd>
+      </dl></section>
+      <section><h3>more</h3><dl>
+        <dt>B · ride</dt><dd>ride along with Nautile</dd>
+        <dt>V Y</dt><dd>detail · travel speed</dd>
+        <dt>G L M</dt><dd>glow · labels · sound</dd>
+        <dt>P I Z</dt><dd>photo · info · screensaver</dd>
+        <dt>esc</dt><dd>close, then let go</dd>
+      </dl></section>
+    </div>
+    <p class="note">Depths and sizes are real; the horizontal layout is compressed so that every zone sits within a swim of the next. Fast motions are slowed or sped up to be seen, and the look of each creature is an artist's model. Below about 150 m the view is lit as a submersible's lamps would light it. Nautile is real; its route here is invented.</p>
+    <p class="note">deepatlas · inspired by <a href="https://github.com/eshin087/gcdatlas" target="_blank" rel="noopener">gcdatlas</a> · your settings and progress stay on this device</p>
+  </div>
+</div>
+<div id="nogl" class="nogl" hidden>This needs WebGL 2, which this browser or device has turned off.</div>
