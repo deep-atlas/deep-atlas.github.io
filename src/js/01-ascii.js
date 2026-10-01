@@ -150,7 +150,7 @@ in vec2 vUv; out vec4 o;
 vec3 src(vec2 uv){
   vec3 c = max(texture(uSrc, uv).rgb, 0.0) * uWB;
   float L = max(luma(c), 0.42 * max(max(c.r, c.g), c.b)), b = 1.0 - exp(-1.6 * L);
-  return c / max(L, 1e-5) * max(b - 0.18, 0.0) * uGlowOn + min(c, vec3(0.6)) * uBack;
+  return c / max(L, 1e-5) * max(b - 0.18, 0.0) * uGlowOn + min(c, vec3(0.3)) * uBack;
 }
 void main(){
   vec3 s = vec3(0.0); float w = 0.0;
@@ -208,7 +208,7 @@ function asciiCompose(time) {
   // glow and backdrop
   {
     u = useProg(P_GLOW);
-    gl.uniform1f(u.uGlowOn, SET.glow ? 1 : 0); gl.uniform1f(u.uBack, CAM.pos[1] > 0 ? 3.5 : 0.32);   // (above the water the sky's blue is a fill, the characters are clouds and glitter)
+    gl.uniform1f(u.uGlowOn, SET.glow ? 1 : 0); gl.uniform1f(u.uBack, CAM.pos[1] > 0 ? 1.6 : 0.32);   // (above the water the sky's blue is a fill, the characters are clouds and glitter)
     gl.bindFramebuffer(gl.FRAMEBUFFER, A.glowA.fb); gl.viewport(0, 0, A.glowA.w, A.glowA.h);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.scene.tex);
     gl.uniform1i(u.uSrc, 0); gl.uniform1i(u.uFirst, 1); gl.uniform2f(u.uDir, 1 / A.glowA.w, 0);

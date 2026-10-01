@@ -171,19 +171,22 @@ void main(){
 const FS_MESH = GLSL_SCENE + GLSL_LIGHT + `
 uniform vec4 uMat;    // x: opacity (1 solid), y: rim, z: glow, w: shine
 uniform vec3 uTint;
+uniform vec3 uWB;
+uniform float uGlowSun;   // 1: the glow is sunlight passing through (ice), coloured by the water like the sun's light
 uniform vec4 uFx;     // x: comb rows (a comb jelly's beating cilia split the light into running rainbows)
 in vec3 vRel; in vec3 vN; in vec4 vCol; in float vW; in vec3 vObj;
 out vec4 o;
 void main(){
   vec3 N = normalize(vN); if (!gl_FrontFacing) N = -N;
   vec3 V = -normalize(vRel);
-  float depth = uCam.w - vRel.y;
+  float depth = -(uCam.y + vRel.y);
   vec3 alb = vCol.rgb * uTint;
   vec3 col = shade(vRel, N, alb, depth, uMat.w);
   float fr = pow(1.0 - abs(dot(N, V)), 2.5);
   vec3 Ld; vec3 lamp = lampAt(vRel, N, Ld);
   col += (sunAt(depth) * 0.35 + lamp * 0.5) * fr * uMat.y * mix(alb, vec3(1.0), 0.5);
-  col += vCol.rgb * vCol.a * uMisc.x * uMat.z;
+  // (light through ice is already the sea's colour: undo the eye's colour correction for it, scaled by the daylight at its depth)
+  col += vCol.rgb * vCol.a * uMisc.x * uMat.z * mix(vec3(1.0), luma(sunAt(depth)) / uWB, uGlowSun);
   if (uFx.y > 0.0){
     // an alarm: Atolla's wheel of light chasing round its rim, or a whole-body flash
     float ang = atan(vObj.z, vObj.y);
@@ -217,6 +220,7 @@ function drawCreature(it, P) {
   const m = it.mat || DEF_MAT;
   gl.uniform4f(u.uMat, m[0], m[1], m[2], m[3]);
   const tn = it.tint || [1, 1, 1]; gl.uniform3f(u.uTint, tn[0], tn[1], tn[2]);
+  gl.uniform1f(u.uGlowSun, it.glowSun ? 1 : 0); gl.uniform3fv(u.uWB, ASCII.wb);
   const sw = it.swim || ZA, s2 = it.swim2 || [0, 2, 0, 0], sy = it.sway || ZA, pu = it.pulse || ZA;
   gl.uniform4f(u.uSwim, sw[0], sw[1], sw[2], sw[3]);
   gl.uniform4f(u.uSwim2, s2[0], s2[1], s2[2], s2[3]);
@@ -236,7 +240,7 @@ const TER_RINGS = 110, TER_SEGS = 160;
 const VS_TERRAIN = GLSL_SCENE + GLSL_COMMON + GLSL_FLOOR + `
 uniform vec2 uGridK;   // r = k.x * (k.y^ring - 1)
 layout(location = 0) in vec3 aPos;
-out vec3 vRel; out vec3 vN; out float vW; out float vX; out float vD;
+out vec3 vRel; out vec3 vN; out float vW; out float vX; out float vD; out float vSM;
 vec4 bandsFor(float spacing){ return vec4(1.0, smoothstep(160.0, 40.0, spacing), smoothstep(20.0, 5.0, spacing), smoothstep(2.5, 0.6, spacing)); }
 float fd(vec2 L, float x, float z, vec4 bw){
   vec4 R = roughness(x) * bw;
@@ -246,7 +250,7 @@ float fd(vec2 L, float x, float z, vec4 bw){
     h += r * (octave(uTerrCell.xy, L, b * 3) * 0.5 + octave(uTerrCell.xy, L, b * 3 + 1) * 0.3 + octave(uTerrCell.xy, L, b * 3 + 2) * 0.2);
   }
   vec2 pd = padAt(x, z);
-  return max(0.4, mix(profileDepth(x) - h, pd.y - h * 0.2, pd.x));
+  return max(0.4, mix(profileDepth(x) - h - seamountAt(x, z), pd.y - h * 0.2, pd.x));
 }
 void main(){
   float r = uGridK.x * (pow(uGridK.y, aPos.z) - 1.0);
@@ -261,11 +265,11 @@ void main(){
   float dx = fd(L + vec2(e, 0.0), x + e, z, bw), dz = fd(L + vec2(0.0, e), x, z + e, bw);
   vN = normalize(vec3((dx - d) / e, 1.0, (dz - d) / e));
   vRel = vec3(off.x, uCam.w - d, off.y);
-  vX = x; vD = d;
+  vX = x; vD = d; vSM = seamountAt(x, z) / 3800.0;
   gl_Position = uVP * vec4(vRel, 1.0); vW = gl_Position.w;
 }`;
 const FS_TERRAIN = GLSL_SCENE + GLSL_LIGHT + `
-in vec3 vRel; in vec3 vN; in float vW; in float vX; in float vD;
+in vec3 vRel; in vec3 vN; in float vW; in float vX; in float vD; in float vSM;
 out vec4 o;
 void main(){
   vec3 wp = uCam.xyz + vRel;
@@ -299,6 +303,8 @@ void main(){
   float nod = smoothstep(0.72, 0.8, noise3(wp * 6.0)) * smoothstep(34000.0, 38000.0, x) * (1.0 - smoothstep(60000.0, 66000.0, x));
   alb = mix(alb, nodule, nod * 0.85);
   alb = mix(alb, mix(rock * 0.9, ooze * 0.85, smoothstep(0.3, 0.1, N.y < 0.85 ? 0.0 : 0.5)), smoothstep(67000.0, 71000.0, x));
+  // a seamount's flanks are bare volcanic rock, dusted with ooze where they level off
+  alb = mix(alb, mix(rock * 0.75, ooze * 0.9, smoothstep(0.8, 0.95, N.y) * 0.6), smoothstep(0.08, 0.25, vSM));
   vec3 col = shade(vRel, N, alb, vD, 0.05);
   col = fogMix(col, vRel);
   o = vec4(col, 1.0);
@@ -340,16 +346,17 @@ float waves(vec2 q, float t){
   return sin(dot(q, vec2(0.62, 0.21)) * 1.1 + t * 1.3) * 0.5 + sin(dot(q, vec2(-0.3, 0.9)) * 1.7 - t * 1.7) * 0.3
        + sin(dot(q, vec2(0.85, -0.6)) * 3.1 + t * 2.3) * 0.15 + (noise3(vec3(q * 1.3, t * 0.4)) - 0.5) * 0.6;
 }
-vec3 skyCol(vec3 d){
+vec3 skyCol(vec3 d, float clouds){
   float y = max(d.y, 0.0);
   vec3 c = mix(vec3(0.55, 0.75, 0.95), vec3(0.12, 0.35, 0.85), pow(y, 0.5)) * 0.07;
   float k = max(dot(d, uSunAir), 0.0);
   c += vec3(1.0, 0.95, 0.85) * (pow(k, 300.0) * 6.0 + pow(k, 8.0) * 0.25);
   vec2 q = d.xz / (y + 0.12) * 0.9 + vec2(uKd.w * 0.01, 0.0);
   float cl = smoothstep(0.55, 0.8, fbm3(vec3(q, 1.7)));
-  c = mix(c, vec3(0.95, 0.97, 1.0) * 0.8, cl * 0.8 * smoothstep(0.0, 0.15, y));
+  c = mix(c, vec3(0.95, 0.97, 1.0) * 0.8, cl * 0.8 * smoothstep(0.0, 0.15, y) * clouds);
   return c * uSun.w * 0.45;
 }
+vec3 skyCol(vec3 d){ return skyCol(d, 1.0); }
 // the sea from above at a point hit along dir, tt away, from hgt metres up: rgb, and how opaque it is
 vec4 seaAbove(vec3 dir, vec3 hit, float tt, float hgt){
   float t = uKd.w;
@@ -359,9 +366,9 @@ vec4 seaAbove(vec3 dir, vec3 hit, float tt, float hgt){
   vec3 n = normalize(vec3(-gx * 2.5 * near, 1.0, -gz * 2.5 * near));
   float cosI = max(dot(-dir, n), 0.0);
   float fres = 0.02 + 0.98 * pow(1.0 - cosI, 5.0);
-  vec3 body = vec3(0.01, 0.05, 0.08) * uSun.w;
+  vec3 body = vec3(0.004, 0.02, 0.035) * uSun.w;
   vec3 r = reflect(dir, n);
-  vec3 c = mix(body, skyCol(vec3(r.x, abs(r.y), r.z)), fres);
+  vec3 c = mix(body, skyCol(vec3(r.x, abs(r.y), r.z), 0.0), fres);
   c += vec3(1.0, 0.97, 0.9) * pow(max(dot(r, uSunAir), 0.0), 60.0) * 2.5 * uSun.w * (0.4 + 0.6 * smoothstep(0.3, 0.8, noise3(vec3(hit.xz * 1.5, t * 2.0))));
   c = mix(c, skyCol(normalize(vec3(dir.x, 0.02, dir.z))), smoothstep(hgt * 20.0 + 50.0, hgt * 300.0 + 2000.0, tt));
   return vec4(c, mix(0.6, 0.97, pow(1.0 - cosI, 2.0)));
@@ -479,7 +486,7 @@ in float vA; in vec3 vRel; in float vW;
 out vec4 o;
 void main(){
   vec2 q = gl_PointCoord * 2.0 - 1.0; if (dot(q, q) > 1.0) discard;
-  float depth = uCam.w - vRel.y;
+  float depth = -(uCam.y + vRel.y);
   vec3 Ld; vec3 lamp = lampAt(vRel, vec3(0.0, 1.0, 0.0), Ld);
   vec3 c = sunAt(depth) * 0.3 + lamp * 0.45 + glowAt(vRel, vec3(0.0)) * 0.8;
   vec3 T = exp(-uC.rgb * length(vRel));

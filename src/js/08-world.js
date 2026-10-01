@@ -139,6 +139,7 @@ function drawPart(o, p) {
   _it.pos = vadd(o.pos, vadd(vadd(vmul(o.fwd, p.off[0]), vmul(o.up, p.off[1])), vmul(o.side || sd, p.off[2])));
   _it.fwd = f; _it.up = u; _it.scale = p.scale;
   _it.mesh = p.mesh; _it.mat = p.mat; _it.tint = p.tint; _it.swim = p.swim; _it.swim2 = p.swim2; _it.sway = p.sway; _it.pulse = p.pulse; _it.school = p.school;
+  _it.glowSun = p.glowSun;
   _it.fx = o.fxDyn ? [(p.fx || ZA)[0], o.fxDyn[1], o.fxDyn[2], o.fxDyn[3]] : p.fx;
   _it.pred = p.school ? schoolPredators(o, p) : null;
   drawCreature(_it, p.school ? P_SCHOOL : P_MESH);
@@ -402,6 +403,7 @@ function buildCatalog() {
     views:[{ d:[0.6, 0.4, 1], k:1.7, hold:10, drift:0.03, frame:'world' }, { d:[1, 0.15, 0.2], k:0.2, hold:9, drift:0.03, frame:'world' }] });
   addMoreFish(REEF);
   addDeepFolk(VENTS);
+  addPlaces2();
 }
 
 // vent shrimp: a cloud hugging the chimneys
@@ -438,7 +440,7 @@ in float vA; in vec3 vRel; in float vW; in float vAge;
 out vec4 o;
 void main(){
   vec2 q = gl_PointCoord * 2.0 - 1.0; float d = dot(q, q); if (d > 1.0) discard;
-  float depth = uCam.w - vRel.y;
+  float depth = -(uCam.y + vRel.y);
   vec3 Ld; vec3 lamp = lampAt(vRel, vec3(0.0, 1.0, 0.0), Ld);
   vec3 c = vec3(0.1, 0.1, 0.1) * (lamp + sunAt(depth));
   float a = vA * (1.0 - d) * 0.25;

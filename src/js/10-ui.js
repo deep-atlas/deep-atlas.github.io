@@ -36,7 +36,7 @@ function markSeen(o) { if (!o.place || SEEN.has(o.key)) return; SEEN.add(o.key);
 // ---- tours
 const TOURS = [
   { id:'dive', name:'the grand dive', blurb:'From the surface to the floor of the Challenger Deep, zone by zone.',
-    stops:['surface', 'flyingfish', 'manowar', 'reef', 'clownfish', 'lionfish', 'turtle', 'manta', 'kelp', 'baitball', 'whaleshark', 'bluewhale', 'krill', 'coelacanth', 'oarfish', 'lanternfish', 'siphonophore', 'barreleye', 'giantsquid', 'vampsquid', 'dragonfish', 'blobfish', 'spermwhale', 'anglerfish', 'gulper', 'vents', 'whalefall', 'titanic', 'dumbo', 'abyss', 'tripodfish', 'snailfish', 'amphipods', 'challenger'] },
+    stops:['surface', 'flyingfish', 'manowar', 'reef', 'clownfish', 'lionfish', 'turtle', 'manta', 'kelp', 'baitball', 'whaleshark', 'bluewhale', 'seep', 'krill', 'coelacanth', 'oarfish', 'lanternfish', 'siphonophore', 'barreleye', 'giantsquid', 'vampsquid', 'dragonfish', 'blobfish', 'spermwhale', 'anglerfish', 'gulper', 'vents', 'whalefall', 'titanic', 'dumbo', 'abyss', 'tripodfish', 'snailfish', 'amphipods', 'challenger'] },
   { id:'giants', name:'giants', blurb:'The biggest animals there are, and one that is a colony.',
     stops:['bluewhale', 'humpback', 'whaleshark', 'spermwhale', 'colossal', 'giantsquid', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'sunfish', 'greatwhite'] },
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
@@ -45,6 +45,8 @@ const TOURS = [
     stops:['copepod', 'krill', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
     stops:['reef', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'kelp'] },
+  { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
+    stops:['mangroves', 'seagrass', 'dugong', 'seaice', 'narwhal', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
     stops:['spidercrab', 'coelacanth', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
@@ -651,7 +653,7 @@ function addSub() {
     parts:[part(mkNautile, { mat:[1, 0.3, 1.6, 0.9] })],
     views:[{ d:[0.7, 0.3, 1], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.05, 0.25], k:1.2, hold:8, drift:0.02 }, { d:[-1, 0.4, 0.6], k:1.5, hold:8, drift:0.02 }] });
   // its route: everything it can reach, down to its rated 6,000 m (the trenches are beyond it)
-  const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish'];
+  const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish', 'seaice', 'narwhal', 'mangroves', 'seagrass', 'dugong'];
   SUB.stops = byDepth().filter(o => o.kind !== 'micro' && o.size < 200 && o.kind !== 'subs' && o.key !== 'trench' && !SHALLOWS.includes(o.key) && depthOf(o) < 6000);
 }
 function updateSubMark() {

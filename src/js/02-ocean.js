@@ -62,8 +62,20 @@ function octave(x, z, k) {
 }
 const OCT_W = [0.5, 0.3, 0.2];
 // flat ground where a wreck or a colony lies: [x, z, radius]; the floor there is the profile's depth at the middle, its bumps mostly smoothed
-const PADS = [[28100, -400, 170], [25500, 500, 45], [21500, -300, 40], [45000, 0, 60], [84500, 0, 70]];
-const PAD_D = PADS.map(p => profileDepth(p[0]));
+const PADS = [[28100, -400, 170], [25500, 500, 45], [21500, -300, 40], [45000, 0, 60], [84500, 0, 70], [12600, -900, 45], [40000, 3200, 70]];
+// seamounts: extinct volcanoes rising from the abyss, [x, z, height, radius]; the floor is lifted by a rounded, ribbed cone
+const SEAMOUNTS = [[40000, 3200, 3800, 2600]];
+function seamountAt(x, z) {
+  let h = 0;
+  for (const [sx, sz, sh, sr] of SEAMOUNTS) {
+    const dx = x - sx, dz = z - sz, r = Math.hypot(dx, dz) / sr;
+    if (r > 3) continue;
+    const rib = 1 + 0.06 * Math.sin(Math.atan2(dz, dx) * 7 + r * 5);
+    h += sh * Math.exp(-r * r * 1.2) * rib;
+  }
+  return h;
+}
+const PAD_D = PADS.map(p => profileDepth(p[0]) - seamountAt(p[0], p[1]));   // (a pad on a seamount sits at the seamount's height)
 function padAt(x, z) {
   let w = 0, d = 0;
   PADS.forEach((p, i) => { const k = smooth(p[2], p[2] * 0.45, Math.hypot(x - p[0], z - p[1])); if (k > w) { w = k; d = PAD_D[i]; } });
@@ -80,7 +92,7 @@ function floorDepth(x, z) {
     h += s * R[b];
   }
   const [w, pd] = padAt(x, z);
-  return Math.max(0.4, lerp(profileDepth(x) - h, pd - h * 0.2, w));
+  return Math.max(0.4, lerp(profileDepth(x) - h - seamountAt(x, z), pd - h * 0.2, w));
 }
 const floorY = (x, z) => -floorDepth(x, z);
 
@@ -116,6 +128,18 @@ float octave(ivec2 cell, vec2 L, int k){
   float s = float(1 << k) / 1024.0;
   vec2 X = L * s, f = floor(X);
   return vnoiseCell(cell * (1 << k) + ivec2(f), X - f);
+}
+const int NSM = ${SEAMOUNTS.length};
+const vec4 SM[NSM] = vec4[NSM](${SEAMOUNTS.map(s => `vec4(${s.map(v => v.toFixed(1)).join(', ')})`).join(',')});
+float seamountAt(float x, float z){
+  float h = 0.0;
+  for (int i = 0; i < NSM; i++){
+    vec2 d = vec2(x, z) - SM[i].xy; float r = length(d) / SM[i].w;
+    if (r > 3.0) continue;
+    float rib = 1.0 + 0.06 * sin(atan(d.y, d.x) * 7.0 + r * 5.0);
+    h += SM[i].z * exp(-r * r * 1.2) * rib;
+  }
+  return h;
 }
 const int NPADS = ${PADS.length};
 const vec3 PADS[NPADS] = vec3[NPADS](${PADS.map(p => `vec3(${p[0].toFixed(1)}, ${p[1].toFixed(1)}, ${p[2].toFixed(1)})`).join(',')});
@@ -203,6 +227,12 @@ vec3 waterInf(vec3 dir){
 }
 vec3 fogMix(vec3 col, vec3 rel){
   float d = length(rel);
+  if (uCamFwd.w > 0.0){
+    // looking from the air: only the part of the sight line below the surface is hazed by water
+    float py = rel.y + uCamFwd.w;   // (the point's height above the sea)
+    if (py >= 0.0) return col;
+    d *= -py / max(-rel.y, 1e-6);
+  }
   vec3 T = exp(-uC.rgb * d);
   return col * T + waterInf(rel / max(d, 1e-9)) * (1.0 - T);
 }
