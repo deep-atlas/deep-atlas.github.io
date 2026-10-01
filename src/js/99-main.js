@@ -41,7 +41,7 @@ for (const P of PROGS) P.start();
 if (typeof boot === 'function') boot();
 requestAnimationFrame(frame);
 // test hooks; step() draws frames by hand (a hidden tab gets no animation frames)
-window.__deep = { CAM, SET, ASCII, LIGHT, floorDepth, asciiText, BYKEY, OBJS, VIEW, TOD, userGo, startTour, letGo, lockOn, goView, PROGS, DEBUG,
+window.__deep = { CAM, SET, ASCII, LIGHT, floorDepth, asciiText, BYKEY, OBJS, VIEW, TOD, userGo, startTour, letGo, lockOn, goView, PROGS, DEBUG, waterSpark, triggerReact, SPARKS, KEYS,
   step(n = 1, dt = 1 / 30) { for (let i = 0; i < n; i++) { lastNow -= dt * 1000; drawFrame(performance.now()); } return asciiText(); },
   // one object alone, evenly lit, from a chosen angle (for checking models)
   async studio(key, yaw, pitch, k) {

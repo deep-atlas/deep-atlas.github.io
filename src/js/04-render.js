@@ -3,10 +3,10 @@
 // the camera: world position (doubles), basis, field of view. Everything is drawn relative to cam.pos.
 const CAM = { pos:[300, -8, 0], fwd:[1, 0, 0], up:[0, 1, 0], right:[0, 0, 1], fov:0.9, far:4000, scale:10, depth:8 };
 
-// the shared uniform block (std140, 256 bytes)
-const UBO_DATA = new ArrayBuffer(256), UBO_F = new Float32Array(UBO_DATA), UBO_I = new Int32Array(UBO_DATA);
+// the shared uniform block (std140, 384 bytes)
+const UBO_DATA = new ArrayBuffer(384), UBO_F = new Float32Array(UBO_DATA), UBO_I = new Int32Array(UBO_DATA);
 const UBO = gl.createBuffer();
-gl.bindBuffer(gl.UNIFORM_BUFFER, UBO); gl.bufferData(gl.UNIFORM_BUFFER, 256, gl.DYNAMIC_DRAW);
+gl.bindBuffer(gl.UNIFORM_BUFFER, UBO); gl.bufferData(gl.UNIFORM_BUFFER, 384, gl.DYNAMIC_DRAW);
 gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, UBO);
 function bindScene(P) {
   if (P._bound) return; P._bound = true;
@@ -57,6 +57,7 @@ function updateUBO(time) {
   U8.set([CAM.pos[0] - cx * 1024, CAM.pos[2] - cz * 1024, CAM.pos[0], CAM.pos[2]], 52);
   UBO_I.set([cx, cz, 0, 0], 56);
   U8.set([...CAM.fwd, Math.max(0, -d)], 60);
+  U8.set(typeof collectLights === 'function' ? collectLights() : new Float32Array(32), 64);
   gl.bindBuffer(gl.UNIFORM_BUFFER, UBO); gl.bufferSubData(gl.UNIFORM_BUFFER, 0, UBO_DATA);
 }
 
@@ -66,6 +67,7 @@ uniform vec4 uSwim;   // amplitude (body lengths), beats per second, waves along
 uniform vec4 uSwim2;  // axis (0: side to side like a fish, 1: up and down like a whale), envelope power, flap amplitude, flap beats per second
 uniform vec4 uSway;   // amplitude, speed, spatial scale, phase
 uniform vec4 uPulse;  // amplitude, beats per second, phase
+uniform vec4 uFx;     // y: alarm, z: cloak turned inside out, w: alarm style
 void deform(inout vec3 p, inout vec3 n, vec4 an, float t, float ph0){
   float s = an.x;
   if (uSwim.x != 0.0 && s > 0.0){
@@ -90,6 +92,14 @@ void deform(inout vec3 p, inout vec3 n, vec4 an, float t, float ph0){
     float k = uPulse.x * an.w * pl;
     p.yz *= 1.0 - k; p.x -= k * 0.15;
   }
+  if (uFx.z > 0.0 && an.w > 0.0){
+    // the vampire squid's "pineapple" defence: the cloak folds forward over the mantle, its spiny inside facing out
+    float e = uFx.z, x0 = -0.05, L = max(x0 - p.x, 0.0), r = length(p.yz);
+    vec2 dir = r > 1e-5 ? p.yz / r : vec2(1.0, 0.0);
+    p.x = mix(p.x, x0 + L * 1.1, e);
+    p.yz = dir * mix(r, 0.19 + 0.04 * sin(L * 20.0), e);
+    n = normalize(mix(n, vec3(0.1, dir), e));
+  }
 }`;
 
 const VS_MESH = GLSL_SCENE + GLSL_DEFORM + `
@@ -109,6 +119,7 @@ const VS_SCHOOL = GLSL_SCENE + GLSL_DEFORM + `
 uniform mat4 uModel;
 uniform vec4 uSchool;   // x: mode, y: fish length (m), z: speed, w: spread
 uniform float uSchoolPx;  // scene pixels per metre at 1 m
+uniform vec4 uPred[4];    // what the school keeps clear of: xyz relative to the camera, w: how far
 layout(location = 0) in vec3 aPos; layout(location = 1) in vec3 aNor; layout(location = 2) in vec4 aCol; layout(location = 3) in vec4 aAnim;
 layout(location = 4) in vec4 iA; layout(location = 5) in vec4 iB;
 out vec3 vRel; out vec3 vN; out vec4 vCol; out float vW; out vec3 vObj;
@@ -143,6 +154,14 @@ void main(){
   deform(p, n, aAnim, uKd.w, iB.x * 6.2831);
   vec3 lp = c + (f * p.x + up * p.y + sd * p.z) * L;
   vec4 w = uModel * vec4(lp, 1.0);
+  // part round predators and divers: each fish is pushed out of a bubble round them, the push easing off at its edge
+  vec3 cw = (uModel * vec4(c, 1.0)).xyz, push = vec3(0.0);
+  for (int i = 0; i < 4; i++){
+    float R = uPred[i].w; if (R <= 0.0) continue;
+    vec3 d = cw - uPred[i].xyz; float dl = length(d);
+    push += (dl > 1e-4 ? d / dl : vec3(0.0, 1.0, 0.0)) * R * (1.0 - smoothstep(R * 0.2, R * 1.15, dl)) * 0.75;
+  }
+  w.xyz += push;
   vRel = w.xyz; vN = mat3(uModel) * (f * n.x + up * n.y + sd * n.z); vCol = aCol; vObj = aPos;
   gl_Position = uVP * vec4(vRel, 1.0); vW = gl_Position.w;
   // a fish smaller than a pixel would flicker in and out between samples: leave it out instead
@@ -165,6 +184,13 @@ void main(){
   vec3 Ld; vec3 lamp = lampAt(vRel, N, Ld);
   col += (sunAt(depth) * 0.35 + lamp * 0.5) * fr * uMat.y * mix(alb, vec3(1.0), 0.5);
   col += vCol.rgb * vCol.a * uMisc.x * uMat.z;
+  if (uFx.y > 0.0){
+    // an alarm: Atolla's wheel of light chasing round its rim, or a whole-body flash
+    float ang = atan(vObj.z, vObj.y);
+    float wheel = uFx.w < 1.5 ? pow(0.5 + 0.5 * sin(ang * 3.0 - uKd.w * 7.0), 5.0) * step(0.01, vCol.a) * 4.0
+                              : 0.5 + 0.5 * sin(uKd.w * 21.0 + vObj.x * 37.0 + ang * 3.0);
+    col += vec3(0.25, 0.85, 1.0) * wheel * uFx.y * 1.6;
+  }
   if (uFx.x > 0.0){
     float row = smoothstep(0.36, 0.46, abs(fract(atan(vObj.y, vObj.z) / 6.2831853 * 8.0) - 0.5));
     float ph = vObj.x * 22.0 - uKd.w * 5.0;
@@ -197,6 +223,7 @@ function drawCreature(it, P) {
   gl.uniform4f(u.uSway, sy[0], sy[1], sy[2], sy[3]);
   gl.uniform4f(u.uPulse, pu[0], pu[1], pu[2], pu[3]);
   const fx = it.fx || ZA; gl.uniform4f(u.uFx, fx[0], fx[1], fx[2], fx[3]);
+  if (it.school && it.pred) gl.uniform4fv(u.uPred, it.pred);
   if (it.school) { gl.uniform4f(u.uSchool, it.school[0], it.school[1], it.school[2], it.school[3]); gl.uniform1f(u.uSchoolPx, ASCII.rows * SY / (2 * Math.tan(CAM.fov / 2))); }
   gl.bindVertexArray(it.mesh.vao);
   if (it.school) gl.drawElementsInstanced(gl.TRIANGLES, it.mesh.count, gl.UNSIGNED_INT, 0, it.mesh.icount);
@@ -454,7 +481,7 @@ void main(){
   vec2 q = gl_PointCoord * 2.0 - 1.0; if (dot(q, q) > 1.0) discard;
   float depth = uCam.w - vRel.y;
   vec3 Ld; vec3 lamp = lampAt(vRel, vec3(0.0, 1.0, 0.0), Ld);
-  vec3 c = sunAt(depth) * 0.3 + lamp * 0.45;
+  vec3 c = sunAt(depth) * 0.3 + lamp * 0.45 + glowAt(vRel, vec3(0.0)) * 0.8;
   vec3 T = exp(-uC.rgb * length(vRel));
   o = vec4(c * vA * T, 0.0);
   gl_FragDepth = clamp(vW * uMisc.y, 0.0, 1.0);

@@ -145,6 +145,7 @@ function renderInfo() {
   if (TOUR.id && TOUR.i + 1 < TOUR.list.length) { gn.hidden = false; $('goNextTxt').textContent = 'next stop · ' + TOUR.list[TOUR.i + 1].label; }
   else gn.hidden = true;
   $('btnRideI').textContent = RIDE.on ? 'stop riding' : 'ride along';
+  $('btnPoke').hidden = !(o && o.react && VIEW.mode !== 'flight');
   $('btnLock').hidden = !NEAR.o;
   if (NEAR.o && NEAR.o !== NEAR.last) toast(`you have reached ${NEAR.o.name}`);
   NEAR.last = NEAR.o;
@@ -196,6 +197,7 @@ function nearPlace() {
   return best;
 }
 $('btnLock').onclick = () => { if (NEAR.o) userGo(NEAR.o); };
+$('btnPoke').onclick = () => triggerReact(VIEW.focus);
 
 // ---- play, pause and the way back
 function updatePlay() {
@@ -695,7 +697,7 @@ $('subMark').onclick = () => userGo(BYKEY.nautile);
     ptrs.delete(e.pointerId);
     if (!drag) return;
     canvas.classList.remove('dragging');
-    if (moved < 4 && drag.b === 0 && ptrs.size === 0) { const o = pick(e.clientX, e.clientY); if (o) userGo(o); }
+    if (moved < 4 && drag.b === 0 && ptrs.size === 0) { const o = pick(e.clientX, e.clientY); if (o && o === VIEW.focus && o.react && VIEW.mode === 'orbit') triggerReact(o); else if (o) userGo(o); else waterSpark(e.clientX, e.clientY); }
     if (ptrs.size === 0) drag = null;
   };
   canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
@@ -811,6 +813,8 @@ function tick(dt) {
   updateSubMark();
   tickIdle(dt);
   tickSaver(dt);
+  tickReactions(dt);
+  tickSparks(dt);
   tickSound(dt);
   if (Math.floor(simTime) !== Math.floor(simTime - dt)) { renderTime(); if (VIEW.mode === 'flight' || VIEW.mode === 'free') renderInfo(); }
 }
@@ -819,6 +823,7 @@ function tick(dt) {
 function boot() {
   buildCatalog();
   addSub();
+  addLife();
   syncSettings(); renderTime(); renderAtlas(); renderTours(); setInfo('full');
   measureControls(); buildLadder(); setupDaily();
   window.addEventListener('resize', () => { measureControls(); buildLadder(); });

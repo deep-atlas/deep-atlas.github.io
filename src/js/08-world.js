@@ -77,6 +77,13 @@ function moveObj(o, t) {
       up = vnorm(vcross(vcross(fwd, [1, 0, 0]), fwd));
       break;
     }
+    case 'rose': {
+      // loops that pass through the centre again and again: hunters slashing through a bait ball
+      const P = tt => { const a = tt * m.v / (m.R * (m.k || 2)) + (m.ph || 0), r = m.R * Math.cos((m.k || 2) * a);
+        return [A[0] + r * Math.cos(a), A[1] + (m.bob ?? 1) * Math.sin(tt * 0.23 + (m.ph || 0)), A[2] + r * Math.sin(a)]; };
+      pos = P(t); fwd = vnorm(vsub(P(t + 0.05), pos));
+      break;
+    }
     case 'crawl': {
       // walks a slow loop over the floor, following its every bump
       const a = t * m.v / m.R + (m.ph || 0), x = A[0] + m.R * Math.cos(a), z = A[2] + m.R * Math.sin(a);
@@ -122,6 +129,7 @@ function drawWorld(trans) {
   } else {
     DRAWN.sort((a, b) => b.camDist - a.camDist);
     for (const o of DRAWN) for (const p of o.parts) if (p.trans) drawPart(o, p);
+    drawSparks();
   }
 }
 const _it = {};
@@ -131,7 +139,8 @@ function drawPart(o, p) {
   _it.pos = vadd(o.pos, vadd(vadd(vmul(o.fwd, p.off[0]), vmul(o.up, p.off[1])), vmul(o.side || sd, p.off[2])));
   _it.fwd = f; _it.up = u; _it.scale = p.scale;
   _it.mesh = p.mesh; _it.mat = p.mat; _it.tint = p.tint; _it.swim = p.swim; _it.swim2 = p.swim2; _it.sway = p.sway; _it.pulse = p.pulse; _it.school = p.school;
-  _it.fx = p.fx;
+  _it.fx = o.fxDyn ? [(p.fx || ZA)[0], o.fxDyn[1], o.fxDyn[2], o.fxDyn[3]] : p.fx;
+  _it.pred = p.school ? schoolPredators(o, p) : null;
   drawCreature(_it, p.school ? P_SCHOOL : P_MESH);
 }
 

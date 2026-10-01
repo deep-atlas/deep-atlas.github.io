@@ -188,6 +188,8 @@ layout(std140) uniform Scene {
   vec4 uTerr;        // xy: camera x, z inside its 1024 m cell; zw: camera x, z (plain floats)
   ivec4 uTerrCell;   // xy: the camera's 1024 m cell
   vec4 uCamFwd;      // xyz: camera forward, w: height above the sea (0 underwater)
+  vec4 uGLp[4];      // living lights: xyz position relative to the camera, w: reach (m)
+  vec4 uGLc[4];      // their colour x strength; w: 1 when in use
 };
 `;
 
@@ -232,6 +234,18 @@ vec3 lampAt(vec3 rel, vec3 N, out vec3 Ldir){
   vec3 ab = exp(-uC.rgb * (min(r, 3.0) * 0.7 + max(r - D, 0.0) * 2.0));
   return uLamp.rgb * fall * cone * ab;
 }
+// the light of living things (a lure, a searchlight, a sub's floodlights): N may be zero for points that face every way
+vec3 glowAt(vec3 rel, vec3 N){
+  vec3 c = vec3(0.0);
+  for (int i = 0; i < 4; i++){
+    float R = uGLp[i].w; if (R <= 0.0) continue;
+    vec3 d = uGLp[i].xyz - rel; float r2 = dot(d, d), r = sqrt(r2);
+    float fall = R * R / (r2 + R * R * 0.05);
+    float nl = dot(N, N) > 0.0 ? max(dot(N, d / max(r, 1e-9)), 0.0) * 0.85 + 0.15 : 1.0;
+    c += uGLc[i].rgb * fall * nl * exp(-uC.rgb * r);
+  }
+  return c;
+}
 // light on a surface: rel from the camera, normal N, albedo, the surface's depth; returns lit colour
 vec3 shade(vec3 rel, vec3 N, vec3 alb, float depth, float spec){
   vec3 E = sunAt(depth);
@@ -247,6 +261,7 @@ vec3 shade(vec3 rel, vec3 N, vec3 alb, float depth, float spec){
   vec3 Ld; vec3 lamp = lampAt(rel, N, Ld);
   float nl = max(dot(N, Ld), 0.0);
   c += lamp * (nl * 1.1 + 0.15);
+  c += glowAt(rel, N);
   vec3 col = alb * c;
   col += lamp * spec * pow(nl, 40.0) * 0.6;
   // sunlight glancing off wet skin and silver scales
