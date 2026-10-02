@@ -11,7 +11,7 @@ const J_AS = { dolphin:{ name:'a bottlenose dolphin', size:3 }, krill:{ name:'an
 function journeyItems() {
   const list = [];
   for (const k of JOURNEY_KEYS) {
-    if (k === 'diver') { list.push({ name:'a scuba diver', type:'for scale', size:1.8, fact:'A diver for scale: about 1.8 m from head to fins.', part:{ build:mkDiver, scale:1, mat:M_SKIN, off:[0, 0, 0] }, src:null }); continue; }
+    if (k === 'diver') { list.push({ name:'a scuba diver', type:'for scale', size:1.8, frame:1.8, fact:'A diver for scale: about 1.8 m from head to fins.', part:{ build:mkDiver, scale:1, mat:M_SKIN, off:[0, 0, 0] }, src:null }); continue; }
     const o = BYKEY[k]; if (!o || !o.parts.length) continue;
     const p0 = o.parts[0], as = J_AS[k] || {};
     // (schools and pods are shown as a single animal; everything else exactly as in the atlas)

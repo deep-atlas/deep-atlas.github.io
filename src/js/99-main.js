@@ -11,6 +11,12 @@ function drawFrame(now) {
   simTime += dt * (+SET.time);
   asciiResize();
   if (typeof tick === 'function') tick(dt, now / 1000);
+  // a camera that has gone non-finite would draw nothing ever again: put it back somewhere safe
+  if (!CAM.pos.every(isFinite) || !CAM.fwd.every(isFinite) || !isFinite(CAM.scale)) {
+    console.warn('camera reset: it had become non-finite');
+    if (typeof endJourney === 'function') endJourney(true);
+    lockOn(BYKEY.reef); updateCamera(0);
+  }
   CAM.depth = -CAM.pos[1];
   updateLight(DEBUG.solo ? 6 : Math.max(0, CAM.depth), typeof TOD !== 'undefined' ? TOD.min : 630);
   updateUBO(simTime % 20000);
