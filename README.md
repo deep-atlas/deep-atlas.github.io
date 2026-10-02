@@ -29,7 +29,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **115 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **116 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill, with Adélie penguins hunting through the swarm), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -41,7 +41,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
   and iron-armoured scaly-foot snails at the vents, the swimming sea cucumber (the "headless chicken monster"), a bluntnose sixgill shark, the cock-eyed squid,
   the red helmet jellyfish and a pyrosome. On the reef and in the kelp: cuttlefish, mantis shrimp, nudibranchs, a pufferfish, garibaldi
   and a loose school of blacksmith, a sea otter in the canopy, sea lions, blacktip reef sharks and snappers, a grouper at a cleaning station, a blue-ringed octopus, and out on the sand garden
-  eels that duck into their burrows, a goby sharing a burrow with a pistol shrimp, and a stingray. Orcas and a leatherback turtle in open water, a tornado of chevron barracuda off the
+  eels that duck into their burrows, a goby sharing a burrow with a pistol shrimp, a peacock flounder and a stingray. Orcas and a leatherback turtle in open water, a tornado of chevron barracuda off the
   drop-off, a leafy seadragon by the seagrass, and a chambered nautilus
   on the deep reef slope. A lion's mane jellyfish trails its tentacles under the Arctic ice, and a box jellyfish hunts the
   channel off the mangroves.

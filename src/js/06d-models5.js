@@ -361,6 +361,21 @@ function mkBlueRinged() {
     return m > 0.8 ? [0.01, 0.12, 0.5, 3.0] : m > 0.66 ? [0.06, 0.05, 0.03] : (n < -0.3 ? brown : tan);
   } });
 }
+function mkFlounder() {
+  // peacock flounder, one unit long, lying on its left side: the body a flat oval seen from above, fringed all round by the
+  // dorsal and anal fins; both eyes on the upper side, on short turrets; sandy, speckled, with blue rings
+  const mb = new MB(), sand = [0.24, 0.22, 0.17], dark = [0.1, 0.09, 0.07], blue = [0.12, 0.3, 0.75];
+  const col = (p) => { const rr = Math.hypot(fract(p[0] * 9) - 0.5, fract(p[2] * 9 + 0.3) - 0.5); if (Math.abs(rr - 0.3) < 0.05 && Math.sin(p[0] * 13 + p[2] * 7) > 0) return blue; return Math.sin(p[0] * 41 + p[2] * 17) * Math.sin(p[2] * 37) > 0.4 ? dark : sand; };
+  ellip(mb, [0.02, 0.02, 0], [0.4, 0.035, 0.24], { n:10, m:24, shape:p => [p[0], p[1] < 0 ? p[1] * 0.3 : p[1], p[2]], col:(u, v, p) => p[1] < 0 ? [0.92, 0.9, 0.85] : col(p), anim:p => [Math.max(0, -p[0] - 0.1) * 1.5, 0, 0, 0] });
+  // the fin fringe round the edge, rippling
+  const fr = []; for (let k = 0; k <= 30; k++) { const a = k / 30 * TAU; fr.push([Math.cos(a) * 0.44 + 0.02, Math.sin(a) * 0.3]); }
+  fin(mb, fr, { origin:[0, 0.005, 0], ua:[1, 0, 0], va:[0, 0, 1], col:(a, b, r) => r > 0.85 ? col([a, 0, b]) : col([a, 0, b]), center:[0.02, 0], anim:(a, b, r) => [0, r > 0.85 ? (0.5 + 0.5 * Math.sin(a * 20)) * 0.6 : 0, 0, 0] });
+  // tail
+  fin(mb, [[0, 0.06], [-0.12, 0.1], [-0.14, -0.1], [0, -0.06]], { origin:[-0.4, 0.005, 0], ua:[1, 0, 0], va:[0, 0, 1], col:(a, b) => col([a - 0.4, 0, b]), anim:() => [1, 0, 0, 0] });
+  // the two eyes on the upper side, both on what was the right side of the larva
+  for (const [x, z] of [[0.3, 0.05], [0.24, -0.04]]) { tube(mb, { n:2, m:6, path:t => [x, 0.04 + t * 0.03, z], r:0.025, col:fc(sand) }); ellip(mb, [x, 0.075, z], [0.022, 0.022, 0.022], { n:5, m:8, col:(u, v, p) => p[1] > 0.085 ? [0.02, 0.02, 0.02] : [0.55, 0.5, 0.4] }); }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -447,6 +462,11 @@ function addShallows(REEF) {
     post:o => { const e = smooth(0, 0.6, o.reactEnv || 0); o.parts[0].mat[2] = lerp(0.02, 4.5, e) * (0.6 + 0.4 * Math.sin((o.reactAge || 0) * 9)); },
     parts:[part(mkBlueRinged, { scale:0.15, mat:[1, 0.35, 0.04, 0.6], sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0] })],
     views:[{ d:[0.6, 0.6, 1], k:2.2, hold:10, drift:0.025 }, { d:[1, 0.25, -0.2], k:2.0, hold:8, drift:0.02 }] });
+  addObj({ key:'flounder', name:'peacock flounder', type:'Bothus lunatus', kind:'fish', floor:[REEF[0] + 31, REEF[1] - 2, 0.02], size:0.4, rad:0.3, yaw:0.9,
+    fact:'It hatches as an ordinary upright fish; then one eye migrates over the top of its head, and it settles on its side on the bottom with both eyes facing up. It changes its colour and pattern to match the sand in a few seconds, and can move each eye on its own.',
+    motion:{ type:'hover', amp:0.005, turn:0.05 },
+    parts:[part(mkFlounder, { scale:0.4, mat:[1, 0.3, 1, 0.4], swim:[0.02, 0.6, 0.8, 0], swim2:[0, 2, 0, 0] })],
+    views:[{ d:[0.3, 0.9, 0.5], k:2.0, hold:10, drift:0.02 }, { d:[1, 0.3, 0.4], k:2.0, hold:9, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
