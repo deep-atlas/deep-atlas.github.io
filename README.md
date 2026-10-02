@@ -21,9 +21,15 @@ Then open http://localhost:5173. The server rebuilds the page on every reload, s
 To build once without serving: `node build.mjs`, which writes `dist/index.html`. That file is self-contained apart from the
 Google Fonts link, and works opened straight from disk too.
 
+## Put it online
+
+`dist/index.html` is the whole site in one file (fonts come from Google Fonts), so any static host works.
+With GitHub Pages: push this repository to GitHub, then in **Settings > Pages** set the source to **GitHub Actions**.
+The workflow in `.github/workflows/pages.yml` builds and publishes the page on every push to `main`.
+
 ## What's in it
 
-- **82 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **89 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -116,6 +122,7 @@ yellow hull is given a faint glow (its own work lights) so it reads as yellow at
 | `05-models.js` | fish, sharks, rays, turtles, whales, deep-sea fish |
 | `06-models2.js` | jellies, squid, octopus, plankton, microbes, floor life, Nautile, a diver |
 | `06b-models3.js` | blobfish, oarfish, coelacanth, goblin, frilled and Greenland sharks, fangtooth, lionfish, parrotfish, moray, flying fish |
+| `06d-models5.js` | cuttlefish, mantis shrimp, nudibranchs, pufferfish, sea otter, garibaldi, orca |
 | `06c-models4.js` | the vampire squid and ten more deep-sea animals (squids, dragonfish, loosejaw, chimaera, isopod, crabs, sea cucumber) |
 | `07-scenes.js` | the reef, kelp forest, vents, whale fall, Titanic, abyssal and hadal floors, schools |
 | `07b-scenes2.js` | the seamount garden, cold seep, Arctic sea ice, mangroves, seagrass; narwhal, dugong, orange roughy |
