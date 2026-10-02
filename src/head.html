@@ -319,6 +319,7 @@ body.ui-idle .info::before{opacity:0;transition:opacity 1s}
   .tick:not(.zone)::after{width:6px}
   .tick.zone{display:none}
   .hint{display:none}
+  .strip{bottom:auto;top:calc(122px + env(safe-area-inset-top,0px))}   /* (the info panel fills the bottom) */
   .info .readout,.info .scale{display:none}
 }
 </style>
