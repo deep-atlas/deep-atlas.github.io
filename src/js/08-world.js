@@ -337,7 +337,8 @@ function buildCatalog() {
   addObj({ key:'gulper', name:'gulper eel', type:'pelican eel · Eurypharynx pelecanoides', kind:'fish', at:[20000, 100, 2000], size:0.75, rad:0.5,
     fact:'Its loosely hinged mouth opens wide enough to swallow prey much bigger than itself, though it mostly eats small shrimp. The tip of its whip-like tail glows pink.',
     motion:{ type:'circle', R:2, v:0.25, bob:0.3, bank:0.1 },
-    parts:[part(mkGulperEel, { scale:0.75, mat:M_SKIN, ...FISH_SWIM(0.06, 0.5, 1.6, 1.2) })], views:SIDE });
+    parts:[part(mkGulperEel, { scale:0.75, mat:M_SKIN, ...FISH_SWIM(0.06, 0.5, 1.6, 1.2) })],
+    views:[{ d:[0.15, 0.12, 1], k:1.5, hold:10, drift:0.025 }, { d:[1, 0.25, 0.6], k:1.7, hold:8, drift:0.03 }, { d:[0.4, 0.5, 0.8], k:1.4, hold:8, drift:-0.03 }] });
   addObj({ key:'beakedwhale', name:'Cuvier’s beaked whale', label:'beaked whale', type:'the deepest-diving mammal · Ziphius cavirostris', kind:'air', at:[23000, -500, 2100], size:6, rad:4,
     fact:'The deepest-diving mammal known: one dive reached 2,992 m, and another lasted 3 hours and 42 minutes on a single breath.',
     motion:{ type:'circle', R:40, v:1.5, bob:5, bank:0.08 },
@@ -399,7 +400,7 @@ function buildCatalog() {
   addObj({ key:'snailfish', vsize:3.5, name:'Mariana snailfish', label:'snailfish', type:'Pseudoliparis swirei', kind:'fish', floor:[75200, 0, 3], size:0.11, rad:2,
     fact:'Among the deepest-living fish known, at home near 8,000 m. Its body is soft and jelly-like with little hard bone, built for a pressure some 800 times that at the surface.',
     parts:[part(mkSnailfish, { inst:schoolCloud(7, 1.6, 0.4, 81, 1, 0.5), school:[1, 0.11, 0.6, 0], mat:[0.85, 0.8, 1, 0.5], ...FISH_SWIM(0.07, 0.7, 1.2, 1.2) })],
-    views:[{ d:[0.3, 0.2, 1], k:1.2, hold:10, drift:0.02, frame:'world' }, { d:[1, 0.15, 0.2], k:0.75, hold:9, drift:0.02, frame:'world' }] });
+    views:[{ d:[0.3, 0.2, 1], k:0.8, hold:10, drift:0.02, frame:'world' }, { d:[1, 0.15, 0.2], k:0.6, hold:9, drift:0.02, frame:'world' }] });
   const DEEP = [84500, 0];
   addObj({ key:'challenger', name:'the Challenger Deep', label:'Challenger Deep', type:'the deepest point of the ocean', kind:'places', floor:[DEEP[0], DEEP[1], 0], size:30, rad:14,
     fact:'The deepest known point of the ocean, about 10,935 m down in the Mariana Trench, at over 1,000 times the pressure at the surface. Jacques Piccard and Don Walsh first reached it in 1960 in the bathyscaphe Trieste.',
