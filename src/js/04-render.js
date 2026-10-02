@@ -351,6 +351,7 @@ float waves(vec2 q, float t){
   return sin(dot(q, vec2(0.62, 0.21)) * 1.1 + t * 1.3) * 0.5 + sin(dot(q, vec2(-0.3, 0.9)) * 1.7 - t * 1.7) * 0.3
        + sin(dot(q, vec2(0.85, -0.6)) * 3.1 + t * 2.3) * 0.15 + (noise3(vec3(q * 1.3, t * 0.4)) - 0.5) * 0.6;
 }
+const vec3 MOON = normalize(vec3(-0.55, 0.42, 0.35));
 vec3 skyCol(vec3 d, float clouds){
   float y = max(d.y, 0.0);
   vec3 c = mix(vec3(0.55, 0.75, 0.95), vec3(0.12, 0.35, 0.85), pow(y, 0.5)) * 0.07;
@@ -359,7 +360,16 @@ vec3 skyCol(vec3 d, float clouds){
   vec2 q = d.xz / (y + 0.12) * 0.9 + vec2(uKd.w * 0.01, 0.0);
   float cl = smoothstep(0.55, 0.8, fbm3(vec3(q, 1.7)));
   c = mix(c, vec3(0.95, 0.97, 1.0) * 0.8, cl * 0.8 * smoothstep(0.0, 0.15, y) * clouds);
-  return c * uSun.w * 0.45;
+  c *= uSun.w * 0.45;
+  // at night: stars (hidden by cloud), and the moon
+  float nt = uMisc.z;
+  if (nt > 0.0){
+    vec3 g = floor(d * 260.0);
+    float st = step(0.9965, hash3(g)) * (0.4 + 0.6 * hash3(g + 7.0)) * smoothstep(0.02, 0.2, y) * (1.0 - cl * clouds);
+    float mk = max(dot(d, MOON), 0.0);
+    c += nt * (vec3(0.85, 0.9, 1.0) * st * 0.9 + vec3(0.9, 0.93, 1.0) * (step(0.99965, mk) * 3.0 + pow(mk, 40.0) * 0.08));
+  }
+  return c;
 }
 vec3 skyCol(vec3 d){ return skyCol(d, 1.0); }
 // the sea from above at a point hit along dir, tt away, from hgt metres up: rgb, and how opaque it is
@@ -374,7 +384,9 @@ vec4 seaAbove(vec3 dir, vec3 hit, float tt, float hgt){
   vec3 body = vec3(0.004, 0.02, 0.035) * uSun.w;
   vec3 r = reflect(dir, n);
   vec3 c = mix(body, skyCol(vec3(r.x, abs(r.y), r.z), 0.0), fres);
-  c += vec3(1.0, 0.97, 0.9) * pow(max(dot(r, uSunAir), 0.0), 60.0) * 2.5 * uSun.w * (0.4 + 0.6 * smoothstep(0.3, 0.8, noise3(vec3(hit.xz * 1.5, t * 2.0))));
+  float glit = 0.4 + 0.6 * smoothstep(0.3, 0.8, noise3(vec3(hit.xz * 1.5, t * 2.0)));
+  c += vec3(1.0, 0.97, 0.9) * pow(max(dot(r, uSunAir), 0.0), 60.0) * 2.5 * uSun.w * glit;
+  c += vec3(0.85, 0.9, 1.0) * pow(max(dot(r, MOON), 0.0), 40.0) * 0.9 * uMisc.z * glit;   // the moon's glade on the water
   c = mix(c, skyCol(normalize(vec3(dir.x, 0.02, dir.z))), smoothstep(hgt * 20.0 + 50.0, hgt * 300.0 + 2000.0, tt));
   return vec4(c, mix(0.6, 0.97, pow(1.0 - cosI, 2.0)));
 }

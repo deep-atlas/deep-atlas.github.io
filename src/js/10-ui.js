@@ -399,7 +399,7 @@ $('btnHelp').onclick = () => { $('help').hidden = false; };
 $('btnNotes').onclick = () => { $('notes').hidden = false; save('notesSeen', NOTES_V); $('btnNotes').classList.remove('fresh'); };
 $('notesClose').onclick = () => { $('notes').hidden = true; };
 $('notes').onclick = e => { if (e.target === $('notes')) $('notes').hidden = true; };
-const NOTES_V = '0.6';
+const NOTES_V = '0.7';
 if (load('notesSeen', '') !== NOTES_V) $('btnNotes').classList.add('fresh');
 $('helpClose').onclick = () => { $('help').hidden = true; };
 $('settingsHelp').onclick = () => { $('help').hidden = false; };
