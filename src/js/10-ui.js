@@ -157,6 +157,7 @@ function renderInfo() {
   if (TOUR.id && TOUR.i + 1 < TOUR.list.length) { gn.hidden = false; $('goNextTxt').textContent = 'next stop · ' + TOUR.list[TOUR.i + 1].label; }
   else gn.hidden = true;
   $('btnRideI').textContent = RIDE.on ? 'stop riding' : 'ride along';
+  $('btnCockpit').hidden = !RIDE.on; $('btnCockpit').textContent = RIDE.cockpit ? 'outside' : 'cockpit';
   $('btnPoke').hidden = !(o && o.react && VIEW.mode !== 'flight');
   $('btnLock').hidden = !NEAR.o;
   if (NEAR.o && NEAR.o !== NEAR.last) toast(`you have reached ${NEAR.o.name}`);
@@ -623,7 +624,8 @@ $('btnCompare').onclick = openCompare;
 $('capBtn').onclick = () => { if (JOURNEY.on) { endJourney(); return; } endCompare(); VIEW.auto = true; goView(VIEW.vi); updatePlay(); };
 
 // ---- riding along with Nautile
-const RIDE = { on:false, status:'' };
+const RIDE = { on:false, status:'', cockpit:false };
+function toggleCockpit() { if (!RIDE.on) startRide(); RIDE.cockpit = !RIDE.cockpit; $('btnCockpit').textContent = RIDE.cockpit ? 'outside' : 'cockpit'; toast(RIDE.cockpit ? 'in the cockpit: three crew lie in a titanium sphere looking out of small windows like this' : 'outside, following Nautile', 3500); }
 function startRide() {
   endCompare(); leaveTour();
   RIDE.on = true; VIEW.mode = 'ride'; VIEW.flight = null;
@@ -632,14 +634,22 @@ function startRide() {
 }
 function stopRide(quiet) {
   if (!RIDE.on) return;
-  RIDE.on = false; $('btnRide').setAttribute('aria-pressed', 'false');
+  RIDE.on = false; RIDE.cockpit = false; $('btnRide').setAttribute('aria-pressed', 'false');
   if (!quiet) { lockOn(BYKEY.nautile); }
   renderInfo();
 }
 $('btnRide').onclick = () => RIDE.on ? stopRide() : startRide();
 $('btnRideI').onclick = () => RIDE.on ? stopRide() : startRide();
+$('btnCockpit').onclick = toggleCockpit;
 function updateRide(dt) {
   const s = BYKEY.nautile;
+  if (RIDE.cockpit) {
+    // in the crew sphere, looking out of the nose window; the floodlights reach about 8 m ahead
+    CAM.pos = vmad(vmad(s.pos, s.fwd, 4.4), s.up, -0.45);
+    setBasis(vlerp(CAM.fwd, vnorm(vadd(s.fwd, vmul(s.up, -0.12))), 1 - Math.exp(-dt * 6)));
+    CAM.scale = 8; CAM.lampD = 8;
+    return;
+  }
   const back = vmad(vmad(s.pos, s.fwd, -17), [0, 1, 0], 5);
   const want = clampCam(back, 10);
   const k = 1 - Math.exp(-dt * 2.5);
@@ -782,6 +792,7 @@ window.addEventListener('keydown', e => {
     case 'p': photo(!PHOTO.on); break;
     case 'z': startSaver(); break;
     case 'b': RIDE.on ? stopRide() : startRide(); break;
+    case 'c': toggleCockpit(); break;
     case 'g': SET.glow = !SET.glow; saveSettings(); syncSettings(); toast('glow ' + (SET.glow ? 'on' : 'off')); break;
     case 'l': SET.labels = !SET.labels; saveSettings(); syncSettings(); toast('labels ' + (SET.labels ? 'on' : 'off')); break;
     case 'm': SET.sound = !SET.sound; saveSettings(); syncSettings(); soundOn(SET.sound); break;
@@ -849,7 +860,8 @@ function tick(dt) {
   tickTime(dt);
   if (RIDE.on) { for (const o of OBJS) if (o.motion.type !== 'still' || o.motion.fn || !o._placed) { moveObj(o, simTime); o._placed = true; } updateRide(dt); }
   else updateCamera(dt);
-  if (VIEW.mode === 'free' || VIEW.mode === 'flight') CAM.lampD = Math.max(CAM.scale, 2); else CAM.lampD = CAM.scale;
+  if (RIDE.on && RIDE.cockpit) CAM.lampD = 8;
+  else if (VIEW.mode === 'free' || VIEW.mode === 'flight') CAM.lampD = Math.max(CAM.scale, 2); else CAM.lampD = CAM.scale;
   updateInfoLive(dt);
   updateLadder();
   updateLabels();
