@@ -201,6 +201,17 @@ function buildWreck(A, seed) {
   return mb;
 }
 
+function mkSeaAngel() {
+  // Clione limacina, a sea angel: a shell-less swimming snail about 3 cm long, drawn upright (head at +x, swimming head-first),
+  // glass-clear with an orange-red gut and head, rowing with two wing-like flaps
+  const mb = new MB(), glass = [0.8, 0.9, 1.0, 0.3], red = [1.0, 0.35, 0.2, 0.6];
+  loft(mb, { n:20, m:12, sec:t => { const f = Math.pow(Math.sin(Math.min(1, t * 1.1 + 0.05) * PI), 0.6) * (1 - t * 0.55); return { x:0.5 - t, y:0, w:0.13 * f, h:0.13 * f, e:2 }; }, col:fc(glass), anim:() => [0, 0, 0, 0] });
+  ellip(mb, [0.38, 0, 0], [0.09, 0.075, 0.075], { n:6, m:10, col:fc(red) });           // the head
+  ellip(mb, [0.05, 0, 0], [0.16, 0.05, 0.05], { n:6, m:10, col:fc([0.95, 0.45, 0.2, 0.5]) });   // the gut
+  for (const sz of [1, -1]) fin(mb, [[0, 0.02], [0.08, 0.06], [0.06, 0.2], [-0.02, 0.26], [-0.07, 0.1], [-0.04, 0]], { origin:[0.24, 0, sz * 0.06], ua:[1, 0, 0], va:[0, 0, sz], col:fc(glass), anim:(a, b) => [0, Math.abs(b) * 4, 0, 0] });
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -290,6 +301,11 @@ function addPlaces2() {
     motion:{ type:'circle', R:18, v:1.3, bob:1.5, bank:0.1 },
     parts:[0, 1, 2].map(i => part(mkBeluga, { scale:4.2 - i * 0.5, off:[[0, 0, 0], [-4.5, 1.2, 2.6], [-3, -1, -3.2]][i], mat:M_SKIN, swim:[0.04, 0.45 + i * 0.04, 0.7, i * 1.7], swim2:[1, 2.5, 0, 0] })),
     views:[{ d:[0.4, 0.1, 1], k:1.3, hold:11, drift:0.02, off:[1, 0, 0] }, { d:[1, -0.3, 0.4], k:1.2, hold:9, drift:0.02 }] });
+  addObj({ key:'seaangel', name:'sea angels', type:'Clione limacina · a swimming snail', kind:'micro', at:[ICE[0] + 4, ICE[1] - 6, 6], size:0.03, vsize:0.2, rad:0.3,
+    fact:'A snail that has lost its shell and turned its foot into a pair of flapping wings. It hunts only one prey, the sea butterfly, a shelled cousin, seizing it with six tentacles that shoot from its head and pulling the snail out of its shell.',
+    motion:{ type:'hover', amp:0.04, turn:0.6, pitch:1.2 },
+    parts:[[0, 0, 0], [-0.04, -0.03, 0.05], [0.05, 0.02, -0.05]].map((off, i) => part(mkSeaAngel, { scale:0.03 - i * 0.004, off, mat:[0.5, 1.4, 1, 0.5], trans:true, swim2:[0, 2, 0.008, 2.6 + i * 0.4] })),
+    views:[{ d:[0.3, 0.1, 1], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.4, hold:9, drift:0.02 }] });
   addObj({ key:'lionsmane', name:'lion’s mane jellyfish', label:'lion’s mane', type:'Cyanea capillata', kind:'jellies', at:[ICE[0] - 14, ICE[1] + 8, 9], size:1.6, vsize:4, rad:3,
     fact:'The largest known jellyfish. Its bell can reach 2 m across and its hundreds of sticky tentacles trail over 30 m: one found in 1870 was longer than a blue whale. It thrives in cold Arctic and North Atlantic water.',
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
