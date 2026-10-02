@@ -106,7 +106,7 @@
 </aside>
 
 <div id="ladder" class="ladder" aria-label="Depth ladder: drag to dive, click a name to go there">
-  <div class="lad-cap">depth</div>
+  <div class="lad-cap" title="How deep is deep? Famous depths on one scale">depth &#9432;</div>
   <div id="ladTrack" class="lad-track"></div>
   <div id="ladMark" class="ladmark" role="slider" tabindex="0" aria-label="Depth"><span id="ladTxt"></span></div>
 </div>
@@ -202,6 +202,13 @@
         <li>A rebuilt Titanic; the info panel names the place you have reached.</li>
       </ul></details>
     </div>
+  </div>
+</div>
+<div id="depths" class="help" hidden>
+  <div class="help-card" role="dialog" aria-modal="true" aria-labelledby="depthsTitle">
+    <div class="help-top"><h2 id="depthsTitle">how deep is deep?</h2><button class="btn" id="depthsClose">close</button></div>
+    <p class="lede">Everything on one scale, from the surface to the bottom of the Challenger Deep. Click a line to dive there.</p>
+    <div id="depthChart" class="depth-chart"></div>
   </div>
 </div>
 <div id="nogl" class="nogl" hidden>This needs WebGL 2, which this browser or device has turned off.</div>
