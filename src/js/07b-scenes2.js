@@ -126,7 +126,7 @@ function mkNarwhal() {
     hShape:t => t < 0.15 ? lerp(0.75, 1, smooth(0, 0.15, t)) : 1,
     pect:{ at:0.22, len:0.08, w:0.035, down:0.6, back:0.5, y:-0.55, col:dark },
     dorsal:[{ at:0.5, len:0.15, h:0.012, col:dark }],
-    extra:(mb) => tube(mb, { n:20, m:5, path:t => [0.47 + t * 0.55, 0.0 + t * 0.03, 0.012], r:t => 0.012 * (1 - t * 0.8), col:(t, u) => fract(t * 22 + u) < 0.3 ? [0.65, 0.6, 0.48] : [0.92, 0.9, 0.8], anim:p => swimA(p) }) });
+    extra:(mb) => tube(mb, { n:20, m:5, path:t => [0.47 + t * 0.55, 0.0 + t * 0.03, 0.012], r:t => 0.017 * (1 - t * 0.75), col:(t, u) => fract(t * 22 + u) < 0.3 ? [0.72, 0.66, 0.52] : [1.0, 0.97, 0.88], anim:p => swimA(p) }) });
 }
 
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
@@ -208,11 +208,11 @@ function addPlaces2() {
     parts:[part(() => buildIce(BYKEY.seaice.anchor, 51), { mat:[1, 0.3, 0.7, 0.8], glowSun:true, tint:[0.3, 0.3, 0.3] }),
       part(mkSardine, { inst:schoolMill(180, 5, 2, 88, 0.6), school:[0, 0.2, 1, 0], off:[14, -9, 6], tint:[0.45, 0.5, 0.45], mat:M_SKIN, ...FISH_SWIM(0.08, 3, 0.9, 1.8) })],
     views:[{ d:[0.6, -0.35, 1], k:0.22, hold:12, drift:0.015, frame:'world', off:[0, -3, 0] }, { d:[0.2, -0.85, 0.5], k:0.15, hold:10, drift:0.02, frame:'world', off:[0, -2, 0] }, { d:[0.5, 0.4, 1], k:0.6, hold:9, drift:0.015, frame:'world', air:true }] });
-  addObj({ key:'narwhal', name:'narwhals', type:'Monodon monoceros · the unicorns of the sea', kind:'air', at:[ICE[0] + 10, ICE[1] + 5, 14], size:4.5, vsize:9, rad:6, predator:true,
+  addObj({ key:'narwhal', name:'narwhals', type:'Monodon monoceros · the unicorns of the sea', kind:'air', at:[ICE[0] + 10, ICE[1] + 5, 14], size:4.5, vsize:5.5, rad:6, predator:true,
     fact:'The tusk is a tooth, usually the male’s upper left canine, that spirals out through the lip to as much as 3 m. It is packed with nerve endings and may sense the water. Narwhals dive below 1,500 m under the winter pack ice to hunt halibut and squid.',
     motion:{ type:'circle', R:22, v:1.6, bob:2, bank:0.12 },
     parts:[0, 1, 2, 3].map(i => part(mkNarwhal, { scale:4.5 - i * 0.25, off:[[0, 0, 0], [-4, 1.5, 3], [-6, -1, -2.8], [-10, 0.6, 1]][i], mat:M_SKIN, swim:[0.04, 0.5 + i * 0.03, 0.7, i * 1.3], swim2:[1, 2.5, 0, 0] })),
-    views:[{ d:[0.2, 0.15, 1], k:1.8, hold:11, drift:0.02 }, { d:[1, 0.3, 0.4], k:1.4, hold:9, drift:0.02 }, { d:[0.3, -0.6, 0.6], k:1.6, hold:9, drift:0.02 }] });
+    views:[{ d:[0.45, 0.12, 1], k:1.3, hold:11, drift:0.02, off:[1.5, 0, 0] }, { d:[1, 0.2, 0.5], k:1.1, hold:9, drift:0.02, off:[2, 0, 0] }, { d:[0.3, -0.6, 0.6], k:2.2, hold:9, drift:0.02 }] });
   addObj({ key:'mangroves', name:'the mangroves', label:'mangroves', type:'a forest standing in the sea', kind:'places', floor:[MANG[0], MANG[1], 0], size:44, rad:24,
     fact:'Mangrove trees stand in salt water on arching prop roots, filtering out salt as they drink. The tangle of roots is a nursery: many reef fish spend their first years hiding there. Mangrove forests break storm waves and store several times more carbon than inland forests.',
     parts:[part(() => buildMangroves(BYKEY.mangroves.anchor, 61), { mat:[1, 0.3, 1, 0.3] }),
