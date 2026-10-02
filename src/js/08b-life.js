@@ -134,6 +134,7 @@ void main(){
 }`;
 const P_SPARK = program(VS_SPARK, FS_SPARK, 'sparks');
 function drawSparks() {
+  drawSpawn();
   if (!SPARKS.length) return;
   const u = sceneProg(P_SPARK); if (!u) return;
   gl.uniform1f(u.uPx, ASCII.rows * SY / Math.tan(CAM.fov / 2) * 0.5);
@@ -214,6 +215,43 @@ function breachPost(o, t) {
   }
 }
 
+// ---- coral spawning: at night the reef releases bundles of eggs and sperm that float up towards the surface
+const VS_SPAWN = GLSL_SCENE + `
+uniform vec3 uBase;     // the reef's centre relative to the camera
+uniform float uPx, uOn, uR, uH;
+layout(location = 0) in vec4 aSeed;
+out float vA; out float vW; out vec3 vRel;
+void main(){
+  float t = uKd.w;
+  float age = fract(t * 0.012 * (0.7 + aSeed.w * 0.6) + aSeed.z);
+  float a = aSeed.x * 6.2831, r = sqrt(aSeed.y) * uR;
+  vec3 p = uBase + vec3(cos(a) * r + sin(t * 0.3 + aSeed.w * 9.0) * 0.3, age * uH, sin(a) * r + cos(t * 0.27 + aSeed.x * 7.0) * 0.3);
+  vRel = p;
+  vA = uOn * smoothstep(0.0, 0.05, age) * (1.0 - smoothstep(0.75, 1.0, age));
+  gl_Position = uVP * vec4(p, 1.0); vW = gl_Position.w;
+  gl_PointSize = clamp(uPx * 0.02 / max(gl_Position.w, 1e-6), 4.0, 10.0);
+}`;
+const FS_SPAWN = GLSL_SCENE + GLSL_LIGHT + `
+in float vA; in float vW; in vec3 vRel; out vec4 o;
+void main(){
+  vec2 q = gl_PointCoord * 2.0 - 1.0; float d = dot(q, q); if (d > 1.0) discard;
+  float depth = -(uCam.y + vRel.y);
+  vec3 Ld; vec3 lamp = lampAt(vRel, vec3(0.0, 1.0, 0.0), Ld);
+  vec3 c = vec3(1.0, 0.45, 0.55) * (sunAt(depth) + lamp * 2.5 + glowAt(vRel, vec3(0.0)) + 0.04) * vA * (1.0 - d * 0.5);
+  o = vec4(fogMix(c, vRel) * vA, 0.0);
+  gl_FragDepth = clamp(vW * uMisc.y, 0.0, 1.0);
+}`;
+const P_SPAWN = program(VS_SPAWN, FS_SPAWN, 'spawn');
+function drawSpawn() {
+  const R = BYKEY.reef; if (!R || !R.vis) return;
+  const on = smooth(0.4, 0.9, night()); if (on <= 0) return;
+  const u = sceneProg(P_SPAWN); if (!u) return;
+  gl.uniform3fv(u.uBase, vsub(R.pos, CAM.pos)); gl.uniform1f(u.uOn, on); gl.uniform1f(u.uR, 9); gl.uniform1f(u.uH, -R.pos[1] + 0.5);
+  gl.uniform1f(u.uPx, ASCII.rows * SY / Math.tan(CAM.fov / 2) * 0.5);
+  gl.bindVertexArray(SNOW_VAO);
+  gl.drawArrays(gl.POINTS, 0, SNOW_N);
+}
+
 // ---- who lights, who hunts, who reacts
 function addLife() {
   const set = (k, v) => { if (BYKEY[k]) Object.assign(BYKEY[k], v); };
@@ -238,6 +276,7 @@ function addLife() {
   set('spermwhale', { motion:{ type:'still', fn:huntMotion }, hunt:true });
   set('giantsquid', { post:squidPost });
   set('humpback', { post:breachPost });
+  set('reef', { readout:() => night() > 0.5 ? 'night: the corals are spawning, bundles of eggs and sperm rising to the surface\n(on real reefs this happens a few nights a year, just after a full moon)' : 'day: the coral polyps are pulled in; at night they open to feed' });
   const bb = BYKEY.baitball;
   if (bb) {
     set('sailfish', { anchor:bb.anchor.slice(), motion:{ type:'rose', R:12, v:4.5, k:2, bob:1.2, ph:0.6 } });
