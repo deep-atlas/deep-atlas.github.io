@@ -169,6 +169,38 @@ function mkSargassumFish() {
   return mb;
 }
 
+// ---- a wreck turned reef: a 60 m steel freighter on the sand at 30 m, listing to port, grown over with soft corals and sea fans
+function buildWreck(A, seed) {
+  const mb = new MB(), r = rng(seed), rust = [0.62, 0.42, 0.28], rustL = [0.85, 0.6, 0.38], hole = [0.02, 0.02, 0.02], deck = [0.55, 0.45, 0.35];
+  const growth = [[0.75, 0.3, 0.75], [1.0, 0.5, 0.2], [0.95, 0.85, 0.3], [0.9, 0.4, 0.5], [0.6, 0.75, 0.45]];
+  const enc = p => { const n = Math.sin(p[0] * 1.3 + p[1] * 2.1) * Math.sin(p[2] * 1.7 + p[0] * 0.6) + 0.5 * Math.sin(p[0] * 4.1 + p[2] * 3.3);
+    return n > 0.75 ? growth[Math.floor(fract(p[0] * 0.37 + p[1] * 0.11) * growth.length)] : n > 0.35 ? rustL : rust; };
+  const L = 60, X0 = -30, halfW = x => 5 * Math.pow(1 - Math.pow(clamp((x - 12) / 18, 0, 1), 2), 0.6) * (x < -26 ? lerp(0.6, 1, (x + 30) / 4) : 1) + 0.1, H = 7;
+  const m0 = mb.mark();
+  loft(mb, { n:50, m:24, capStart:true, capEnd:true, sec:t => { const x = X0 + t * L; return { x, y:H / 2 + 0.6 * smooth(10, 30, x), w:halfW(x), h:H / 2, e:4 }; },
+    col:(t, u, p, sy, sz) => { if (sy > 0.95) { const x = p[0]; return [-14, -2, 9].some(h => Math.abs(x - h) < 3) && Math.abs(p[2]) < 2.5 ? hole : deck; }
+      if (Math.abs(sz) > 0.4 && Math.abs(p[1] - 5.6) < 0.25 && fract(p[0] / 1.8) < 0.3 && p[0] < -18) return hole; return enc(p); } });
+  // the bridge and accommodation aft, a funnel, a fallen mast across the deck
+  loft(mb, { n:2, m:4, sec:t => ({ x:-20 - t * 8, y:H + 2.2, w:3.6, h:2.2, e:9 }), col:(t, u, p, sy, sz) => Math.abs(sz) > 0.6 && Math.abs(p[1] - H - 3) < 0.4 && fract(p[0] / 1.2) < 0.4 ? hole : enc(p) });
+  loft(mb, { n:2, m:4, sec:t => ({ x:-21 - t * 5, y:H + 5.2, w:2.6, h:0.9, e:9 }), col:(t, u, p) => enc(p) });
+  tube(mb, { n:3, m:10, path:t => [-26, H + 4.4 + t * 3.4, 0], r:t => 1.0 - t * 0.1, col:t => t > 0.85 ? hole : enc([-26, H + 5 + t * 3, 1]) });
+  tube(mb, { n:10, m:5, path:t => [2 + t * 13, H + 0.4 + Math.sin(t * PI) * 0.4, -1 + t * 4.5], r:0.22, col:t => enc([2 + t * 13, H, t * 4]) });
+  for (const x of [-14, -2, 9]) for (const sz of [1, -1]) loft(mb, { n:1, m:4, sec:t => ({ x:x - 3 + t * 6, y:H + 0.4, w:0.15, h:0.4, e:9 }), col:() => enc([x, H, sz * 2.6]) }), mb.xform(mb.mark(), q => q);
+  // list to port 25 degrees, settle into the sand, and lie on the floor's slope
+  const c = Math.cos(0.44), sn = Math.sin(0.44);
+  mb.xform(m0, q => { const y = q[1], z = q[2]; return [q[0], y * c - z * sn - 1.2, y * sn + z * c]; });
+  mb.xform(m0, q => [q[0], q[1] + groundAt(A, q[0], 0), q[2]]);
+  // soft corals and sea fans grown on the upturned side and the deck edge
+  for (let k = 0; k < 70; k++) {
+    const x = X0 + 3 + r() * (L - 6), side = r() < 0.7 ? 1 : -1, ang = side > 0 ? 0.44 : 0.44 - 1.0, hw = halfW(x);
+    // a point on the starboard (upper) side or along the deck
+    const y0 = r() * H, z0 = hw * 1.02, y = y0 * c - z0 * sn - 1.2 + groundAt(A, x, 0), z = y0 * sn + z0 * c;
+    const col = growth[Math.floor(r() * growth.length)];
+    if (r() < 0.35) fanTree(mb, [x, y, z], 1 + r() * 1.5, col, k + 900); else softCoral(mb, [x, y, z], 0.5 + r() * 0.6, col, k + 700);
+  }
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -263,6 +295,12 @@ function addPlaces2() {
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
     parts:[part(mkLionsMane, { scale:1.6, mat:[0.8, 0.7, 1, 0.4], trans:true, pulse:[0.1, 0.3, 0, 0], sway:[0.12, 0.3, 2, 0] })],
     views:[{ d:[0.3, 0.1, 1], k:1.6, hold:11, drift:0.02, frame:'world', off:[0, -1.5, 0] }, { d:[0.2, 0.9, 0.3], k:1.0, hold:9, drift:0.02, frame:'world' }, { d:[0.5, -0.5, 0.8], k:1.2, hold:9, drift:0.02, frame:'world', off:[0, -3, 0] }] });
+  const WRECK = [3200, -600];
+  addObj({ key:'wreck', name:'a wreck turned reef', label:'shipwreck', type:'a 60 m freighter on the sand at 30 m', kind:'places', floor:[WRECK[0], WRECK[1], 0], size:60, rad:32, yaw:0.5, frame:'obj',
+    fact:'A sunken ship is a ready-made reef. Within months its steel is coated with algae and sponges; within years soft corals, sea fans and anemones cover it, and fish shelter in its holds. Some navies and harbours now sink old ships on purpose to make new reefs.',
+    parts:[part(() => buildWreck(BYKEY.wreck.anchor, 33), { mat:[1, 0.2, 1, 0.3], sway:[0.04, 0.7, 1.2, 0] }),
+      part(mkSardine, { inst:schoolCloud(350, 3, 1.5, 133, 1, 0.3), school:[1, 0.06, 1, 0], off:[-2, 6, 2], tint:[1.0, 0.85, 0.6], mat:M_SILVER, shy:10, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
+    views:[{ d:[0.45, 0.3, 1], k:0.5, hold:12, drift:0.015, off:[0, 3, 0] }, { d:[0.6, 0.15, 1], k:0.35, hold:10, drift:0.015, off:[20, 3, 0] }, { d:[-0.5, 0.45, 0.8], k:0.26, hold:9, drift:0.015, off:[-22, 6, 0] }] });
   const SARG = [5200, 900];
   addObj({ key:'sargassum', name:'sargassum raft', label:'sargassum', type:'a floating forest · Sargassum natans', kind:'places', at:[SARG[0], SARG[1], 0.2], size:7, rad:4,
     fact:'Golden-brown seaweed that never touches the bottom, buoyed up by berry-like air bladders. In the Sargasso Sea rafts of it gather into floating forests that shelter baby turtles, eels on their way from their spawning grounds, and fish found nowhere else.',
