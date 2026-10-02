@@ -86,6 +86,7 @@ body.info-hidden .info{display:none}
 .btn.primary{color:var(--ink)}
 #btnSub[aria-pressed="true"],#btnRide[aria-pressed="true"]{color:var(--sub);border-color:rgba(143,230,255,.55)}
 #btnRide{color:var(--sub)}
+#btnNotes.fresh{color:var(--void);background:var(--flare);border-color:var(--flare)}
 #btnSound{min-width:calc(9.5ch + 22px);text-align:center}
 #btnSound.on{color:var(--flare);border-color:rgba(255,179,92,.6)}
 #btnSound.silent{color:var(--mute);border-color:rgba(255,128,118,.5)}
@@ -263,6 +264,13 @@ input[type=range]{width:100%;accent-color:var(--flare)}
 .photo-bar .pb-l{color:var(--flare);font-size:calc(10.5px*var(--ts));letter-spacing:.16em;text-transform:uppercase;padding:0 8px}
 body.photo .info,body.photo .controls,body.photo .ladder,body.photo .daily,body.photo .brand,body.photo .strip,body.photo .info-pill,body.photo .labels.hide,body.photo .submark{display:none!important}
 .cmp-list{max-height:50vh;overflow:auto}
+.notes-list details{border-top:1px solid var(--line);padding:8px 0}
+.notes-list summary{cursor:pointer;display:flex;gap:12px;align-items:baseline;list-style:none}
+.notes-list summary::-webkit-details-marker{display:none}
+.notes-list .nv{color:var(--flare);font-variant-numeric:tabular-nums;min-width:3ch}
+.notes-list .nt{color:var(--ink)}
+.notes-list ul{margin:6px 0 2px;padding-left:20px;color:var(--soft);font-size:calc(11.5px*var(--ts))}
+.notes-list li{margin:3px 0}
 /* screensaver: nothing but the ocean, and a quiet caption */
 body.saver .info,body.saver .controls,body.saver .ladder,body.saver .daily,body.saver .brand,body.saver .strip,body.saver .info-pill,body.saver .labels,body.saver .submark,body.saver .caption,body.saver .panel,body.saver .atlas{display:none!important}
 body.saver #view{cursor:none}

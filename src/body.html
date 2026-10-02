@@ -36,6 +36,7 @@
   <button class="btn" id="btnRide" aria-pressed="false" title="Ride along with Nautile, a real deep submersible">ride</button>
   <button class="btn" id="btnSound" aria-pressed="false" title="Sound (M)">sound</button>
   <button class="btn" id="btnSettings" aria-expanded="false" aria-controls="settings">settings</button>
+  <button class="btn" id="btnNotes" title="What's new">new</button>
   <button class="btn" id="btnHelp" title="Controls help (?)">?</button>
   <button class="btn play" id="btnPlay" title="Pause the camera (space)"><b aria-hidden="true"></b><span>pause</span></button>
   <button class="btn resume" id="btnResume" hidden>&#9656; resume tour</button>
@@ -163,6 +164,35 @@
     </div>
     <p class="note">Depths and sizes are real; the horizontal layout is compressed so that every zone sits within a swim of the next. Fast motions are slowed or sped up to be seen, and the look of each creature is an artist's model. Below about 150 m the view is lit as a submersible's lamps would light it. Nautile is real; its route here is invented.</p>
     <p class="note">deepatlas · inspired by <a href="https://github.com/eshin087/gcdatlas" target="_blank" rel="noopener">gcdatlas</a> · your settings and progress stay on this device</p>
+  </div>
+</div>
+<div id="notes" class="help" hidden>
+  <div class="help-card" role="dialog" aria-modal="true" aria-labelledby="notesTitle">
+    <div class="help-top"><h2 id="notesTitle">what's new</h2><button class="btn" id="notesClose">close</button></div>
+    <div class="notes-list">
+      <details open><summary><span class="nv">0.6</span><span class="nt">a living ocean</span></summary><ul>
+        <li>Schools part round hunters and divers. Watch sailfish and dolphins slash through the sardine bait ball.</li>
+        <li>The hunt: a sperm whale patrols near the giant squid and charges; the squid dodges, jetting away.</li>
+        <li>Living lights light their surroundings: the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights.</li>
+        <li>Disturb them: Atolla's spinning alarm, the vampire squid's inside-out cloak, a glowing sea cucumber. Click open water and the plankton flash.</li>
+        <li>Watch the night migration (in time of day): lanternfish rise 400 m at dusk.</li>
+        <li>From a whale to a microbe: a new tour that zooms through size, every animal at true scale.</li>
+        <li>Hidden worlds: a seamount coral garden, a brine pool on the seafloor, Arctic sea ice with narwhals, mangroves, seagrass and a dugong.</li>
+      </ul></details>
+      <details><summary><span class="nv">0.5</span><span class="nt">more of the deep</span></summary><ul>
+        <li>Colossal, bigfin and glass squid, black dragonfish, stoplight loosejaw, ghost shark, giant isopod, Japanese spider crab, yeti crabs and the "headless chicken monster".</li>
+        <li>A rebuilt vampire squid.</li>
+      </ul></details>
+      <details><summary><span class="nv">0.4</span><span class="nt">the odd ones</span></summary><ul>
+        <li>Blobfish, oarfish, coelacanth, goblin and frilled sharks, fangtooth, Greenland shark, lionfish, parrotfish, moray and flying fish.</li>
+        <li>A rebuilt sperm whale; the depth ladder no longer lifts you to the surface on the way down.</li>
+      </ul></details>
+      <details><summary><span class="nv">0.3</span><span class="nt">above the waves</span></summary><ul>
+        <li>Swim up through the surface to see the sky and the sea from above.</li>
+        <li>Nautile, Ifremer's real yellow submersible, roams the atlas; ride along with it.</li>
+        <li>A rebuilt Titanic; the info panel names the place you have reached.</li>
+      </ul></details>
+    </div>
   </div>
 </div>
 <div id="nogl" class="nogl" hidden>This needs WebGL 2, which this browser or device has turned off.</div>

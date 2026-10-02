@@ -396,6 +396,11 @@ $('btnSound').onclick = () => { SET.sound = !SET.sound; saveSettings(); syncSett
 $('btnSub').onclick = () => { SET.subMark = !SET.subMark; saveSettings(); syncSettings(); };
 $('btnPlay').onclick = togglePlay;
 $('btnHelp').onclick = () => { $('help').hidden = false; };
+$('btnNotes').onclick = () => { $('notes').hidden = false; save('notesSeen', NOTES_V); $('btnNotes').classList.remove('fresh'); };
+$('notesClose').onclick = () => { $('notes').hidden = true; };
+$('notes').onclick = e => { if (e.target === $('notes')) $('notes').hidden = true; };
+const NOTES_V = '0.6';
+if (load('notesSeen', '') !== NOTES_V) $('btnNotes').classList.add('fresh');
 $('helpClose').onclick = () => { $('help').hidden = true; };
 $('settingsHelp').onclick = () => { $('help').hidden = false; };
 $('help').onclick = e => { if (e.target === $('help')) $('help').hidden = true; };
@@ -786,6 +791,7 @@ window.addEventListener('keydown', e => {
     case 'arrowright': stepPlace(1); break;
     case 'escape':
       if (!$('help').hidden) { $('help').hidden = true; break; }
+      if (!$('notes').hidden) { $('notes').hidden = true; break; }
       if (PHOTO.on) { photo(false); break; }
       if (JOURNEY.on) { endJourney(); break; }
       if (CMP.obj) { $('capBtn').click(); break; }
