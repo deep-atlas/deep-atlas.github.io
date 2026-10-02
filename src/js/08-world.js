@@ -187,6 +187,8 @@ function buildCatalog() {
   addObj({ key:'octopus', name:'octopus', type:'common octopus · Octopus vulgaris', kind:'cephs', floor:[REEF[0] - 4, REEF[1] - 3, 0.15], size:0.9, rad:0.6, yaw:1,
     fact:'Two thirds of an octopus’s neurons are in its arms, and each arm can taste what it touches. It can change colour and the texture of its skin in a fraction of a second.',
     motion:{ type:'hover', amp:0.05, turn:0.3 },
+    // at rest it matches the reef (a dull sandy green); swim close or disturb it and it flushes dark red, then slowly fades back
+    post:o => { const e = smooth(0, 1, o.reactEnv || 0); o.parts[0].tint = vlerp([0.95, 1.05, 0.95], [1.25, 0.55, 0.5], e).map((c, i) => lerp(c, [0.85, 1.25, 1.2][i], (1 - e) * 0.55)); },
     parts:[part(() => mkOctopus(), { scale:0.9, mat:M_SKIN, sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0] })],
     views:[{ d:[0.6, 0.6, 1], k:2.2, hold:10, drift:0.025 }, { d:[1, 0.25, -0.2], k:2.0, hold:8, drift:0.02 }] });
   addObj({ key:'turtle', name:'green sea turtle', type:'Chelonia mydas', kind:'air', floor:[REEF[0] + 60, REEF[1] - 40, 3], size:1.1, rad:0.8,
