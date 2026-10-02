@@ -201,6 +201,42 @@ function mkSeadragon() {
   fin(mb, [[0, 0], [-0.04, 0.05], [-0.12, 0.05], [-0.14, 0]], { origin:spine(0.38), ua:[1, 0, 0], va:[0, 1, 0], col:fc([0.9, 0.85, 0.7]), anim:(a, b) => [0, 0, Math.abs(b) * 0.5, 0] });
   return mb;
 }
+function mkNautilus() {
+  // chambered nautilus, one unit = the shell's diameter, head at +x. The shell is a logarithmic spiral that triples its size
+  // each turn; the soft body sits in the last chamber, the leathery hood on top, a cluster of ridged tentacles in front
+  const mb = new MB(), cream = [0.95, 0.9, 0.8], stripe = [0.62, 0.32, 0.16], hood = [0.55, 0.35, 0.25], flesh = [0.9, 0.78, 0.68];
+  const b = Math.log(3) / TAU, thE = 4 * PI - PI / 3, R = 0.634, a = R / Math.exp(b * thE), th0 = thE - 5 * PI;
+  const ro = th => a * Math.exp(b * th);
+  const at = th => { const rc = ro(th) * 0.667; return [rc * Math.cos(th), rc * Math.sin(th), 0]; };
+  const mk = mb.mark();
+  tube(mb, { n:140, m:14, path:t => at(lerp(th0, thE, t)), r:t => ro(lerp(th0, thE, t)) * 0.333,
+    col:(t, u, p) => {
+      const th = lerp(th0, thE, t), rr = Math.hypot(p[0], p[1]), outer = rr > ro(th) * 0.7;
+      // flame stripes on the older part of the shell, fading out before the aperture
+      return t < 0.9 && outer && Math.sin(th * 5 + rr * 14) > -0.15 ? stripe : cream;
+    } });
+  mb.xform(mk, p => [p[0], p[1], p[2] * 0.62]);
+  // the shell is centred on the coil; move it so the aperture sits near the origin
+  const ap = at(thE), tan = vnorm([-Math.sin(thE), Math.cos(thE), 0]);
+  mb.xform(mk, p => [p[0] - ap[0], p[1] - ap[1] + 0.05, p[2]]);
+  const head = vadd(vmul(tan, 0.05), [0, 0.05, 0]);
+  ellip(mb, head, [0.13, 0.11, 0.1], { n:8, m:12, col:fc(flesh) });
+  // the hood, folded over the top of the head like a lid
+  ellip(mb, vadd(head, [0.02, 0.08, 0]), [0.16, 0.06, 0.11], { n:6, m:12, col:(u, v, p) => Math.sin(p[0] * 60) * Math.sin(p[2] * 50) > 0.4 ? [0.4, 0.25, 0.18] : hood });
+  // pinhole eyes on stalks
+  for (const sz of [1, -1]) { ellip(mb, vadd(head, [0.03, 0.0, sz * 0.1]), [0.035, 0.035, 0.02], { n:4, m:8, col:fc(flesh) }); ellip(mb, vadd(head, [0.035, 0.0, sz * 0.118]), [0.012, 0.012, 0.005], { n:3, m:6, col:fc([0.05, 0.04, 0.04]) }); }
+  // the tentacles: a few dozen, fanning forward and down
+  const r = rng(4242);
+  for (let k = 0; k < 34; k++) {
+    const ang = r() * TAU, rad = 0.02 + r() * 0.06, L = 0.18 + r() * 0.16, droop = 0.05 + r() * 0.15, cy = Math.sin(ang) * rad * 0.8, cz = Math.cos(ang) * rad;
+    const base = vadd(head, [0.1, cy - 0.02, cz]);
+    tube(mb, { n:6, m:3, path:t => [base[0] + t * L, base[1] - t * t * droop + cy * t * 0.8, base[2] + cz * t * 1.6], r:t => 0.008 * (1 - t * 0.6),
+      col:fc(flesh), anim:t => [0, 0, t * 0.5, 0] });
+  }
+  // the funnel it jets with, under the head
+  tube(mb, { n:4, m:6, path:t => vadd(head, [0.05 + t * 0.06, -0.09, 0]), r:t => 0.025 - t * 0.008, col:fc(flesh) });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -259,6 +295,11 @@ function addShallows(REEF) {
     fact:'By day hundreds of chevron barracuda hang in a slowly turning tornado off the reef wall, then split up at dusk to hunt alone. A barracuda can lunge at over 40 km/h, snapping with fang-like teeth.',
     parts:[part(mkBarracuda, { inst:schoolMill(150, 2.8, 4.5, 717, 0.35), school:[0, 0.9, 1, 0], mat:M_SILVER, shy:4, ...FISH_SWIM(0.05, 1.6, 0.85, 2) })],
     views:[{ d:[0.3, 0.1, 1], k:1.4, hold:10, drift:0.025, frame:'world' }, { d:[0.2, -0.9, 0.3], k:0.9, hold:9, drift:0.03, frame:'world' }, { d:[1, 0.3, 0.2], k:0.55, hold:9, drift:0.03, frame:'world' }] });
+  addObj({ key:'nautilus', name:'chambered nautilus', label:'nautilus', type:'Nautilus pompilius', kind:'cephs', floor:[11300, -300, 2.5], size:0.2, rad:0.25, yaw:0.5,
+    fact:'A shelled relative of the octopus, little changed in 500 million years. It sinks and rises by pumping liquid in and out of the sealed chambers of its shell, and jets backwards with its funnel. By day it stays deep on reef slopes, rising at night to feed.',
+    motion:{ type:'hover', amp:0.15, turn:0.3 },
+    parts:[part(mkNautilus, { scale:0.2, mat:M_SKIN, swim2:[0, 1.6, 0.02, 0.15], sway:[0.03, 0.8, 3, 0] })],
+    views:[{ d:[0.15, 0.12, 1], k:2.6, hold:10, drift:0.02 }, { d:[1, 0.2, 0.5], k:2.8, hold:9, drift:0.02 }, { d:[-0.7, 0.4, 0.7], k:2.8, hold:8, drift:-0.02 }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },

@@ -50,7 +50,7 @@ const TOURS = [
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
     stops:['mangroves', 'seagrass', 'dugong', 'seadragon', 'seaice', 'narwhal', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
-    stops:['seadragon', 'spidercrab', 'coelacanth', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
+    stops:['seadragon', 'spidercrab', 'coelacanth', 'nautilus', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
     stops:['isopod', 'vents', 'tubeworms', 'yeticrab', 'whalefall', 'sixgill', 'abyss', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'snailfish', 'amphipods', 'challenger'] },
   { id:'sizes', name:'from a whale to a microbe', blurb:'One long zoom through size: every animal at its true size beside the last, from a 25 m blue whale to a single cell under a thousandth of a millimetre.', journey:true },

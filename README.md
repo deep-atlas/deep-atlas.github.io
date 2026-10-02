@@ -29,7 +29,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **102 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **103 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -42,7 +42,8 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
   and the red helmet jellyfish. On the reef and in the kelp: cuttlefish, mantis shrimp, nudibranchs, a pufferfish, garibaldi
   and a loose school of blacksmith, a sea otter in the canopy, blacktip reef sharks and snappers, and out on the sand garden
   eels that duck into their burrows and a stingray. Orcas in open water, a tornado of chevron barracuda off the
-  drop-off, and a leafy seadragon by the seagrass.
+  drop-off, a leafy seadragon by the seagrass, and a chambered nautilus
+  on the deep reef slope.
 - **Hidden worlds**: a seamount's deep coral garden (bubblegum, bamboo and black corals, sea lilies, orange roughy), a cold seep
   whose brine pool is a lake on the seafloor ringed by mussels, the underside of Arctic sea ice with ice algae, brinicles and
   narwhals, a mangrove forest on its prop roots, and a seagrass meadow with a grazing dugong.

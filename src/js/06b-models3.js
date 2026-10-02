@@ -198,12 +198,12 @@ function addMoreFish(REEF) {
   addObj({ key:'frilledshark', name:'frilled shark', type:'Chlamydoselachus anguineus', kind:'sharks', at:[14800, 350, 700], size:1.8, rad:1.1,
     fact:'An eel-like shark with six frilled gill slits and about 300 three-pronged teeth. Its pregnancy may last three and a half years, the longest known of any animal.',
     motion:{ type:'circle', R:6, v:0.35, bob:0.6, bank:0.05 },
-    parts:[part(mkFrilledShark, { scale:1.8, mat:M_SKIN, ...FISH_SWIM(0.07, 0.45, 1.5, 1.2) })], views:SIDE });
+    parts:[part(mkFrilledShark, { scale:1.8, mat:M_SKIN, ...FISH_SWIM(0.07, 0.45, 1.5, 1.2) })], views:[{ d:[0.2, 0.12, 1], k:1.3, hold:10, drift:0.02 }, { d:[0.9, 0.2, 0.5], k:1.2, hold:9, drift:0.02 }, { d:[-0.6, 0.4, 0.8], k:1.4, hold:8, drift:-0.02 }] });
   addObj({ key:'fangtooth', name:'fangtooth', type:'Anoplogaster cornuta', kind:'fish', at:[20500, 300, 2000], size:0.16, rad:0.12,
     fact:'For its size it has the largest teeth of any fish. The two longest are so big that it has sockets either side of its brain to hold them when its mouth closes.',
     motion:{ type:'hover', amp:0.03, turn:0.3 },
     parts:[part(mkFangtooth, { scale:0.16, mat:M_SKIN, ...FISH_SWIM(0.04, 1.2, 0.9, 2) })],
-    views:[{ d:[1, 0.1, 0.5], k:2.6, hold:10, drift:0.02 }, { d:[0.3, 0.15, 1], k:2.8, hold:9, drift:0.02 }] });
+    views:[{ d:[0.3, 0.12, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.1, 0.5], k:2.6, hold:9, drift:0.02 }] });
   addObj({ key:'greenlandshark', name:'Greenland shark', type:'Somniosus microcephalus', kind:'sharks', at:[17200, 600, 1200], size:5, rad:3,
     fact:'The longest-lived vertebrate known: some are thought to be around 400 years old, growing barely a centimetre a year in near-freezing water. It cruises at a walking pace, one of the slowest fish for its size.',
     motion:{ type:'circle', R:25, v:0.3, bob:2, bank:0.04 },
