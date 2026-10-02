@@ -409,6 +409,7 @@ function buildCatalog() {
   addMoreFish(REEF);
   addDeepFolk(VENTS);
   addPlaces2();
+  addShallows(REEF);
 }
 
 // vent shrimp: a cloud hugging the chimneys
