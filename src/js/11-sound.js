@@ -167,6 +167,14 @@ function tickSound(dt) {
       what = k === 'bluewhale' ? 'a blue whale calling, almost too low to hear' : 'a humpback singing nearby';
     }
   }
+  // sea lions bark underwater too: short buzzy honks, in runs
+  const sl = near('sealion', 60);
+  if (sl && due('bark')) {
+    SND.next.bark = 3 + Math.random() * 5;
+    const loud = clamp(1 - sl.d / 60, 0.2, 1), n = 2 + Math.floor(Math.random() * 4), f = 260 + Math.random() * 120;
+    for (let i = 0; i < n; i++) blip({ type:'sawtooth', f0:f, curve:[f * 1.15, f * 0.9], dur:0.22, amp:0.03 * loud, att:0.02, delay:i * 0.32, pan:sl.pan, bp:f * 2, q:2.5 });
+    what = 'sea lions barking';
+  }
   if (what !== SND.what) { SND.what = what; $('nowPlaying').textContent = what; }
 }
 // the browser only lets sound start after a click or key
