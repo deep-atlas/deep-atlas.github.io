@@ -44,11 +44,14 @@ function updateUBO(time) {
   const att = beam.map(c => Math.exp(-c * fs * path));
   // in the sunlit shallows a photographer's strobe fills in what the water has taken: red returns near the camera,
   // distant things still fade to blue. It hands over to the floodlights as the sunlight fails.
-  const fill = SET.strobe === false ? 0 : 0.28 * smooth(70, 12, CAM.depth) * (CAM.depth > 0.3 ? 1 : 0) * LIGHT.level;
+  // Below that, in the dim blue of the upper twilight zone before the floodlights take over, a close-up subject still gets a light
+  // on it, as an ROV filming a nautilus at 300 m would turn its lights on it.
+  const closeUp = smooth(4, 1, Math.max(CAM.lampD || CAM.scale, 1e-4)) * smooth(50, 140, CAM.depth);
+  const fill = SET.strobe === false ? 0 : Math.max(0.28 * smooth(70, 12, CAM.depth), 0.4 * closeUp) * (CAM.depth > 0.3 ? 1 : 0) * LIGHT.level;
   // (floodlights are tuned for close-ups; a wide view of the deep floor gets more of them, as a sub would turn its lights up)
   const lampLev = Math.max(LIGHT.lamp * 0.8 * clamp(Math.sqrt(Math.max(CAM.scale, 1e-6) / 3), 1, 1.8), fill);
   // (the strobe is warmed less than full white so that a white belly lit only by it does not turn pink under a balance set for blue water)
-  const sunMax = Math.max(...LIGHT.sun, 1e-9), sf = lampLev > 0 ? clamp(fill / lampLev, 0, 1) * (1 - LIGHT.lamp) : 0;
+  const sunMax = Math.max(...LIGHT.sun, 1e-9), sf = lampLev > 0 ? clamp(fill / lampLev, 0, 1) * (1 - LIGHT.lamp) * smooth(90, 40, CAM.depth) : 0;
   const lampC = LAMP_COL.map((c, i) => c * lerp(1, Math.pow(LIGHT.sun[i] / sunMax, 0.1), sf));
   const lampI = lampC.map((c, i) => c * lampLev * att[i]), sunI = LIGHT.sun;
   const illum = [0, 1, 2].map(i => sunI[i] + lampI[i]);
