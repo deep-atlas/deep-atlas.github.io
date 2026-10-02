@@ -146,7 +146,7 @@ function mkInk() {
 }
 function mkOctopus(o = {}) {
   const mb = new MB(), skin = o.skin || [0.7, 0.4, 0.3], mott = o.mott || [0.45, 0.22, 0.18];
-  const pat = p => o.dumbo ? skin : (Math.sin(p[0] * 60 + p[2] * 40) * Math.sin(p[1] * 70) > 0.3 ? mott : skin);
+  const pat = o.pat || (p => o.dumbo ? skin : (Math.sin(p[0] * 60 + p[2] * 40) * Math.sin(p[1] * 70) > 0.3 ? mott : skin));
   // the mantle above and behind the head
   ellip(mb, [-0.12, 0.2, 0], [0.22, 0.17, 0.16], { n:12, m:16, col:(u, v, p) => pat(p), anim:() => [0, 0, 0, 0.08] });
   ellip(mb, [0.04, 0.05, 0], [0.11, 0.1, 0.12], { n:8, m:12, col:(u, v, p) => (Math.abs(p[2]) > 0.08 && p[1] > 0.08 && Math.abs(p[0] - 0.06) < 0.03) ? [0.05, 0.05, 0.03] : pat(p), anim:() => [0, 0, 0, 0] });

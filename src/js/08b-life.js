@@ -301,6 +301,7 @@ function addLife() {
   set('octopus', { react:{ type:'colour', dur:9, text:'The octopus flushes dark red and squirts a cloud of ink, a decoy to hide behind while it gets away. Then it fades back into the colours of the reef: its skin is packed with colour cells it opens and closes at will.' } });
   set('pyrosome', { lights:[{ at:[0, 0, 0], col:[0.35, 1.0, 0.8], power:o => (o.reactEnv || 0) * 0.3, reach:0.8, flick:4 }],
     react:{ type:'wave', dur:8, text:'Touched, the pyrosome lights up: each tiny zooid answers its neighbour’s light, and a glow runs the length of the colony.' } });
+  set('blueringed', { react:{ type:'colour', dur:8, text:'Alarmed, the blue-ringed octopus flashes its rings electric blue: a warning that it carries enough venom to kill.' } });
   set('combjelly', { react:{ type:'flash', dur:4, text:'Some comb jellies glow when touched: the rainbows are reflected sunlight, but this blue flash is their own.' } });
   // Nautile's floodlights light whatever it passes, once it is deep enough to need them
   set('nautile', { lights:[{ at:[6.5, 0, 0], col:[0.9, 0.95, 1.0], power:o => 0.9 * deep(o), reach:7, metres:true }] });

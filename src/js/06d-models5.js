@@ -339,6 +339,28 @@ function mkPenguin() {
   tube(mb, { n:3, m:5, path:t => [-0.48 - t * 0.06, 0.01, 0], r:t => 0.02 * (1 - t * 0.6), col:fc(black) });
   return mb;
 }
+function mkGrouper() {
+  // giant grouper, one unit long: a huge mouth, heavy body, mottled brown and grey with pale blotches
+  const brown = [0.3, 0.26, 0.2], pale = [0.6, 0.55, 0.42], dark = [0.14, 0.12, 0.1];
+  return fish({ H:0.15, W:0.11, tm:0.32, nose:0.45, ped:0.22, bodyLen:0.82, back:brown, belly:pale, eye:[0.1, 0.33, 0.022], n:18, m:12,
+    pattern:(t, sy, sz, p) => { const n = Math.sin(p[0] * 34 + p[1] * 9) * Math.sin(p[1] * 30 + p[2] * 11); return n > 0.45 ? pale : n < -0.55 ? dark : null; },
+    tail:'round', tailH:0.13, tailCol:brown, dorsal:[{ at:0.3, len:0.45, h:0.07, col:brown }], anal:[{ at:0.62, len:0.14, h:0.07, col:brown }],
+    pect:{ at:0.3, len:0.12, w:0.07, col:brown },
+    extra:mb => { for (const sz of [1, -1]) ellip(mb, [0.43, -0.03, sz * 0.03], [0.07, 0.02, 0.025], { n:4, m:8, col:fc([0.55, 0.3, 0.3]) }); } });   // (the mouth, held open to be cleaned)
+}
+function mkCleanerWrasse() {
+  const blue = [0.3, 0.55, 1.0], white = [0.95, 0.95, 0.95];
+  return fish({ H:0.12, W:0.06, tm:0.28, nose:0.6, ped:0.2, bodyLen:0.84, back:blue, belly:white, eye:[0.08, 0.3, 0.035], n:12, m:8,
+    pattern:(t, sy) => Math.abs(sy + 0.05 - t * 0.2) < 0.18 && t > 0.05 ? [0.03, 0.03, 0.05] : (sy > 0.2 ? [0.55, 0.75, 1.0] : white),
+    tail:'truncate', tailH:0.1, tailCol:blue, dorsal:[{ at:0.3, len:0.5, h:0.05, col:blue }], pect:{ at:0.24, len:0.08, w:0.03, col:white } });
+}
+function mkBlueRinged() {
+  const tan = [0.82, 0.72, 0.4], brown = [0.55, 0.42, 0.22];
+  return mkOctopus({ skin:tan, mott:brown, pat:p => {
+    const n = Math.sin(p[0] * 55 + p[2] * 20) * Math.sin(p[1] * 60 + p[2] * 45), m = Math.abs(n);
+    return m > 0.8 ? [0.01, 0.12, 0.5, 3.0] : m > 0.66 ? [0.06, 0.05, 0.03] : (n < -0.3 ? brown : tan);
+  } });
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -409,6 +431,22 @@ function addShallows(REEF) {
       part(mkWatchmanGoby, { scale:0.1, off:[0.08, 0.03, -0.03], mat:M_SKIN, swim:[0.03, 0.8, 0.9, 0], swim2:[0, 2, 0, 0] }),
       part(mkPistolShrimp, { scale:0.045, off:[0.06, 0.012, 0.04], mat:M_SKIN, sway:[0.004, 2, 30, 0] })],
     views:[{ d:[0.3, 0.06, 1], k:1.2, hold:10, drift:0.02, off:[0.07, 0.03, 0] }, { d:[1, 0.08, 0.3], k:1.1, hold:9, drift:0.02, off:[0.07, 0.02, 0] }] });
+  addObj({ key:'grouper', name:'grouper at a cleaning station', label:'cleaning station', type:'giant grouper · Epinephelus lanceolatus, and cleaner wrasses', kind:'fish', floor:[REEF[0] - 2, REEF[1] + 5, 1.4], size:1.6, rad:1.2, yaw:0.3,
+    fact:'Big fish queue at cleaning stations, where cleaner wrasses pick parasites and dead skin off them, even from inside their mouths and gills. A grouper that could swallow the cleaner whole holds still, mouth open, and lets it work.',
+    motion:{ type:'hover', amp:0.05, turn:0.15 },
+    // the cleaners flit over its head, along its flanks, in and out of its open mouth
+    post:(o, t) => { for (let i = 1; i < o.parts.length; i++) { const p = o.parts[i], u = t * (0.35 + i * 0.07) + i * 2.1;
+      const s = 0.5 + 0.5 * Math.sin(u), side = i % 2 ? 1 : -1;
+      p.off = [lerp(0.75, -0.1, s) + 0.08 * Math.sin(u * 3.1), 0.05 + 0.1 * Math.sin(u * 1.7 + i), side * (0.14 + 0.06 * Math.sin(u * 2.3))]; } },
+    parts:[part(mkGrouper, { scale:1.6, mat:M_SKIN, ...FISH_SWIM(0.015, 0.4, 0.8, 2) }),
+      ...[0, 1, 2, 3].map(i => part(mkCleanerWrasse, { scale:0.1, off:[0.7, 0.05, 0.15], mat:M_SKIN, ...FISH_SWIM(0.07, 4, 1, 1.6) }))],
+    views:[{ d:[0.4, -0.3, 1], k:1.5, hold:11, drift:0.02, off:[0.3, 0, 0] }, { d:[0.8, -0.15, 0.7], k:0.9, hold:9, drift:0.02, off:[0.5, 0, 0] }] });
+  addObj({ key:'blueringed', name:'blue-ringed octopus', type:'Hapalochlaena lunulata', kind:'cephs', floor:[REEF[0] + 34, REEF[1] - 6, 0.03], size:0.15, rad:0.12, yaw:1.2,
+    fact:'Golf-ball sized and one of the most venomous animals in the sea: its saliva carries tetrodotoxin, enough to kill adult humans, with no antidote. At rest it is a dull tan; alarmed, its rings flash an electric blue, a warning to keep away.',
+    motion:{ type:'hover', amp:0.01, turn:0.4 },
+    post:o => { const e = smooth(0, 0.6, o.reactEnv || 0); o.parts[0].mat[2] = lerp(0.02, 4.5, e) * (0.6 + 0.4 * Math.sin((o.reactAge || 0) * 9)); },
+    parts:[part(mkBlueRinged, { scale:0.15, mat:[1, 0.35, 0.04, 0.6], sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0] })],
+    views:[{ d:[0.6, 0.6, 1], k:2.2, hold:10, drift:0.025 }, { d:[1, 0.25, -0.2], k:2.0, hold:8, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
