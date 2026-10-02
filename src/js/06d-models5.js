@@ -297,6 +297,27 @@ function mkBurrow() {
   ellip(mb, [0, 0, 0], [0.1, 0.018, 0.09], { n:6, m:12, col:(u, v, p) => Math.hypot(p[0] - 0.02, p[2] - 0.01) < 0.035 && p[1] > 0.008 ? [0.04, 0.03, 0.02] : [0.7, 0.66, 0.55] });
   return mb;
 }
+function mkLeatherback() {
+  // leatherback turtle, one unit long: no hard shell, but a leathery carapace with seven ridges running nose to tail, tapering to a
+  // point behind; black, spotted white; front flippers longer than in any other turtle, spanning about its body length
+  const mb = new MB(), black = [0.2, 0.21, 0.25], spot = [0.8, 0.83, 0.85], belly = [0.8, 0.76, 0.76];
+  loft(mb, { n:28, m:28, sec:t => { const f = Math.sin(Math.min(1, t * 1.15) * PI * 0.92 + 0.12); return { x:0.3 - t * 0.78, y:0.02 * f, w:0.22 * Math.pow(Math.max(f, 0), 0.6) * (1 - t * 0.35), h:0.12 * Math.pow(Math.max(f, 0), 0.7), e:2 }; },
+    // (the seven ridges: thin pale lines along the back)
+    col:(t, u, p, sy, sz) => sy < -0.15 ? belly : (Math.abs(Math.sin(Math.atan2(sz, sy) * 3.5)) < 0.1 && sy > -0.1 ? [0.3, 0.32, 0.36] : (Math.sin(p[0] * 90) * Math.sin(p[2] * 80) > 0.8 ? spot : black)),
+    anim:() => [0, 0, 0, 0] });
+  // ridges raised a little
+  for (let k = -3; k <= 3; k++) { const a = k / 3.5 * PI / 2; tube(mb, { n:16, m:3, path:t => { const x = 0.26 - t * 0.68, f = Math.sin(Math.min(1, (0.3 - x) / 0.78 * 1.15) * PI * 0.92 + 0.12); return [x, 0.02 * f + Math.cos(a) * 0.12 * Math.pow(Math.max(f, 0), 0.7), Math.sin(a) * 0.22 * Math.pow(Math.max(f, 0), 0.6) * (1 - (0.3 - x) / 0.78 * 0.35)]; }, r:0.006, col:fc([0.25, 0.26, 0.3]) }); }
+  // the head: big, rounded, with a notched beak
+  ellip(mb, [0.38, 0.0, 0], [0.11, 0.07, 0.07], { n:8, m:12, col:(u, v, p) => (p[0] > 0.42 && Math.abs(p[2]) > 0.04 && p[1] > 0.01) ? [0.02, 0.02, 0.02] : (Math.sin(p[0] * 120) * Math.sin(p[2] * 110) > 0.7 ? spot : black) });
+  const front = mb.mark();
+  fin(mb, [[0, 0.07], [0.08, 0.05], [0.55, -0.08], [0.62, -0.18], [0.45, -0.12], [0.05, -0.06]],
+    { origin:[0.16, -0.03, 0.18], ua:vnorm([-0.3, -0.12, 1]), va:[1, 0, 0], col:(a, b) => (Math.sin(a * 70) * Math.sin(b * 70) > 0.6 ? spot : black), anim:(a, b, r, p) => [0, Math.max(0, p[2] - 0.16) * 1.4, 0, 0] });
+  mb.dup(front, mirrorZ);
+  const rear = mb.mark();
+  fin(mb, [[0, 0.04], [0.14, 0.02], [0.12, -0.06], [0.0, -0.04]], { origin:[-0.3, -0.03, 0.08], ua:vnorm([-0.6, -0.1, 1]), va:[1, 0, 0], col:fc(black), anim:(a, b, r, p) => [0, Math.max(0, p[2] - 0.08) * 0.8, 0, 0] });
+  mb.dup(rear, mirrorZ);
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -380,6 +401,11 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.15, turn:0.3 },
     parts:[part(mkNautilus, { scale:0.2, mat:M_SKIN, swim2:[0, 1.6, 0.02, 0.15], sway:[0.03, 0.8, 3, 0] })],
     views:[{ d:[0.15, 0.12, 1], k:2.6, hold:10, drift:0.02 }, { d:[1, 0.2, 0.5], k:2.8, hold:9, drift:0.02 }, { d:[-0.7, 0.4, 0.7], k:2.8, hold:8, drift:-0.02 }] });
+  addObj({ key:'leatherback', name:'leatherback turtle', type:'Dermochelys coriacea', kind:'air', at:[9000, -600, 90], size:2, rad:1.6,
+    fact:'The largest turtle alive, up to about 2 m long and over 500 kg, and the deepest-diving: past 1,000 m. Its shell is not bone plates but leathery skin over a mosaic of small bones. It lives on jellyfish, and keeps warm enough to hunt them in waters near freezing.',
+    motion:{ type:'circle', R:18, v:0.8, bob:3, bank:0.12 },
+    parts:[part(mkLeatherback, { scale:2, mat:M_SKIN, swim2:[0, 2, 0.28, 0.25] })],
+    views:[{ d:[0.2, 0.15, 1], k:1.9, hold:10, drift:0.02 }, { d:[0.5, 0.8, 0.5], k:1.8, hold:9, drift:0.02 }, { d:[1, -0.3, 0.4], k:2, hold:8, drift:0.02 }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },
