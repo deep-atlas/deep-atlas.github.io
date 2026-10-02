@@ -255,6 +255,20 @@ function drawSpawn() {
   gl.drawArrays(gl.POINTS, 0, SNOW_N);
 }
 
+// ---- breathing: air-breathers that live near the floor rise to the surface every so often
+function breathePost(o, t) {
+  const T = o.breatheT || 110, u = (((t + o.idx * 13) % T) + T) % T / T, a = 0.78, b = 0.97;
+  if (u < a || u > b) return;
+  const s = (u - a) / (b - a), lift = Math.sin(s * PI);
+  const y0 = o.pos[1];
+  o.pos = [o.pos[0], lerp(y0, -o.size * 0.25, smooth(0, 0.45, s) * (1 - smooth(0.6, 1, s))), o.pos[2]];
+  const pitch = Math.cos(s * PI) * 0.7 * lift;
+  const flat = vnorm([o.fwd[0], 0, o.fwd[2]]);
+  o.fwd = vnorm(vadd(vmul(flat, Math.cos(pitch)), [0, Math.sin(pitch), 0]));
+  const sd = vnorm(vcross(o.fwd, [0, 1, 0])); o.up = isFinite(sd[0]) ? vnorm(vcross(sd, o.fwd)) : [0, 1, 0]; o.side = vcross(o.fwd, o.up);
+  o.breathing = s > 0.4 && s < 0.6;
+}
+
 // ---- who lights, who hunts, who reacts
 function addLife() {
   const set = (k, v) => { if (BYKEY[k]) Object.assign(BYKEY[k], v); };
@@ -279,6 +293,7 @@ function addLife() {
   set('spermwhale', { motion:{ type:'still', fn:huntMotion }, hunt:true });
   set('giantsquid', { post:squidPost });
   set('humpback', { post:breachPost });
+  set('turtle', { post:breathePost, breatheT:120, readout:() => BYKEY.turtle.breathing ? 'up at the surface for a breath' : 'can stay under for hours when resting, minutes when active' });
   set('reef', { readout:() => night() > 0.5 ? 'night: the corals are spawning, bundles of eggs and sperm rising to the surface\n(on real reefs this happens a few nights a year, just after a full moon)' : 'day: the coral polyps are pulled in; at night they open to feed' });
   const bb = BYKEY.baitball;
   if (bb) {
