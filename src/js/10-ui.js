@@ -246,10 +246,13 @@ function searchMatches(q) {
   const kindName = o => (KINDS.find(k => k.id === o.kind) || {}).name || '';
   return PLACES().map(o => {
     const hay = `${o.name} ${o.label} ${o.type} ${kindName(o)} ${o.aka || ''} ${zoneOf(depthOf(o)).name}`.toLowerCase();
-    if (!words.every(w => hay.includes(w))) return null;
+    const fact = (o.fact || '').toLowerCase();
+    // names and kinds first; then words found only in the facts ("oldest", "glow", "teeth")
+    const inHay = words.every(w => hay.includes(w)), inFact = !inHay && words.every(w => hay.includes(w) || fact.includes(w));
+    if (!inHay && !inFact) return null;
     const n = o.name.toLowerCase();
-    return { o, s:(n.startsWith(q) ? 0 : n.includes(q) ? 1 : 2) + depthOf(o) * 1e-6 };
-  }).filter(Boolean).sort((a, b) => a.s - b.s).map(m => m.o);
+    return { o, s:(n.startsWith(q) ? 0 : n.includes(q) ? 1 : inHay ? 2 : 3) + depthOf(o) * 1e-6, fact:inFact };
+  }).filter(Boolean).sort((a, b) => a.s - b.s).map(m => { m.o._factHit = m.fact; return m.o; });
 }
 function renderSuggest() {
   const q = $('search').value, box = $('suggest');
@@ -268,6 +271,7 @@ function renderSuggest() {
     const b = document.createElement('button');
     b.innerHTML = `<span></span><small></small>`;
     b.firstChild.textContent = o.name; b.lastChild.textContent = fmtDepth(depthOf(o));
+    if (o._factHit) b.title = (o.fact || '').slice(0, 160);
     b.onclick = () => { userGo(o); closeSearch(); };
     box.appendChild(b);
   }
