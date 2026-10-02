@@ -273,6 +273,8 @@ function addShallows(REEF) {
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
     fact:'Colourblind, yet it matches its background in under a second: millions of pigment sacs in its skin are opened and closed by muscle. To mesmerise prey it sends bands of colour rippling over its body, the "passing cloud" display.',
     motion:{ type:'hover', amp:0.1, turn:0.4 },
+    // every so often it hunts: the passing cloud ripples over it for a few seconds
+    post:(o, t) => { const c = (t + 7) % 26, e = smooth(0, 1.5, c) * smooth(9, 7, c); o.parts[0].fx = e > 0.01 ? [-e, 0, 0, 0] : null; },
     parts:[part(mkCuttlefish, { scale:0.4, mat:M_SKIN, swim2:[0, 2, 0.02, 1.5], sway:[0.008, 2, 10, 0] })],
     views:[{ d:[0.3, -0.2, 1], k:2.4, hold:10, drift:0.02 }, { d:[0.9, -0.1, 0.4], k:2.2, hold:9, drift:0.02 }, { d:[0.2, 0.7, 0.6], k:2.6, hold:8, drift:0.02 }] });
   addObj({ key:'mantisshrimp', name:'peacock mantis shrimp', label:'mantis shrimp', type:'Odontodactylus scyllarus', kind:'floor', floor:[REEF[0] - 4.5, REEF[1] + 5, 0.03], size:0.15, rad:0.12, yaw:0.5,

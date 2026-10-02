@@ -182,7 +182,7 @@ uniform vec4 uMat;    // x: opacity (1 solid), y: rim, z: glow, w: shine
 uniform vec3 uTint;
 uniform vec3 uWB;
 uniform float uGlowSun;   // 1: the glow is sunlight passing through (ice), coloured by the water like the sun's light
-uniform vec4 uFx;     // x: comb rows (a comb jelly's beating cilia split the light into running rainbows)
+uniform vec4 uFx;     // x: comb rows (a comb jelly's beating cilia split the light into running rainbows); below 0, a cuttlefish's passing cloud
 in vec3 vRel; in vec3 vN; in vec4 vCol; in float vW; in vec3 vObj;
 out vec4 o;
 void main(){
@@ -202,6 +202,11 @@ void main(){
     float wheel = uFx.w < 1.5 ? pow(0.5 + 0.5 * sin(ang * 3.0 - uKd.w * 7.0), 5.0) * step(0.01, vCol.a) * 4.0
                               : 0.5 + 0.5 * sin(uKd.w * 21.0 + vObj.x * 37.0 + ang * 3.0);
     col += vec3(0.25, 0.85, 1.0) * wheel * uFx.y * 1.6;
+  }
+  if (uFx.x < 0.0){
+    // a cuttlefish's 'passing cloud': dark bands sweeping from tail to head over its skin, to startle prey into moving
+    float band = smoothstep(0.35, 0.65, 0.5 + 0.5 * sin(vObj.x * 22.0 + vObj.z * 4.0 + uKd.w * 5.0));
+    col *= 1.0 - band * 0.92 * -uFx.x;
   }
   if (uFx.x > 0.0){
     float row = smoothstep(0.36, 0.46, abs(fract(atan(vObj.y, vObj.z) / 6.2831853 * 8.0) - 0.5));
