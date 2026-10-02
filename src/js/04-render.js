@@ -382,7 +382,8 @@ vec4 seaAbove(vec3 dir, vec3 hit, float tt, float hgt){
   vec3 n = normalize(vec3(-gx * 2.5 * near, 1.0, -gz * 2.5 * near));
   float cosI = max(dot(-dir, n), 0.0);
   float fres = 0.02 + 0.98 * pow(1.0 - cosI, 5.0);
-  vec3 body = vec3(0.004, 0.02, 0.035) * uSun.w;
+  // sunlight scattered back up out of the water: the sea's own blue, a little brighter on the wave faces that tilt to the sun
+  vec3 body = vec3(0.014, 0.085, 0.135) * uSun.w * (0.55 + 1.0 * clamp(0.5 + dot(n.xz, uSunAir.xz) * 10.0, 0.0, 1.0) * near + 0.45 * (1.0 - near));
   vec3 r = reflect(dir, n);
   vec3 c = mix(body, skyCol(vec3(r.x, abs(r.y), r.z), 0.0), fres);
   float glit = 0.4 + 0.6 * smoothstep(0.3, 0.8, noise3(vec3(hit.xz * 1.5, t * 2.0)));
@@ -434,7 +435,9 @@ void main(){
     vec3 refl = waterInf(vec3(dir.x, -dir.y, dir.z)) / max(uSun.rgb, 1e-6);
     float rim = smoothstep(0.57, 0.63, cosT) * (1.0 - smoothstep(0.63, 0.71, cosT));
     vec3 surf = mix(refl * (1.1 + 0.15 * w * near), skyL * uSun.w, win) + vec3(0.55, 0.8, 1.0) * rim * 0.25 * uSun.w;
-    vec3 T = exp(clamp(uKd.rgb * d - uC.rgb * tt, -40.0, 8.0));
+    // (light coming straight down through the water loses at least what the ambient light does: else, under the white balance,
+    // the window would glow red where red is long gone)
+    vec3 T = exp(clamp(uKd.rgb * d - max(uC.rgb, uKd.rgb) * tt, -40.0, 8.0));
     vec3 Tv = exp(-uC.rgb * tt);
     col = uSun.rgb * surf * T + col * (1.0 - Tv);
   }

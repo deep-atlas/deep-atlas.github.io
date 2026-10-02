@@ -192,11 +192,11 @@ function buildCatalog() {
     fact:'Green turtles can rest underwater for hours on one breath. They graze seagrass and algae, and the females swim back across whole oceans to the beach where they hatched to lay their eggs.',
     motion:{ type:'circle', R:10, v:0.5, bob:0.8, bank:0.15 },
     parts:[part(mkTurtle, { scale:1.1, mat:M_SKIN, swim2:[0, 2, 0.22, 0.3] })], views:SIDE });
-  addObj({ key:'manta', name:'manta ray', type:'reef manta · Mobula alfredi', kind:'sharks', at:[2000, -150, 12], size:4.5, rad:2.6,
+  addObj({ key:'manta', name:'manta ray', type:'reef manta · Mobula alfredi', kind:'sharks', at:[2900, -150, 13], size:4.5, rad:2.6,
     fact:'Mantas have one of the largest brains for their size of any fish, and come to cleaning stations on the reef to have small fish pick them clean. A reef manta’s wings span up to 5 m.',
     motion:{ type:'circle', R:22, v:1.0, bob:1.5, bank:0.25 },
     parts:[part(mkManta, { scale:4.5, mat:M_SKIN, swim2:[0, 2, 0.32, 0.2] })],
-    views:[{ d:[0.2, -0.75, 0.5], k:2.6, hold:10, drift:0.02 }, { d:[0.3, 0.1, 1], k:2.4, hold:8, drift:0.02 }, { d:[1, -0.3, 0.2], k:2.6, hold:8, drift:0.02 }] });
+    views:[{ d:[0.3, -0.4, 1], k:2.4, hold:10, drift:0.02 }, { d:[0.2, 0.9, 0.4], k:2.2, hold:8, drift:0.02 }, { d:[1, -0.3, 0.2], k:2.6, hold:8, drift:0.02 }] });
   addObj({ key:'kelp', name:'the kelp forest', label:'kelp forest', type:'giant kelp · Macrocystis pyrifera', kind:'places', floor:[2600, 400, 0], size:60, rad:32,
     fact:'Giant kelp can grow 60 cm in a day, among the fastest of anything alive. Gas-filled floats hold its blades up to the light, and the forest shelters fish, seals and sea otters.',
     parts:[part(() => buildKelp(BYKEY.kelp.anchor, 8), { mat:[1, 1.1, 1, 0.3], sway:[1.1, 0.35, 0.08, 0] })],

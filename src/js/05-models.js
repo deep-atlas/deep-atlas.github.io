@@ -302,15 +302,16 @@ function mkTurtle() {
 function mkManta() {
   // one unit = the wingspan. The disc is lofted nose to tail; its cross-section is a thin lens, its width the wings
   const mb = new MB();
-  const back = [0.07, 0.07, 0.09], belly = [0.93, 0.93, 0.9], patch = [0.88, 0.88, 0.86];
+  const back = [0.2, 0.21, 0.25], belly = [0.93, 0.93, 0.9], patch = [0.88, 0.88, 0.86];
   loft(mb, { n:28, m:30, sec:t => {
-      const span = 0.5 * Math.pow(Math.sin(clamp(t / 0.95, 0, 1) * PI), 0.75) + 0.02;
+      // a broad head, the wings widening to pointed tips a little forward of the middle, then a concave trailing edge
+      const span = t < 0.42 ? 0.06 + 0.44 * Math.pow(Math.sin(t / 0.42 * PI / 2), 1.1) : 0.5 * Math.pow(Math.max(0, 1 - (t - 0.42) / 0.55), 1.8) + 0.012;
       return { x:0.2 - t * 0.42, y:0, w:span, h:0.045 * Math.pow(Math.sin(clamp(t * 1.05, 0, 1) * PI), 0.6) + 0.003, e:1.25 };
     },
     col:(t, u, p, sy) => {
       const az = Math.abs(p[2]);
       if (sy < 0) return (az < 0.12 && t > 0.15 && t < 0.5 && Math.sin(p[2] * 90) * Math.sin(p[0] * 70) > 0.7) ? [0.25, 0.25, 0.25] : belly;
-      if (az > 0.07 && az < 0.22 && t > 0.06 && t < 0.3 && az < 0.22 - (t - 0.06) * 0.5) return patch;   // the pale shoulder patches
+      if (az > 0.06 && az < 0.26 && t > 0.05 && t < 0.36 && az < 0.26 - (t - 0.05) * 0.55) return patch;   // the pale shoulder patches
       return back;
     },
     anim:(t, u, p) => [0, Math.pow(Math.abs(p[2]) * 2, 1.4) * 0.5, 0, 0] });
