@@ -129,6 +129,17 @@ function mkNarwhal() {
     extra:(mb) => tube(mb, { n:20, m:5, path:t => [0.47 + t * 0.55, 0.0 + t * 0.03, 0.012], r:t => 0.017 * (1 - t * 0.75), col:(t, u) => fract(t * 22 + u) < 0.3 ? [0.72, 0.66, 0.52] : [1.0, 0.97, 0.88], anim:p => swimA(p) }) });
 }
 
+function mkBeluga() {
+  // beluga: all white, no dorsal fin (a low ridge instead, for breaking through ice), a bulbous forehead (the melon) it can reshape
+  // as it calls, a short beak and a neck that turns, which most whales cannot do
+  const white = [0.93, 0.94, 0.93], ridge = [0.82, 0.84, 0.84];
+  return cetacean({ back:white, belly:white, H:0.11, W:0.1, nose:0.32, bodyLen:0.86, eye:[0.11, 0.05, 0.008], tailH:0.15, tailL:0.1, tm:0.36,
+    skin:(t, sy) => sy > 0.85 && t > 0.4 && t < 0.65 ? ridge : white,
+    hShape:t => t < 0.12 ? lerp(0.7, 1.08, smooth(0, 0.12, t)) : t < 0.2 ? lerp(1.08, 0.92, smooth(0.12, 0.2, t)) : lerp(0.92, 1, smooth(0.2, 0.35, t)),
+    pect:{ at:0.22, len:0.09, w:0.045, down:0.6, back:0.4, y:-0.55, col:white },
+    dorsal:[{ at:0.45, len:0.2, h:0.01, col:ridge }] });
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -213,6 +224,11 @@ function addPlaces2() {
     motion:{ type:'circle', R:22, v:1.6, bob:2, bank:0.12 },
     parts:[0, 1, 2, 3].map(i => part(mkNarwhal, { scale:4.5 - i * 0.25, off:[[0, 0, 0], [-4, 1.5, 3], [-6, -1, -2.8], [-10, 0.6, 1]][i], mat:M_SKIN, swim:[0.04, 0.5 + i * 0.03, 0.7, i * 1.3], swim2:[1, 2.5, 0, 0] })),
     views:[{ d:[0.45, 0.12, 1], k:1.3, hold:11, drift:0.02, off:[1.5, 0, 0] }, { d:[1, 0.2, 0.5], k:1.1, hold:9, drift:0.02, off:[2, 0, 0] }, { d:[0.3, -0.6, 0.6], k:2.2, hold:9, drift:0.02 }] });
+  addObj({ key:'beluga', name:'belugas', type:'Delphinapterus leucas · the white whale', kind:'air', at:[ICE[0] - 25, ICE[1] - 12, 12], size:4.2, vsize:5, rad:6,
+    fact:'Called the sea canary for its whistles, chirps and clicks, which carry through the ice. It has no dorsal fin, so it can swim right up under the ice, and a flexible neck that lets it turn its head. Its forehead, the melon, changes shape as it focuses its calls.',
+    motion:{ type:'circle', R:18, v:1.3, bob:1.5, bank:0.1 },
+    parts:[0, 1, 2].map(i => part(mkBeluga, { scale:4.2 - i * 0.5, off:[[0, 0, 0], [-4.5, 1.2, 2.6], [-3, -1, -3.2]][i], mat:M_SKIN, swim:[0.04, 0.45 + i * 0.04, 0.7, i * 1.7], swim2:[1, 2.5, 0, 0] })),
+    views:[{ d:[0.4, 0.1, 1], k:1.3, hold:11, drift:0.02, off:[1, 0, 0] }, { d:[1, -0.3, 0.4], k:1.2, hold:9, drift:0.02 }] });
   addObj({ key:'lionsmane', name:'lion’s mane jellyfish', label:'lion’s mane', type:'Cyanea capillata', kind:'jellies', at:[ICE[0] - 14, ICE[1] + 8, 9], size:1.6, vsize:4, rad:3,
     fact:'The largest known jellyfish. Its bell can reach 2 m across and its hundreds of sticky tentacles trail over 30 m: one found in 1870 was longer than a blue whale. It thrives in cold Arctic and North Atlantic water.',
     motion:{ type:'drift', amp:0.4, tilt:0.15 },

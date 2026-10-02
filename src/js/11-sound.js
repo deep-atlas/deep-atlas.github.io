@@ -175,6 +175,14 @@ function tickSound(dt) {
     blip({ f0:f, curve:[f * 1.3, f * 0.8, f * 1.5, f * 1.1], dur:0.5 + Math.random() * 0.6, amp:0.018 * loud, att:0.03, pan:dl.pan, dry:false });
     what = 'dolphins whistling';
   }
+  const bl = near('beluga', 150);
+  if (bl && due('canary')) {
+    // the sea canary: chirps, trills and squeals
+    SND.next.canary = 0.8 + Math.random() * 2;
+    const loud = clamp(1 - bl.d / 150, 0.15, 1), n = 1 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < n; i++) { const f = 2500 + Math.random() * 3500; blip({ f0:f, f1:f * (0.6 + Math.random() * 0.9), dur:0.08 + Math.random() * 0.25, amp:0.02 * loud, att:0.01, delay:i * 0.18, pan:bl.pan, dry:false }); }
+    what = 'belugas chirping: the sea canaries';
+  }
   const oc = near('orca', 220);
   if (oc && due('orcaCall')) {
     SND.next.orcaCall = 3 + Math.random() * 5;
