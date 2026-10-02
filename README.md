@@ -29,34 +29,41 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **121 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
-  the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
-  plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill, with Adélie penguins hunting through the swarm), lanternfish, hatchetfish, a 40 m
-  siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
-  black-smoker vents with giant tube worms, a whale fall, the Titanic's bow, dumbo octopus, the abyssal plain with sea pigs,
-  xenophyophores, tripod fish and grenadiers, the Mariana Trench, snailfish, hadal amphipods and the Challenger Deep.
-  Also the odd ones: blobfish, oarfish (upright, as they hang), coelacanth, goblin shark, frilled shark, fangtooth,
-  Greenland shark, lionfish, parrotfish, moray eel, and flying fish gliding over the waves. From the deep: colossal squid,
-  bigfin squid, glass squid, black dragonfish, stoplight loosejaw, ghost shark, giant isopod, Japanese spider crab, yeti crabs
-  and iron-armoured scaly-foot snails at the vents, the swimming sea cucumber (the "headless chicken monster"), a bluntnose sixgill shark, the cock-eyed squid,
-  the red helmet jellyfish and a pyrosome. On the reef and in the kelp: cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms that snap into their tubes, a pufferfish, garibaldi
-  and a loose school of blacksmith, a sea otter in the canopy, sea lions, blacktip reef sharks and snappers, a grouper at a cleaning station, a blue-ringed octopus, and out on the sand garden
-  eels that duck into their burrows, a goby sharing a burrow with a pistol shrimp, a peacock flounder and a stingray. Orcas and a leatherback turtle in open water, a tornado of chevron barracuda off the
-  drop-off, a leafy seadragon by the seagrass, and a chambered nautilus
-  on the deep reef slope. A lion's mane jellyfish trails its tentacles under the Arctic ice, and a box jellyfish hunts the
-  channel off the mangroves.
-- **Hidden worlds**: a 60 m shipwreck at 30 m turned into a reef, a seamount's deep coral garden (bubblegum, bamboo and black corals, sea lilies, orange roughy), a cold seep
-  whose brine pool is a lake on the seafloor ringed by mussels (and a glass sponge, Venus' flower basket), the underside of Arctic sea ice with ice algae, brinicles,
-  narwhals, belugas and sea angels, a mangrove forest on its prop roots, a seagrass meadow with a grazing dugong, and a floating raft of
-  sargassum weed with a sargassum fish hidden in it.
+- **121 places** across five zones, plus Nautile. By zone:
+  - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
+    a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
+    sailfish, whale shark (with remoras), great white,
+    hammerheads, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school) and
+    the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
+    penguins hunting through it.
+  - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
+    camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a pufferfish, a blue-ringed octopus,
+    blacktip reef sharks, snappers, a grouper at a cleaning station, flashlight fish at night, and on the sand garden eels, a
+    goby sharing a burrow with a pistol shrimp, a peacock flounder and a stingray. A tornado of chevron barracuda off the
+    drop-off, a manta, a green turtle; the kelp forest with a sea otter, sea lions, garibaldi and blacksmith; a shipwreck at
+    30 m turned into a reef; a chambered nautilus on the deep reef slope.
+  - **Coasts and poles**: mangroves with a box jellyfish in the channel, a seagrass meadow with a dugong and a leafy
+    seadragon, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, belugas, a lion's mane jellyfish and
+    sea angels.
+  - **Twilight and midnight zones**: lanternfish, hatchetfish, a 40 m siphonophore, barreleye, giant, colossal, bigfin, glass
+    and cock-eyed squid, firefly squid at night, Atolla, the helmet jellyfish, a pyrosome, vampire squid, sperm whale,
+    anglerfish, viperfish, black dragonfish, stoplight loosejaw, gulper eel, fangtooth, oarfish (upright, as they hang),
+    coelacanth, goblin, frilled and Greenland sharks, a ghost shark, blobfish, a beaked whale, Japanese spider crab and a
+    seamount's deep coral garden with orange roughy.
+  - **The deep floor**: black-smoker vents with giant tube worms, yeti crabs and iron-armoured scaly-foot snails; a cold seep
+    whose brine pool is a lake on the seafloor, with a Venus' flower basket; a whale fall with a sixgill shark; the Titanic's
+    bow; giant isopod; dumbo octopus; the abyssal plain with sea pigs, xenophyophores, tripod fish, grenadiers and the
+    swimming sea cucumber; the Mariana Trench, snailfish, hadal amphipods and the Challenger Deep.
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
-  cucumber's flash, the helmet jelly's rings of light, the pyrosome's running wave of light, the pufferfish swelling into a spiny ball, the octopus flushing red and squirting ink, the blue-ringed octopus flashing its rings);
-  the cuttlefish hunts with its passing-cloud display; click open water and the plankton flash blue, swim through the dark
-  and leave a glowing wake.
-- **Events**: the humpback breaches every couple of minutes; humpbacks bubble-net feed on a herring school; at night the reef spawns, flashlight fish come out and firefly squid swarm near the surface; a sperm
-  whale hunts near the giant squid; at dusk you can watch the lanternfish rise (time of day > watch the night migration).
+  cucumber's flash, the helmet jelly's rings of light, the pyrosome's running wave of light, the pufferfish swelling into
+  a spiny ball, the octopus flushing red and squirting ink, the blue-ringed octopus flashing its rings); shy animals hide
+  when you swim close (garden eels, Christmas tree worms); the cuttlefish hunts with its passing-cloud display; click open
+  water and the plankton flash blue, swim through the dark and leave a glowing wake.
+- **Events**: the humpback breaches every couple of minutes; humpbacks bubble-net feed on a herring school; at night the
+  reef spawns, flashlight fish come out and firefly squid swarm near the surface; a sperm whale hunts near the giant squid;
+  at dusk you can watch the lanternfish rise (time of day > watch the night migration).
 - **Night**: stars, the moon and its glade above the water; a night dive tour.
 - **From a whale to a microbe**: one long zoom through size, every animal at its true size beside the last, from a 25 m blue
   whale to a single Prochlorococcus cell 0.6 µm across.
