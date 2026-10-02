@@ -51,7 +51,9 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
-  cucumber's flash); click open water and the plankton flash blue, swim through the dark and leave a glowing wake.
+  cucumber's flash, the helmet jelly's rings of light, the pufferfish swelling into a spiny ball, the octopus flushing red);
+  the cuttlefish hunts with its passing-cloud display; click open water and the plankton flash blue, swim through the dark
+  and leave a glowing wake.
 - **Events**: the humpback breaches every couple of minutes; at night the reef spawns and flashlight fish come out; a sperm
   whale hunts near the giant squid; at dusk you can watch the lanternfish rise (time of day > watch the night migration).
 - **Night**: stars, the moon and its glade above the water; a night dive tour.
@@ -69,7 +71,8 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 - **Interface** modelled on gcdatlas: info panel (name, type, depth, fact, live readout of pressure, temperature and
   sunlight, ruler, angle bar), search, atlas (sort, filter, seen), tours, settings, help, a depth ladder you can drag
   to dive, labels, today's discovery, photo mode (save a PNG or copy the view as ASCII text), share links, compare size,
-  and a generative underwater soundscape.
+  and a generative underwater soundscape that follows what is near you (a reef's snapping shrimp, a black smoker's roar,
+  a sperm whale's clicks, humpback and blue whale song, dolphin whistles, orca calls, barking sea lions).
 
 ## Controls
 
