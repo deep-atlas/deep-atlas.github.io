@@ -188,8 +188,13 @@ function buildCatalog() {
     fact:'Two thirds of an octopus’s neurons are in its arms, and each arm can taste what it touches. It can change colour and the texture of its skin in a fraction of a second.',
     motion:{ type:'hover', amp:0.05, turn:0.3 },
     // at rest it matches the reef (a dull sandy green); swim close or disturb it and it flushes dark red, then slowly fades back
-    post:o => { const e = smooth(0, 1, o.reactEnv || 0); o.parts[0].tint = vlerp([0.95, 1.05, 0.95], [1.25, 0.55, 0.5], e).map((c, i) => lerp(c, [0.85, 1.25, 1.2][i], (1 - e) * 0.55)); },
-    parts:[part(() => mkOctopus(), { scale:0.9, mat:M_SKIN, sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0] })],
+    post:o => {
+      // a squirt of ink, billowing out behind it and thinning as it spreads
+      const ink = o.parts[1], age = o.reactT > 0 ? o.reactAge : 99;
+      ink.inkOn = age < 6; ink.scale = 0.2 + Math.sqrt(Math.min(age, 6)) * 0.45; ink.mat[0] = 0.85 * smooth(6, 1.5, age); ink.off = [-0.45 - age * 0.18, 0.35 + age * 0.08, 0];
+      const e = smooth(0, 1, o.reactEnv || 0); o.parts[0].tint = vlerp([0.95, 1.05, 0.95], [1.25, 0.55, 0.5], e).map((c, i) => lerp(c, [0.85, 1.25, 1.2][i], (1 - e) * 0.55)); },
+    parts:[part(() => mkOctopus(), { scale:0.9, mat:M_SKIN, sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0] }),
+      part(mkInk, { scale:0.5, mat:[0.8, 0, 0, 0], trans:true, show:o => o.parts[1].inkOn })],
     views:[{ d:[0.6, 0.6, 1], k:2.2, hold:10, drift:0.025 }, { d:[1, 0.25, -0.2], k:2.0, hold:8, drift:0.02 }] });
   addObj({ key:'turtle', name:'green sea turtle', type:'Chelonia mydas', kind:'air', floor:[REEF[0] + 60, REEF[1] - 40, 3], size:1.1, rad:0.8,
     fact:'Green turtles can rest underwater for hours on one breath. They graze seagrass and algae, and the females swim back across whole oceans to the beach where they hatched to lay their eggs.',

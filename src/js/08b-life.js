@@ -298,7 +298,7 @@ function addLife() {
   set('helmetjelly', { lights:[{ at:[0, 0, 0], col:BIO, power:o => (o.reactEnv || 0) * 1.2, reach:0.7, flick:6 }],
     react:{ type:'alarm', dur:6, text:'Disturbed, the helmet jelly sends rings of blue light rippling round its bell.' } });
   set('puffer', { react:{ type:'puff', dur:10, text:'Alarmed, the porcupinefish gulps water and swells into a ball two or three times its size, every spine standing on end.' } });
-  set('octopus', { react:{ type:'colour', dur:9, text:'In a fraction of a second the octopus flushes dark red, a warning, then fades back into the colours of the reef: its skin is packed with colour cells it can open and close at will.' } });
+  set('octopus', { react:{ type:'colour', dur:9, text:'The octopus flushes dark red and squirts a cloud of ink, a decoy to hide behind while it gets away. Then it fades back into the colours of the reef: its skin is packed with colour cells it opens and closes at will.' } });
   set('pyrosome', { lights:[{ at:[0, 0, 0], col:[0.35, 1.0, 0.8], power:o => (o.reactEnv || 0) * 0.3, reach:0.8, flick:4 }],
     react:{ type:'wave', dur:8, text:'Touched, the pyrosome lights up: each tiny zooid answers its neighbour’s light, and a glow runs the length of the colony.' } });
   set('combjelly', { react:{ type:'flash', dur:4, text:'Some comb jellies glow when touched: the rainbows are reflected sunlight, but this blue flash is their own.' } });

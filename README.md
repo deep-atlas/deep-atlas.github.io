@@ -51,7 +51,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
-  cucumber's flash, the helmet jelly's rings of light, the pyrosome's running wave of light, the pufferfish swelling into a spiny ball, the octopus flushing red);
+  cucumber's flash, the helmet jelly's rings of light, the pyrosome's running wave of light, the pufferfish swelling into a spiny ball, the octopus flushing red and squirting ink);
   the cuttlefish hunts with its passing-cloud display; click open water and the plankton flash blue, swim through the dark
   and leave a glowing wake.
 - **Events**: the humpback breaches every couple of minutes; at night the reef spawns and flashlight fish come out; a sperm

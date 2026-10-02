@@ -135,6 +135,15 @@ function mkDumbo() {
   }
   return mb;
 }
+// a puff of ink: a few lumpy, overlapping blobs, one unit across (drawn see-through and grown as it spreads)
+function mkInk() {
+  const mb = new MB(), r = rng(616);
+  for (let k = 0; k < 7; k++) {
+    const c = [(r() - 0.6) * 0.5, (r() - 0.4) * 0.3, (r() - 0.5) * 0.4], s = 0.18 + r() * 0.2;
+    ellip(mb, c, [s * 1.3, s, s], { n:6, m:10, shape:p => { const k2 = 1 + 0.25 * Math.sin(p[0] * 30 + k) * Math.sin(p[1] * 25); return vadd(c, vmul(vsub(p, c), k2)); }, col:fc([0.06, 0.04, 0.05]) });
+  }
+  return mb;
+}
 function mkOctopus(o = {}) {
   const mb = new MB(), skin = o.skin || [0.7, 0.4, 0.3], mott = o.mott || [0.45, 0.22, 0.18];
   const pat = p => o.dumbo ? skin : (Math.sin(p[0] * 60 + p[2] * 40) * Math.sin(p[1] * 70) > 0.3 ? mott : skin);
