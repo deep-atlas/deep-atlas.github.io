@@ -82,6 +82,12 @@ function leaveTour() {
   renderTours(); updatePlay();
 }
 function tourStep(dir) {
+  if (RIDE.on) {
+    // riding: send Nautile straight on to its next (or back to its previous) stop
+    const t = simTime + SUB.off, tau = ((t % SUB.leg) + SUB.leg) % SUB.leg;
+    SUB.off += dir > 0 ? SUB.leg - tau : -tau - SUB.leg + SUB.travel * 0.98;
+    toast(dir > 0 ? 'on to the next stop' : 'back to the last stop', 1500); return;
+  }
   if (JOURNEY.on) { journeyStep(dir); return; }
   if (TOUR.id) { const n = TOUR.i + dir; if (n < 0 || n >= TOUR.list.length) { if (n >= TOUR.list.length) toast('the end of the tour'); return; } TOUR.i = n; TOUR.views = 0; flyTo(TOUR.list[n]); }
   else if (TOUR.last) startTour(TOUR.last.id, TOUR.last.i + dir);
@@ -627,6 +633,8 @@ $('capBtn').onclick = () => { if (JOURNEY.on) { endJourney(); return; } endCompa
 const RIDE = { on:false, status:'', cockpit:false };
 function toggleCockpit() { if (!RIDE.on) startRide(); RIDE.cockpit = !RIDE.cockpit; $('btnCockpit').textContent = RIDE.cockpit ? 'outside' : 'cockpit'; toast(RIDE.cockpit ? 'in the cockpit: three crew lie in a titanium sphere looking out of small windows like this' : 'outside, following Nautile', 3500); }
 function startRide() {
+  // (each ride starts somewhere new on the route, so riding shows more than the shallows)
+  if (!SUB.started) { SUB.started = true; SUB.off += Math.floor(Math.random() * SUB.stops.length) * SUB.leg; }
   endCompare(); leaveTour();
   RIDE.on = true; VIEW.mode = 'ride'; VIEW.flight = null;
   $('btnRide').setAttribute('aria-pressed', 'true');
@@ -659,9 +667,10 @@ function updateRide(dt) {
   CAM.scale = vlen(vsub(s.pos, CAM.pos));
 }
 // the sub's own itinerary: it visits places from the surface down and back, lingering at each
-const SUB = { stops:[], leg:70, travel:24 };
+const SUB = { stops:[], leg:70, travel:24, off:0 };
 function subMotion(o, t) {
   const S = SUB.stops; if (!S.length) return;
+  t += SUB.off;
   const N = S.length * 2 - 2, cyc = SUB.leg * N, tt = ((t % cyc) + cyc) % cyc;
   const k = Math.floor(tt / SUB.leg), tau = tt - k * SUB.leg;
   const idx = i => { i = ((i % N) + N) % N; return i < S.length ? i : N - i; };
