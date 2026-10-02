@@ -19,11 +19,13 @@ function frameYaw(o) {
   const f = o.fwd, h = Math.hypot(f[0], f[2]);
   return h > 0.2 ? Math.atan2(f[2], f[0]) : (o._fy ?? 0);
 }
+// on a tall narrow screen (a phone held upright) the view is framed by its width: pull back so the subject still fits
+function portraitK() { const a = innerWidth / Math.max(innerHeight, 1); return a < 1 ? Math.pow(1.15 / a, 0.85) : 1; }
 // the orbit parameters a view asks for
 function viewParams(o, v) {
   const frame = v.frame || o.frame || 'obj';
   const d = vnorm(v.d);
-  return { yaw:yawOf(d), pitch:pitchOf(d), dist:v.k * vsizeOf(o), off:v.off || [0, 0, 0], frame, air:!!v.air };
+  return { yaw:yawOf(d), pitch:pitchOf(d), dist:v.k * vsizeOf(o) * portraitK(), off:v.off || [0, 0, 0], frame, air:!!v.air };
 }
 function rotYaw(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0] * c - p[2] * s, p[1], p[0] * s + p[2] * c]; }
 // where the camera sits and looks for an orbit state

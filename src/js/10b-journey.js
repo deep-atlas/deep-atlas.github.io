@@ -61,7 +61,7 @@ function journeyCaption() {
   $('caption').hidden = false; $('capBtn').hidden = false; $('capBtn').textContent = 'end journey';
   $('capText').textContent = s;
 }
-const jDist = it => it.frame * (it.frame > 5 ? 1.05 : 1.5);
+const jDist = it => it.frame * (it.frame > 5 ? 1.05 : 1.5) * portraitK();
 function updateJourney(dt) {
   const L = JOURNEY.items; if (!L.length) return;
   if (!JOURNEY.paused && VIEW.manualT > 3) JOURNEY.t += dt;
