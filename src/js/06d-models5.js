@@ -62,6 +62,13 @@ function mkNudibranchs() {
   }
   return mb;
 }
+function mkPufferSlim() {
+  // the same porcupinefish at ease: a blunt, broad-headed fish, spines lying flat, big green eyes and a round tail
+  const skin = [0.85, 0.78, 0.55], spot = [0.25, 0.2, 0.12], belly = [0.97, 0.95, 0.9];
+  return fish({ H:0.17, W:0.13, tm:0.3, nose:0.3, ped:0.3, bodyLen:0.82, back:skin, belly, eye:[0.11, 0.3, 0.06], eyeCol:[0.3, 0.65, 0.45], n:16, m:12,
+    pattern:(t, sy, sz, p) => sy < -0.3 ? belly : (Math.sin(p[0] * 34) * Math.sin(p[2] * 31 + p[1] * 20) > 0.55 ? spot : skin),
+    tail:'round', tailH:0.12, tailCol:skin, dorsal:[{ at:0.62, len:0.12, h:0.07, col:skin }], anal:[{ at:0.64, len:0.1, h:0.06, col:skin }], pect:{ at:0.28, len:0.1, w:0.07, col:skin } });
+}
 function mkPuffer() {
   // a pufferfish puffed up: a ball of water swallowed into its elastic stomach, spines standing out, a beak and big eyes
   const mb = new MB(), skin = [0.85, 0.78, 0.55], spot = [0.25, 0.2, 0.12], belly = [0.97, 0.95, 0.9];
@@ -277,10 +284,14 @@ function addShallows(REEF) {
     fact:'Their bright colours are a warning: many store the stinging cells or toxins of the sponges, anemones and corals they eat, and use them for their own defence. The frilly tuft on the back is their gills.',
     parts:[part(mkNudibranchs, { scale:1, mat:M_SKIN, sway:[0.002, 1, 50, 0] })],
     views:[{ d:[0.4, 0.75, 0.5], k:1.6, hold:10, drift:0.03, frame:'world' }, { d:[1, 0.35, 0.3], k:1.2, hold:9, drift:0.03, frame:'world' }] });
-  addObj({ key:'puffer', name:'pufferfish', type:'a puffed-up porcupinefish · Diodon', kind:'fish', floor:[REEF[0] + 7.5, REEF[1] - 1, 1.6], size:0.4, rad:0.3,
+  addObj({ key:'puffer', name:'pufferfish', type:'a porcupinefish · Diodon', kind:'fish', floor:[REEF[0], REEF[1] - 2.2, 1.8], size:0.4, rad:0.3,
     fact:'Threatened, it gulps water into an elastic stomach and swells to several times its size, its spines standing on end. Many pufferfish also carry tetrodotoxin, one of the most potent poisons known.',
     motion:{ type:'hover', amp:0.08, turn:0.5 },
-    parts:[part(mkPuffer, { scale:0.4, mat:M_SKIN })], views:SIDE });
+    // it swims slim, and swells into a spiny ball when disturbed (swim up close, or "disturb it")
+    post:o => { const e = smooth(0.15, 1, o.reactEnv || 0); o.parts[1].scale = 0.4 * lerp(0.45, 1, e); },
+    parts:[part(mkPufferSlim, { scale:0.4, mat:M_SKIN, ...FISH_SWIM(0.04, 1.6, 0.9, 2), show:o => !(o.reactEnv > 0.15) }),
+      part(mkPuffer, { scale:0.4, mat:M_SKIN, show:o => o.reactEnv > 0.15 })],
+    views:[{ d:[1, 0.25, 0.6], k:2.2, hold:10, drift:0.025 }, { d:[0.3, 0.55, 1], k:2.4, hold:8, drift:0.03 }] });
   addObj({ key:'seaotter', name:'sea otter', type:'Enhydra lutris', kind:'air', at:[KELP[0] + 8, KELP[2] + 5, 0.08], size:1.3, rad:0.8, yaw:0.6,
     fact:'The densest fur of any animal, up to about a million hairs per square inch, keeps it warm without blubber. By eating sea urchins it protects the kelp forest: where otters vanished, urchins grazed the forests away.',
     motion:{ type:'hover', amp:0.15, turn:0.4 },

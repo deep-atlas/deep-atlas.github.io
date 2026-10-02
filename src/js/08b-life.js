@@ -63,7 +63,7 @@ function tickReactions(dt) {
     const env = smooth(0, 0.7, o.reactAge) * smooth(0, 1.5, o.reactT);
     o.reactEnv = env;
     const r = o.react;
-    o.fxDyn = [0, r.type === 'evert' ? 0 : env, r.type === 'evert' ? env : 0, r.wheel ? 1 : 2];
+    o.fxDyn = r.type === 'puff' ? null : [0, r.type === 'evert' ? 0 : env, r.type === 'evert' ? env : 0, r.wheel ? 1 : 2];
   }
 }
 
@@ -297,6 +297,7 @@ function addLife() {
     react:{ type:'flash', dur:5, text:'Disturbed, the swimming sea cucumber flashes blue, and can shed glowing skin to stick to an attacker while it rows away.' } });
   set('helmetjelly', { lights:[{ at:[0, 0, 0], col:BIO, power:o => (o.reactEnv || 0) * 1.2, reach:0.7, flick:6 }],
     react:{ type:'alarm', dur:6, text:'Disturbed, the helmet jelly sends rings of blue light rippling round its bell.' } });
+  set('puffer', { react:{ type:'puff', dur:10, text:'Alarmed, the porcupinefish gulps water and swells into a ball two or three times its size, every spine standing on end.' } });
   set('combjelly', { react:{ type:'flash', dur:4, text:'Some comb jellies glow when touched: the rainbows are reflected sunlight, but this blue flash is their own.' } });
   // Nautile's floodlights light whatever it passes, once it is deep enough to need them
   set('nautile', { lights:[{ at:[6.5, 0, 0], col:[0.9, 0.95, 1.0], power:o => 0.9 * deep(o), reach:7, metres:true }] });

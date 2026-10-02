@@ -139,6 +139,7 @@ function drawWorld(trans) {
 }
 const _it = {};
 function drawPart(o, p) {
+  if (p.show && !p.show(o)) return;
   if (!ensureMesh(p)) return;
   const f = p.fwd ? p.fwd(o) : o.fwd, u = p.up ? p.up(o) : o.up, sd = vcross(f, u);
   _it.pos = vadd(o.pos, vadd(vadd(vmul(o.fwd, p.off[0]), vmul(o.up, p.off[1])), vmul(o.side || sd, p.off[2])));
