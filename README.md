@@ -23,7 +23,7 @@ Google Fonts link, and works opened straight from disk too.
 
 ## What's in it
 
-- **74 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **82 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -33,14 +33,23 @@ Google Fonts link, and works opened straight from disk too.
   Greenland shark, lionfish, parrotfish, moray eel, and flying fish gliding over the waves. From the deep: colossal squid,
   bigfin squid, glass squid, black dragonfish, stoplight loosejaw, ghost shark, giant isopod, Japanese spider crab, yeti crabs
   at the vents and the swimming sea cucumber (the "headless chicken monster").
+- **Hidden worlds**: a seamount's deep coral garden (bubblegum, bamboo and black corals, sea lilies, orange roughy), a cold seep
+  whose brine pool is a lake on the seafloor ringed by mussels, the underside of Arctic sea ice with ice algae, brinicles and
+  narwhals, a mangrove forest on its prop roots, and a seagrass meadow with a grazing dugong.
+- **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
+  animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
+  can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
+  cucumber's flash); click open water and the plankton flash blue, swim through the dark and leave a glowing wake.
+- **From a whale to a microbe**: one long zoom through size, every animal at its true size beside the last, from a 25 m blue
+  whale to a single Prochlorococcus cell 0.6 µm across.
 - **Nautile**, Ifremer's real yellow deep submersible (8 m long, rated to 6,000 m, dived on the Titanic in 1987), modelled to its
   true size; it roams the atlas down to its rated depth, keeping clear of everything, and you can ride along with it (B).
 - **Above the waves**: swim up (R) through Snell's window and out of the water to see the sky, the clouds and the sea from above,
   with the reef glowing through it. The grand dive starts up there.
 - **Where you are**: swimming freely, the info panel names the place you have reached (the coral reef, the kelp forest...) with a
   button to lock on to it.
-- **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, weird and wonderful,
-  life without the sun, and an endless random swim. Screensaver mode (Z).
+- **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, hidden worlds, weird and
+  wonderful, life without the sun, the size journey, and an endless random swim. Screensaver mode (Z).
 - **Time of day**: sunlight, dusk and night, and the nightly vertical migration (lanternfish rise from 450 m to 60 m).
 - **Interface** modelled on gcdatlas: info panel (name, type, depth, fact, live readout of pressure, temperature and
   sunlight, ruler, angle bar), search, atlas (sort, filter, seen), tours, settings, help, a depth ladder you can drag
@@ -54,7 +63,7 @@ Google Fonts link, and works opened straight from disk too.
 | drag | swim round what you're locked on |
 | scroll, pinch, + - | zoom |
 | right-drag, W A S D R F | let go and swim freely (shift: faster); keep rising with R to come out above the waves |
-| click | swim there and lock on |
+| click | swim there and lock on; click it again to disturb it; click open water and the plankton flash |
 | depth ladder | drag to dive, or click a name |
 | / | search (names, kinds, or a depth like `4000 m`) |
 | space | pause / play |
@@ -106,12 +115,15 @@ yellow hull is given a faint glow (its own work lights) so it reads as yellow at
 | `04-render.js` | camera uniforms, creature and school shaders, terrain, background, marine snow |
 | `05-models.js` | fish, sharks, rays, turtles, whales, deep-sea fish |
 | `06-models2.js` | jellies, squid, octopus, plankton, microbes, floor life, Nautile, a diver |
-| `06c-models4.js` | the vampire squid and ten more deep-sea animals (squids, dragonfish, loosejaw, chimaera, isopod, crabs, sea cucumber) |
 | `06b-models3.js` | blobfish, oarfish, coelacanth, goblin, frilled and Greenland sharks, fangtooth, lionfish, parrotfish, moray, flying fish |
+| `06c-models4.js` | the vampire squid and ten more deep-sea animals (squids, dragonfish, loosejaw, chimaera, isopod, crabs, sea cucumber) |
 | `07-scenes.js` | the reef, kelp forest, vents, whale fall, Titanic, abyssal and hadal floors, schools |
+| `07b-scenes2.js` | the seamount garden, cold seep, Arctic sea ice, mangroves, seagrass; narwhal, dugong, orange roughy |
 | `08-world.js` | the object system, motions, drawing, and the catalogue of places |
+| `08b-life.js` | living lights, reactions, schools parting round predators, plankton flashes |
 | `09-camera.js` | orbit, angle loop, flights, free swimming, picking |
 | `10-ui.js` | the interface, tours, atlas, search, ladder, labels, photo, compare, ride, screensaver |
+| `10b-journey.js` | the size journey, from a whale to a microbe |
 | `11-sound.js` | the generative soundscape |
 | `99-main.js` | the frame loop and test hooks (`window.__deep`; `__deep.save(name)` posts a PNG of the canvas to the dev server, which writes it to `.shots/`) |
 
