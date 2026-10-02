@@ -237,6 +237,30 @@ function mkNautilus() {
   tube(mb, { n:4, m:6, path:t => vadd(head, [0.05 + t * 0.06, -0.09, 0]), r:t => 0.025 - t * 0.008, col:fc(flesh) });
   return mb;
 }
+function mkSeaLion() {
+  // California sea lion, one unit long, head at +x: a sleek torpedo that 'flies' with its long fore flippers and steers with the hind ones
+  const mb = new MB(), back = [0.45, 0.32, 0.21], belly = [0.66, 0.53, 0.38], dark = [0.24, 0.17, 0.11];
+  // the body, from the neck back: deepest at the chest, tapering to the hips
+  loft(mb, { n:28, m:16, sec:t => {
+      const f = t < 0.25 ? 0.62 + 0.38 * Math.sin(t / 0.25 * PI / 2) : 1 - 0.82 * Math.pow((t - 0.25) / 0.75, 1.5);
+      return { x:0.32 - t * 0.8, y:0, w:0.105 * f, h:0.12 * f, e:2 };
+    },
+    col:(t, u, p, sy) => sy < -0.25 ? belly : back, anim:t => [0.15 + t * 0.85, 0, 0, 0] });
+  // the head: round crown, a short tapered muzzle, big dark eyes and tiny ear flaps
+  ellip(mb, [0.37, 0.025, 0], [0.085, 0.07, 0.065], { n:8, m:12, col:fc(back), anim:() => [0.08, 0, 0, 0] });
+  tube(mb, { n:4, m:8, path:t => [0.43 + t * 0.07, 0.012 - t * 0.012, 0], r:t => 0.042 - t * 0.02, col:t => t > 0.85 ? dark : belly, anim:() => [0.04, 0, 0, 0] });
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.42, 0.045, sz * 0.045], [0.016, 0.016, 0.01], { n:3, m:6, col:fc([0.03, 0.03, 0.03]), anim:() => [0.08, 0, 0, 0] });
+    tube(mb, { n:2, m:3, path:t => [0.355 - t * 0.02, 0.07 + t * 0.012, sz * (0.045 + t * 0.008)], r:0.006, col:fc(dark), anim:() => [0.1, 0, 0, 0] });
+    // the long fore flippers, angled down and back from the chest
+    fin(mb, [[0, 0.025], [0.1, 0.035], [0.24, 0.015], [0.3, -0.01], [0.18, -0.025], [0, -0.03]], { origin:[0.2, -0.06, sz * 0.08], ua:vnorm([-0.5, -0.55, sz * 0.75]), va:[1, 0, 0],
+      col:fc(dark), anim:(a) => [0.3, a * 3.5, 0, 0] });
+    // the hind flippers, trailing behind the hips
+    fin(mb, [[0, 0.012], [0.07, 0.035], [0.14, 0.04], [0.15, -0.01], [0.07, -0.014], [0, -0.012]], { origin:[-0.46, -0.005, sz * 0.012], ua:vnorm([-1, -0.1, sz * 0.4]), va:vnorm([0, 1, sz * 0.4]),
+      col:fc(dark), anim:() => [1, 0, 0, 0] });
+  }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -262,6 +286,12 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.15, turn:0.4 },
     parts:[part(mkSeaOtter, { scale:1.3, mat:[1, 0.5, 1, 0.4] })],
     views:[{ d:[0.6, 0.55, 1], k:2.4, hold:10, drift:0.02, air:true }, { d:[0.4, -0.55, 0.8], k:2.6, hold:9, drift:0.02 }] });
+  addObj({ key:'sealion', name:'California sea lions', label:'sea lions', type:'Zalophus californianus', kind:'air', at:[KELP[0] - 6, KELP[2] + 8, 6], size:2, vsize:3, rad:3, predator:true,
+    fact:'Sea lions swim by beating their long fore flippers like wings, steering with the hind ones, and turn tighter than almost any other large swimmer. Curious and playful, they often loop round divers in the kelp.',
+    motion:{ type:'eight', R:7, v:2.6, bob:1.5, bank:0.5 },
+    parts:[part(mkSeaLion, { scale:2, mat:[1, 0.45, 1, 0.5], swim:[0.025, 1.1, 0.6, 0], swim2:[1, 2.2, 0.06, 1.1] }),
+      part(mkSeaLion, { scale:1.7, off:[-3, 0.8, 1.6], mat:[1, 0.45, 1, 0.5], swim:[0.025, 1.2, 0.6, 2], swim2:[1, 2.2, 0.05, 1.2] })],
+    views:[{ d:[0.2, 0.1, 1], k:1.6, hold:10, drift:0.02 }, { d:[0.8, -0.3, 0.6], k:1.5, hold:9, drift:0.02 }, { d:[-0.5, 0.5, 0.7], k:1.8, hold:8, drift:-0.02 }] });
   addObj({ key:'blacksmith', name:'blacksmith', type:'a school of Chromis punctipinnis', kind:'fish', at:[KELP[0] + 2, KELP[2] - 3, 9], size:0.25, vsize:6, rad:5,
     fact:'Dark blue damselfish that hang in loose schools in the kelp’s open spaces, picking plankton from the current. At night they shelter in cracks in the rock below.',
     parts:[part(mkBlacksmith, { inst:schoolCloud(150, 5, 2.5, 727, 1, 0.5), school:[1, 0.25, 1, 0], mat:M_SKIN, shy:8, ...FISH_SWIM(0.06, 2.4, 0.9, 1.8) })],
