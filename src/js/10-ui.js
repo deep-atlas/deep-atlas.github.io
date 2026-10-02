@@ -38,7 +38,7 @@ const TOURS = [
   { id:'dive', name:'the grand dive', blurb:'From the surface to the floor of the Challenger Deep, zone by zone.',
     stops:['surface', 'flyingfish', 'manowar', 'reef', 'clownfish', 'lionfish', 'turtle', 'manta', 'kelp', 'baitball', 'whaleshark', 'bluewhale', 'seep', 'krill', 'coelacanth', 'oarfish', 'lanternfish', 'siphonophore', 'barreleye', 'giantsquid', 'vampsquid', 'dragonfish', 'blobfish', 'spermwhale', 'anglerfish', 'gulper', 'vents', 'whalefall', 'titanic', 'dumbo', 'abyss', 'tripodfish', 'snailfish', 'amphipods', 'challenger'] },
   { id:'giants', name:'giants', blurb:'The biggest animals there are, and one that is a colony.',
-    stops:['bluewhale', 'humpback', 'whaleshark', 'orca', 'spermwhale', 'colossal', 'giantsquid', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'leatherback', 'sunfish', 'greatwhite'] },
+    stops:['bluewhale', 'humpback', 'bubblenet', 'whaleshark', 'orca', 'spermwhale', 'colossal', 'giantsquid', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'leatherback', 'sunfish', 'greatwhite'] },
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
     stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'atolla', 'pyrosome', 'cockeyed', 'helmetjelly', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
@@ -440,7 +440,7 @@ $('ladder').querySelector('.lad-cap').onclick = () => { $('depths').hidden = fal
 $('btnNotes').onclick = () => { $('notes').hidden = false; save('notesSeen', NOTES_V); $('btnNotes').classList.remove('fresh'); };
 $('notesClose').onclick = () => { $('notes').hidden = true; };
 $('notes').onclick = e => { if (e.target === $('notes')) $('notes').hidden = true; };
-const NOTES_V = '0.9';
+const NOTES_V = '0.10';
 if (load('notesSeen', '') !== NOTES_V) $('btnNotes').classList.add('fresh');
 $('helpClose').onclick = () => { $('help').hidden = true; };
 $('settingsHelp').onclick = () => { $('help').hidden = false; };
@@ -749,7 +749,7 @@ function addSub() {
     parts:[part(mkNautile, { mat:[1, 0.3, 1.6, 0.9] })],
     views:[{ d:[0.7, 0.3, 1], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.05, 0.25], k:1.2, hold:8, drift:0.02 }, { d:[-1, 0.4, 0.6], k:1.5, hold:8, drift:0.02 }] });
   // its route: everything it can reach, down to its rated 6,000 m (the trenches are beyond it)
-  const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'seaotter', 'garibaldi', 'blacktip', 'snappers', 'flashlight', 'gardeneels', 'stingray', 'seaice', 'narwhal', 'mangroves', 'seagrass', 'dugong', 'sargassum', 'sargassumfish', 'grouper', 'blueringed', 'beluga', 'lionsmane', 'boxjelly', 'seadragon', 'sealion', 'goby', 'barracuda', 'leatherback'];
+  const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'seaotter', 'garibaldi', 'blacktip', 'snappers', 'flashlight', 'gardeneels', 'stingray', 'seaice', 'narwhal', 'mangroves', 'seagrass', 'dugong', 'sargassum', 'sargassumfish', 'grouper', 'blueringed', 'bubblenet', 'beluga', 'lionsmane', 'boxjelly', 'seadragon', 'sealion', 'goby', 'barracuda', 'leatherback'];
   SUB.stops = byDepth().filter(o => o.kind !== 'micro' && o.size < 200 && o.kind !== 'subs' && o.key !== 'trench' && !SHALLOWS.includes(o.key) && depthOf(o) < 6000
     && floorDepth(o.pos[0], o.pos[2]) > 15);   // (nor into water too shallow for it)
 }

@@ -175,6 +175,14 @@ function tickSound(dt) {
     blip({ f0:f, curve:[f * 1.3, f * 0.8, f * 1.5, f * 1.1], dur:0.5 + Math.random() * 0.6, amp:0.018 * loud, att:0.03, pan:dl.pan, dry:false });
     what = 'dolphins whistling';
   }
+  // just before the lunge at the bubble net, one humpback gives its long, rising feeding call
+  const bn = near('bubblenet', 250);
+  if (bn && bn.o.bnU > 0.6 && bn.o.bnU < 0.66 && due('feedcall')) {
+    SND.next.feedcall = 12;
+    const loud = clamp(1 - bn.d / 250, 0.2, 1);
+    blip({ type:'sawtooth', f0:420, curve:[480, 560, 600, 610], dur:3.5, amp:0.05 * loud, att:0.4, vib:[5, 8], pan:bn.pan, bp:900, q:1.2, dry:false });
+    what = 'a humpback’s feeding call: the net is closing';
+  }
   const bl = near('beluga', 150);
   if (bl && due('canary')) {
     // the sea canary: chirps, trills and squeals

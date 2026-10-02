@@ -267,6 +267,12 @@ function buildCatalog() {
     motion:{ type:'circle', R:90, v:1.8, bob:4, bank:0.12 },
     parts:[part(mkHumpback, { scale:15, mat:M_SKIN, ...WHALE_SWIM(0.04, 0.22) })],
     views:[{ d:[0.3, -0.45, 1], k:1.3, hold:12, drift:0.015 }, { d:[0.2, 0.05, 1], k:1.4, hold:9, drift:0.015 }, { d:[-1, 0.3, 0.6], k:1.6, hold:9, drift:0.02 }, { d:[0.3, 0.12, 1], k:2.2, hold:12, drift:0.01, frame:'world', air:true }] });
+  addObj({ key:'bubblenet', name:'bubble-net feeding', label:'bubble net', type:'humpbacks hunting together', kind:'air', at:[8800, -1100, 12], size:13, vsize:22, rad:24,
+    fact:'A few humpbacks circle beneath a school of herring, blowing a spiral curtain of bubbles that the fish will not swim through. As the net closes they dive below it and lunge up through the middle together, mouths open, swallowing tonnes of water and fish. One whale often gives a loud feeding call just before they rise.',
+    motion:{ type:'still', fn:bubbleNetPost },
+    parts:[part(mkSardine, { inst:schoolMill(500, 3.2, 2.5, 444, 1.2), school:[0, 0.25, 1, 0], herring:true, show:o => o.bnU < 0.72 || o.bnU > 0.97, mat:M_SILVER, shy:6, ...FISH_SWIM(0.08, 4, 0.9, 1.8) }),
+      ...[0, 1, 2].map(i => part(mkHumpback, { scale:13 - i, whale:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...WHALE_SWIM(0.035, 0.25 + i * 0.03) }))],
+    views:[{ d:[1, 0.05, 0.3], k:2.1, hold:16, drift:0.008, frame:'world' }, { d:[0.5, -0.45, 0.8], k:1.9, hold:14, drift:0.008, frame:'world', off:[0, -2, 0] }] });
   addObj({ key:'bluewhale', name:'blue whale', type:'the largest animal ever known · Balaenoptera musculus', kind:'air', at:[10500, -400, 60], size:25, rad:15,
     fact:'The largest animal ever known: up to about 30 m long and 190 tonnes. Its heart weighs about 180 kg, and its calls, too low for us to hear, carry for hundreds of kilometres.',
     motion:{ type:'circle', R:150, v:2.2, bob:5, bank:0.06 },

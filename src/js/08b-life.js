@@ -139,19 +139,22 @@ void main(){
 }`;
 const FS_SPARK = GLSL_SCENE + `
 uniform vec3 uCol;
+uniform vec3 uWB;   // (the eye's colour balance, undone so a flash shows its own colour: white spray stays white seen from 25 m down)
 in float vA; in float vW; out vec4 o;
 void main(){
   vec2 q = gl_PointCoord * 2.0 - 1.0; if (dot(q, q) > 1.0) discard;
   float bright = mix(0.35, 1.0, uLamp.w > 0.0 ? 1.0 : 1.0);
-  o = vec4(uCol * vA * bright * (1.0 - dot(q, q) * 0.6) * 1.8, 0.0);
+  o = vec4(uCol / max(uWB, vec3(1e-3)) * vA * bright * (1.0 - dot(q, q) * 0.6) * 1.8, 0.0);
   gl_FragDepth = clamp(vW * uMisc.y, 0.0, 1.0);
 }`;
 const P_SPARK = program(VS_SPARK, FS_SPARK, 'sparks');
 function drawSparks() {
   drawSpawn();
+  drawBubbleNet();
   if (!SPARKS.length) return;
   const u = sceneProg(P_SPARK); if (!u) return;
   gl.uniform1f(u.uPx, ASCII.rows * SY / Math.tan(CAM.fov / 2) * 0.5);
+  gl.uniform3fv(u.uWB, ASCII.wb || [1, 1, 1]);
   gl.bindVertexArray(SNOW_VAO);
   for (const s of SPARKS) {
     const r = vsub(s.pos, CAM.pos);
@@ -262,6 +265,81 @@ function drawSpawn() {
   const u = sceneProg(P_SPAWN); if (!u) return;
   gl.uniform3fv(u.uBase, vsub(R.pos, CAM.pos)); gl.uniform1f(u.uOn, on); gl.uniform1f(u.uR, 9); gl.uniform1f(u.uH, -R.pos[1] + 0.5);
   gl.uniform1f(u.uPx, ASCII.rows * SY / Math.tan(CAM.fov / 2) * 0.5);
+  gl.bindVertexArray(SNOW_VAO);
+  gl.drawArrays(gl.POINTS, 0, SNOW_N);
+}
+
+// ---- bubble-net feeding: humpbacks circle under a school of herring blowing a spiral curtain of bubbles the fish will not cross,
+// then dive beneath and lunge up through the middle together, mouths open, breaking the surface
+const BNET = { T:75 };
+function bnetU(t) { return (((t % BNET.T) + BNET.T) % BNET.T) / BNET.T; }
+function bnetPos(i, u, y0) {
+  // where whale i is (relative to the net's centre, in metres) at phase u; y0 is the centre's height
+  const a0 = i * 0.55, b = i * TAU / 3, sp = s => { const a = a0 + s * TAU * 2.5, R = 11 - 3 * s; return [Math.cos(a) * R, lerp(-22, -9, s) - i * 1.2 - y0, Math.sin(a) * R]; };
+  const L0 = [Math.cos(b) * 2.5, -17 - y0, Math.sin(b) * 2.5], L1 = [Math.cos(b) * 2, -2.5 - y0, Math.sin(b) * 2], L2 = [Math.cos(b) * 4.5, -13 - y0, Math.sin(b) * 4.5];
+  if (u < 0.6) return sp(u / 0.6);
+  if (u < 0.68) return vlerp(sp(1), L0, ease((u - 0.6) / 0.08));
+  if (u < 0.78) return vlerp(L0, L1, ease((u - 0.68) / 0.1));
+  if (u < 0.88) return vlerp(L1, L2, ease((u - 0.78) / 0.1));
+  return vlerp(L2, sp(0), ease((u - 0.88) / 0.12));
+}
+function bubbleNetPost(o, t) {
+  const u = bnetU(t), A = o.anchor;
+  o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1]; o.bnU = u;
+  let k = 0;
+  for (const p of o.parts) {
+    if (p.herring) { p.off = [0, -6 - A[1] + lerp(0, 3, smooth(0.3, 0.6, u)), 0]; continue; }
+    if (!p.whale) continue;
+    const i = k++, pos = bnetPos(i, u, A[1]), nxt = bnetPos(i, u + 0.004, A[1]);
+    let d = vnorm(vsub(nxt, pos));
+    // falling back after the lunge, the whale tips over from upright to level instead of turning nose-down
+    if (u > 0.78 && u < 0.9) { const s = smooth(0.78, 0.9, u), out = vnorm([pos[0], 0, pos[2]]); d = vnorm(vadd(vmul([0, 1, 0], 1 - s), vmul(out, s + 0.05))); }
+    if (u > 0.68 && u < 0.78) d = vnorm(vadd([0, 1, 0], vmul(vnorm([pos[0], 0, pos[2]]), 0.15)));
+    p._dir = p._dir ? vnorm(vlerp(p._dir, d, 0.15)) : d;
+    p.off = pos;
+    const f = p._dir, sd = vnorm(vcross(f, Math.abs(f[1]) > 0.95 ? [1, 0, 0] : [0, 1, 0])), up = vnorm(vcross(sd, f));
+    p._f = f; p._u = up;
+  }
+  if (!o._lunged && u > 0.74 && u < 0.8) {
+    o._lunged = true; spark([A[0], 0.5, A[2]], 9, 700, 2.2, [0.85, 0.95, 1.0]);
+    if ((VIEW.focus === o || vlen(vsub(A, CAM.pos)) < 120) && !RIDE.on) toast('The lunge: the humpbacks burst up through the middle of the net together, mouths open, each taking in tonnes of water and fish.', 6000);
+  }
+  if (u < 0.7) o._lunged = false;
+}
+const VS_BNET = GLSL_SCENE + `
+uniform vec3 uBase; uniform float uPx, uOn, uArc, uY0;
+layout(location = 0) in vec4 aSeed;
+out float vA; out float vW; out vec3 vRel;
+void main(){
+  float t = uKd.w;
+  float a = aSeed.x * 6.2831;
+  float age = fract(t * (0.08 + aSeed.w * 0.06) + aSeed.z);
+  float y = mix(uY0, 0.0, age);
+  float R = 9.5 - (y - uY0) * 0.08 + (aSeed.y - 0.5) * 1.2 + 0.4 * sin(age * 9.0 + aSeed.w * 20.0);
+  vec3 p = uBase + vec3(cos(a) * R, y, sin(a) * R);
+  vRel = p;
+  // the curtain is laid down round the circle as the whales spiral, then rises and thins
+  vA = uOn * step(aSeed.x, uArc) * smoothstep(0.0, 0.08, age) * (1.0 - smoothstep(0.85, 1.0, age));
+  gl_Position = uVP * vec4(p, 1.0); vW = gl_Position.w;
+  gl_PointSize = clamp(uPx * 0.22 / max(gl_Position.w, 1e-6), 2.0, 14.0);
+}`;
+const FS_BNET = GLSL_SCENE + GLSL_LIGHT + `
+in float vA; in float vW; in vec3 vRel; out vec4 o;
+void main(){
+  vec2 q = gl_PointCoord * 2.0 - 1.0; float d = dot(q, q); if (d > 1.0) discard;
+  float depth = -(uCam.y + vRel.y);
+  vec3 c = vec3(0.85, 0.95, 1.0) * (sunAt(depth) * 2.4 + 0.05) * vA * mix(1.0, 0.4, d);
+  o = vec4(fogMix(c, vRel) * vA, 0.0);
+  gl_FragDepth = clamp(vW * uMisc.y, 0.0, 1.0);
+}`;
+const P_BNET = program(VS_BNET, FS_BNET, 'bubblenet');
+function drawBubbleNet() {
+  const o = BYKEY.bubblenet; if (!o || !o.vis || o.bnU == null) return;
+  const u = o.bnU, on = smooth(0.05, 0.12, u) * (1 - smooth(0.7, 0.8, u)); if (on <= 0) return;
+  const pr = sceneProg(P_BNET); if (!pr) return;
+  gl.uniform3fv(pr.uBase, vsub([o.anchor[0], 0, o.anchor[2]], CAM.pos)); gl.uniform1f(pr.uOn, on);
+  gl.uniform1f(pr.uArc, clamp((u - 0.06) / 0.45, 0, 1)); gl.uniform1f(pr.uY0, -22);
+  gl.uniform1f(pr.uPx, ASCII.rows * SY / Math.tan(CAM.fov / 2) * 0.5);
   gl.bindVertexArray(SNOW_VAO);
   gl.drawArrays(gl.POINTS, 0, SNOW_N);
 }
