@@ -235,6 +235,28 @@ function mkCockeyedSquid() {
     ellip(mb, [x, Math.cos(a) * w * 1.04, Math.sin(a) * w * 1.04], [0.008, 0.008, 0.008], { n:2, m:4, col:fc([...BIO, 2.5]) }); }
   return mb;
 }
+function mkLionsMane() {
+  // lion's mane jellyfish, one unit = the bell's width: a shallow lobed bell, a mass of frilled oral arms, and eight clusters of
+  // hair-fine tentacles trailing many times the bell's width (in the biggest, over 30 m)
+  const mb = jelly({ h:0.3, bell:[0.85, 0.45, 0.2], flare:1.15,
+    pattern:(t, u) => {
+      if (t > 0.8 && fract(u * 16) < 0.12) return [0.6, 0.25, 0.1];          // the lobes of the rim
+      if (t < 0.6 && Math.abs(Math.sin(u * PI * 16)) < 0.25) return [0.95, 0.7, 0.4];   // radiating canals
+      return null;
+    },
+    arms:{ n:8, len:0.9, w:0.12, col:[0.9, 0.55, 0.35] } });
+  const r = rng(808);
+  for (let g = 0; g < 8; g++) {
+    const a0 = (g + 0.5) / 8 * TAU;
+    for (let k = 0; k < 7; k++) {
+      // each tentacle drifts out and away from the others as it trails, so the bundle opens into a loose veil
+      const a = a0 + (r() - 0.5) * 0.4, rr = 0.36 + r() * 0.08, L = 3 + r() * 3.5, cy = Math.cos(a) * rr, cz = Math.sin(a) * rr, ph = r() * 6, sp = 0.6 + r() * 1.4;
+      tube(mb, { n:24, m:3, path:t => [-0.15 - t * L, cy * (1 + t * sp) + Math.sin(t * 6 + ph) * 0.35 * t, cz * (1 + t * sp) + Math.cos(t * 4.5 + ph) * 0.35 * t],
+        r:t => 0.005 * (1 - t * 0.5), col:fc([0.75, 0.48, 0.32]), anim:t => [0, 0, t * 0.6, 0.6 - t * 0.5] });
+    }
+  }
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',

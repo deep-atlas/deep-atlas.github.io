@@ -213,6 +213,11 @@ function addPlaces2() {
     motion:{ type:'circle', R:22, v:1.6, bob:2, bank:0.12 },
     parts:[0, 1, 2, 3].map(i => part(mkNarwhal, { scale:4.5 - i * 0.25, off:[[0, 0, 0], [-4, 1.5, 3], [-6, -1, -2.8], [-10, 0.6, 1]][i], mat:M_SKIN, swim:[0.04, 0.5 + i * 0.03, 0.7, i * 1.3], swim2:[1, 2.5, 0, 0] })),
     views:[{ d:[0.45, 0.12, 1], k:1.3, hold:11, drift:0.02, off:[1.5, 0, 0] }, { d:[1, 0.2, 0.5], k:1.1, hold:9, drift:0.02, off:[2, 0, 0] }, { d:[0.3, -0.6, 0.6], k:2.2, hold:9, drift:0.02 }] });
+  addObj({ key:'lionsmane', name:'lion’s mane jellyfish', label:'lion’s mane', type:'Cyanea capillata', kind:'jellies', at:[ICE[0] - 14, ICE[1] + 8, 9], size:1.6, vsize:4, rad:3,
+    fact:'The largest known jellyfish. Its bell can reach 2 m across and its hundreds of sticky tentacles trail over 30 m: one found in 1870 was longer than a blue whale. It thrives in cold Arctic and North Atlantic water.',
+    motion:{ type:'drift', amp:0.4, tilt:0.15 },
+    parts:[part(mkLionsMane, { scale:1.6, mat:[0.8, 0.7, 1, 0.4], trans:true, pulse:[0.1, 0.3, 0, 0], sway:[0.12, 0.3, 2, 0] })],
+    views:[{ d:[0.3, 0.1, 1], k:1.6, hold:11, drift:0.02, frame:'world', off:[0, -1.5, 0] }, { d:[0.2, 0.9, 0.3], k:1.0, hold:9, drift:0.02, frame:'world' }, { d:[0.5, -0.5, 0.8], k:1.2, hold:9, drift:0.02, frame:'world', off:[0, -3, 0] }] });
   addObj({ key:'mangroves', name:'the mangroves', label:'mangroves', type:'a forest standing in the sea', kind:'places', floor:[MANG[0], MANG[1], 0], size:44, rad:24,
     fact:'Mangrove trees stand in salt water on arching prop roots, filtering out salt as they drink. The tangle of roots is a nursery: many reef fish spend their first years hiding there. Mangrove forests break storm waves and store several times more carbon than inland forests.',
     parts:[part(() => buildMangroves(BYKEY.mangroves.anchor, 61), { mat:[1, 0.3, 1, 0.3] }),
