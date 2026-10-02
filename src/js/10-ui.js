@@ -48,7 +48,7 @@ const TOURS = [
   { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',
     stops:['reef', 'flashlight', 'fireflysquid', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
-    stops:['wreck', 'sargassum', 'sargassumfish', 'mangroves', 'boxjelly', 'seagrass', 'dugong', 'seadragon', 'seaice', 'narwhal', 'beluga', 'lionsmane', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
+    stops:['wreck', 'sargassum', 'sargassumfish', 'mangroves', 'boxjelly', 'seagrass', 'dugong', 'seadragon', 'seaice', 'narwhal', 'beluga', 'lionsmane', 'kelp', 'seep', 'flowerbasket', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
     stops:['seadragon', 'spidercrab', 'coelacanth', 'nautilus', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',

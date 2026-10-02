@@ -316,6 +316,24 @@ function mkFireflySquid() {
   for (const sz of [1, -1]) ellip(mb, [0.5 - 0.45 - 0.33, -0.02, sz * 0.04], [0.025, 0.025, 0.025], { n:3, m:6, col:fc([0.3, 0.7, 1.0, 4.0]) });
   return mb;
 }
+function mkFlowerBasket() {
+  // Venus' flower basket (Euplectella), drawn in metres, about 25 cm tall: a curved tube woven of glass (silica) spicules in a
+  // square lattice with spiral ridges, a sieve plate over the top, a tuft of glassy rootlets anchoring it in the mud
+  const mb = new MB(), glass = [0.85, 0.92, 0.95, 0.25], H = 0.25;
+  const axis = t => [0.02 * Math.sin(t * PI), t * H, 0];
+  const R = t => 0.018 + 0.022 * Math.sin(Math.min(1, t * 1.15) * PI * 0.6);
+  for (let k = 0; k < 12; k++) { const a = k / 12 * TAU; tube(mb, { n:14, m:3, path:t => vadd(axis(t), [Math.cos(a) * R(t), 0, Math.sin(a) * R(t)]), r:0.0012, col:fc(glass) }); }
+  for (let j = 1; j < 14; j++) { const t = j / 14; tube(mb, { n:16, m:3, path:u => vadd(axis(t), [Math.cos(u * TAU) * R(t), 0, Math.sin(u * TAU) * R(t)]), r:0.001, col:fc(glass) }); }
+  for (const dir of [1, -1]) for (let k = 0; k < 3; k++) tube(mb, { n:30, m:3, path:t => { const a = k / 3 * TAU + dir * t * TAU * 1.2; return vadd(axis(t * 0.95), [Math.cos(a) * R(t) * 1.08, 0, Math.sin(a) * R(t) * 1.08]); }, r:0.0018, col:fc(glass) });
+  // the sieve plate and its frilled rim
+  ellip(mb, axis(1), [R(1), 0.003, R(1)], { n:3, m:12, col:fc([0.9, 0.95, 1.0, 0.4]) });
+  for (let k = 0; k < 16; k++) { const a = k / 16 * TAU, p = vadd(axis(1), [Math.cos(a) * R(1), 0, Math.sin(a) * R(1)]); tube(mb, { n:2, m:3, path:t => vadd(p, [Math.cos(a) * t * 0.008, t * 0.008, Math.sin(a) * t * 0.008]), r:0.0012, col:fc(glass) }); }
+  // rootlets
+  for (let k = 0; k < 14; k++) { const a = k / 14 * TAU; tube(mb, { n:5, m:3, path:t => [Math.cos(a) * (0.012 + t * 0.04), -t * 0.03, Math.sin(a) * (0.012 + t * 0.04)], r:0.0008, col:fc(glass) }); }
+  // the pair of shrimp living inside, too big to get out through the lattice
+  for (const [y, z] of [[0.11, 0.006], [0.15, -0.008]]) ellip(mb, [0.01, y, z], [0.012, 0.004, 0.004], { n:3, m:6, col:fc([1.0, 0.75, 0.6, 0.4]) });
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -339,6 +357,10 @@ function addDeepFolk(VENTS) {
     fact:'By day it lives 200 to 400 m down; at night it rises to feed, and in spring millions gather to spawn in the shallows of Toyama Bay, Japan, lighting the water blue. Its hundreds of light organs can flash, and the three on the tip of each of two arms are bright enough to dazzle.',
     parts:[part(mkFireflySquid, { inst:schoolCloud(500, 1.6, 1.1, 627, 1, 0.3), school:[1, 0.07, 1, 0], mat:[1, 0.4, 2.2, 0.5], shy:6, pulse:[0.5, 1.4, 0, 0], sway:[0.01, 2, 20, 0] })],
     views:[{ d:[0.3, 0.1, 1], k:0.75, hold:10, drift:0.02, frame:'world' }, { d:[1, -0.3, 0.3], k:0.35, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'flowerbasket', name:'Venus’ flower basket', type:'a glass sponge · Euplectella aspergillum', kind:'floor', floor:[12620, -905, 0], size:0.25, vsize:0.3, rad:0.2,
+    fact:'A sponge whose skeleton is a lattice of glass fibres, stronger for its weight than most things engineers build. A male and female shrimp often enter it young and grow too big to leave, living out their lives inside; in Japan the dried baskets were once given as wedding gifts.',
+    parts:[part(mkFlowerBasket, { mat:[0.3, 1.3, 1, 0.8], trans:true, sway:[0.004, 0.3, 4, 0] })],
+    views:[{ d:[0.3, 0.15, 1], k:2.1, hold:10, drift:0.025, off:[0, 0.12, 0] }, { d:[0.5, 0.9, 0.4], k:1.3, hold:9, drift:0.025, off:[0, 0.12, 0] }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },

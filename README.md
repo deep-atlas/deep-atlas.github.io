@@ -29,7 +29,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **120 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **121 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill, with Adélie penguins hunting through the swarm), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -46,7 +46,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
   on the deep reef slope. A lion's mane jellyfish trails its tentacles under the Arctic ice, and a box jellyfish hunts the
   channel off the mangroves.
 - **Hidden worlds**: a 60 m shipwreck at 30 m turned into a reef, a seamount's deep coral garden (bubblegum, bamboo and black corals, sea lilies, orange roughy), a cold seep
-  whose brine pool is a lake on the seafloor ringed by mussels, the underside of Arctic sea ice with ice algae, brinicles,
+  whose brine pool is a lake on the seafloor ringed by mussels (and a glass sponge, Venus' flower basket), the underside of Arctic sea ice with ice algae, brinicles,
   narwhals, belugas and sea angels, a mangrove forest on its prop roots, a seagrass meadow with a grazing dugong, and a floating raft of
   sargassum weed with a sargassum fish hidden in it.
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
