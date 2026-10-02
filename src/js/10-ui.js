@@ -417,7 +417,7 @@ $('btnHelp').onclick = () => { $('help').hidden = false; };
 // ---- how deep is deep: famous depths on one scale (linear, so the true emptiness of the deep shows)
 const DEPTH_FACTS = [
   [40, 'recreational scuba limit'], [214, 'deepest free dive, one breath'], [332, 'deepest scuba dive'],
-  [450, 'lanternfish by day', 'lanternfish'], [828, 'Burj Khalifa, stood on the floor'], [1000, 'last trace of sunlight'],
+  [450, 'lanternfish by day', 'lanternfish'], [828, 'Burj Khalifa, stood on the floor'], [1000, 'last trace of sunlight'], [1280, 'leatherback turtle, record dive', 'leatherback'],
   [2000, 'sperm whales hunting', 'spermwhale'], [2992, 'beaked whale, record dive', 'beakedwhale'], [3800, 'the Titanic', 'titanic'], [4900, 'the abyssal plain', 'abyss'],
   [6000, 'Nautile’s rated depth'], [8336, 'deepest fish filmed', 'snailfish'], [8849, 'Everest, floor to surface'], [10935, 'the Challenger Deep', 'challenger']];
 function renderDepths() {
