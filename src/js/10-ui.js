@@ -643,6 +643,9 @@ function startCompare(o, c) {
       me.pos = vadd(o.pos, [0, -off, 0]); me.fwd = isFinite(f[0]) ? f : [1, 0, 0]; me.up = [0, 1, 0]; me.side = vcross(me.fwd, me.up);
     } } };
   cmp.idx = OBJS.length; OBJS.push(cmp); CMP.obj = cmp;
+  // hold the animal level and still while comparing, so both stay in profile
+  const f0 = vnorm([o.fwd[0], 0, o.fwd[2]]); o.fwd = isFinite(f0[0]) ? f0 : [1, 0, 0]; o.up = [0, 1, 0]; o.side = vcross(o.fwd, o.up);
+  o.frozen = true; CMP.src = o; VIEW.fyaw = frameYaw(o);
   // frame both from the side
   VIEW.trans = { t:0, T:3, from:{ yaw:VIEW.yaw, pitch:VIEW.pitch, dist:VIEW.dist, off:VIEW.off.slice() }, to:{ yaw:PI / 2, pitch:0.05, dist:Math.max(big * 0.78, off * 2.4) * portraitK(), off:[0, -off / 2, 0], frame:'obj' } };
   VIEW.frame = 'obj'; VIEW.auto = false; updatePlay();
@@ -651,6 +654,7 @@ function startCompare(o, c) {
 }
 function endCompare() {
   if (!CMP.obj) return;
+  if (CMP.src) { CMP.src.frozen = false; CMP.src = null; }
   const i = OBJS.indexOf(CMP.obj); if (i >= 0) OBJS.splice(i, 1);
   CMP.obj = null; $('caption').hidden = true;
 }

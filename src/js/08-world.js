@@ -40,6 +40,7 @@ function ensureMesh(p) {
 // ---- motions: where an object is and which way it faces, at time t
 function moveObj(o, t) {
   const m = o.motion, A = o.anchor;
+  if (o.frozen) return;   // (held still: an animal being compared)
   if (m.fn) { m.fn(o, t); return; }
   let pos = A, fwd = null, up = [0, 1, 0];
   switch (m.type) {
