@@ -39,7 +39,18 @@ function triggerReact(o) {
   toast(o.react.text, 5200);
 }
 // animals that only come out at night
-function tickNightLife() { const f = BYKEY.flashlight; if (f) f.hidden = night() < 0.45; }
+function tickNightLife() {
+  const f = BYKEY.flashlight; if (f) f.hidden = night() < 0.45;
+  // garden eels sink into their burrows when a diver comes near, and slowly rise again
+  const g = BYKEY.gardeneels;
+  if (g) {
+    const close = vlen(vsub(g.pos, CAM.pos)) < 1.6 && VIEW.mode !== 'flight';
+    g.sink = clamp((g.sink || 0) + (close ? 0.08 : -0.004), 0, 1);
+    const b = g.anchor; g.pos = [b[0], b[1] - g.sink * 0.42, b[2]];
+    if (close && g.sink > 0.95 && !g._told) { g._told = true; toast('Too close: the whole garden has ducked into its burrows. Back off and they will slowly come up again.', 5000); }
+    if (g.sink < 0.1) g._told = false;
+  }
+}
 function tickReactions(dt) {
   tickNightLife();
   for (const o of OBJS) {
