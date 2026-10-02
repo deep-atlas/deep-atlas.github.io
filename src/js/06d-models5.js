@@ -161,6 +161,46 @@ function mkBlacksmith() {
     pattern:(t, sy) => t > 0.6 && sy > 0 && Math.sin(t * 60) * Math.sin(sy * 30) > 0.6 ? spot : null,
     tail:'fork', tailH:0.13, tailCol:navy, dorsal:[{ at:0.25, len:0.45, h:0.07 }], anal:[{ at:0.6, len:0.15, h:0.06 }], pect:{ at:0.24, len:0.1, w:0.04 } });
 }
+function mkBarracuda() {
+  // chevron barracuda: long and silver, a jutting lower jaw, two dorsal fins far apart, dark chevrons down the flanks
+  const silver = [0.85, 0.88, 0.9], dark = [0.35, 0.4, 0.45];
+  return fish({ H:0.08, W:0.055, tm:0.3, nose:0.85, ped:0.18, bodyLen:0.86, back:[0.55, 0.6, 0.65], belly:silver, eye:[0.08, 0.2, 0.028], n:18, m:8,
+    pattern:(t, sy) => sy > -0.1 && t > 0.2 && t < 0.88 && fract(t * 16 + Math.abs(sy) * 1.6) < 0.28 ? dark : null,
+    tail:'fork', tailH:0.13, tailCol:[0.5, 0.55, 0.6], dorsal:[{ at:0.3, len:0.1, h:0.06, col:dark }, { at:0.64, len:0.08, h:0.045, col:dark }],
+    anal:[{ at:0.66, len:0.08, h:0.04, col:dark }], pect:{ at:0.24, len:0.07, w:0.025, col:silver } });
+}
+function mkSeadragon() {
+  // leafy seadragon, one unit long, head at +x: a seahorse's cousin that swims level, hung all over with leafy lobes as camouflage
+  const mb = new MB(), body = [0.85, 0.6, 0.25], band = [0.75, 0.45, 0.55], leaf = [0.5, 0.6, 0.22], leaf2 = [0.75, 0.62, 0.25];
+  const spine = t => [0.38 - t * 0.86, 0.04 * Math.sin(t * PI) - (t > 0.7 ? Math.pow((t - 0.7) / 0.3, 2) * 0.08 : 0), 0];
+  tube(mb, { n:40, m:8, path:spine, r:t => t < 0.12 ? 0.03 + t * 0.15 : 0.055 * Math.sin(Math.min(1, (t - 0.05) / 0.4) * PI * 0.5) * (1 - Math.max(0, t - 0.45) * 1.6) + 0.006,
+    col:t => fract(t * 22) < 0.22 ? band : body, anim:t => [0, 0, t * 0.12, 0] });
+  // head and the long thin snout
+  ellip(mb, [0.4, 0.03, 0], [0.05, 0.035, 0.03], { n:5, m:8, col:fc(body) });
+  tube(mb, { n:5, m:6, path:t => [0.44 + t * 0.14, 0.02 - t * 0.015, 0], r:t => 0.014 - t * 0.004, col:fc(body) });
+  for (const sz of [1, -1]) ellip(mb, [0.42, 0.045, sz * 0.026], [0.012, 0.012, 0.008], { n:4, m:6, col:fc([0.08, 0.06, 0.05]) });
+  // the leafy lobes: in pairs along the back, belly and tail, each a frond on a short stalk
+  const r = rng(7171);
+  const lobe = (t, up, side, L) => {
+    // a thin stalk that forks into two or three narrow leaves
+    const p = spine(t), base = vadd(p, [0, up * 0.035, side * 0.02]);
+    const dir = vnorm([-0.45 + (r() - 0.5) * 0.4, up, side * 0.6]), tip = vadd(base, vmul(dir, L * 0.45));
+    tube(mb, { n:3, m:3, path:u => vadd(base, vmul(dir, u * L * 0.45)), r:0.006, col:fc(body), anim:u => [0, 0, 0.1 + u * 0.3, 0] });
+    const nl = 2 + (r() < 0.5 ? 1 : 0);
+    for (let k = 0; k < nl; k++) {
+      const d2 = vnorm(vadd(dir, [(k - (nl - 1) / 2) * 0.7, 0, (r() - 0.5) * 0.5])), w = vnorm(vcross(d2, [0, 0, 1]));
+      const l = L * (0.5 + r() * 0.25), h = l * 0.16;
+      const col = r() < 0.5 ? leaf : leaf2;
+      fin(mb, [[0, 0], [l * 0.25, h], [l * 0.7, h * 0.8], [l, 0], [l * 0.7, -h * 0.8], [l * 0.25, -h]], { origin:tip, ua:d2, va:vlen(w) > 0.1 ? w : [1, 0, 0],
+        col:(a) => a > l * 0.75 ? band : col, anim:(a) => [0, 0, 0.25 + a * 1.5, 0] });
+    }
+  };
+  for (const [t, up, side, L] of [[0.0, 1, 0, 0.09], [0.12, 1, 0.6, 0.12], [0.12, 1, -0.6, 0.12], [0.22, -1, 0.5, 0.13], [0.22, -1, -0.5, 0.13], [0.33, 1, 0.3, 0.15], [0.33, 1, -0.3, 0.15],
+    [0.45, -1, 0.4, 0.12], [0.45, -1, -0.4, 0.12], [0.58, 1, 0.5, 0.11], [0.58, 1, -0.5, 0.11], [0.72, -1, 0.3, 0.1], [0.72, -1, -0.3, 0.1], [0.86, 1, 0.2, 0.08], [0.86, -1, -0.2, 0.08]]) lobe(t, up, side, L);
+  // the small see-through fins that actually drive it
+  fin(mb, [[0, 0], [-0.04, 0.05], [-0.12, 0.05], [-0.14, 0]], { origin:spine(0.38), ua:[1, 0, 0], va:[0, 1, 0], col:fc([0.9, 0.85, 0.7]), anim:(a, b) => [0, 0, Math.abs(b) * 0.5, 0] });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -215,6 +255,10 @@ function addShallows(REEF) {
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
     views:[{ d:[0.3, 1.2, 0.5], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.25, 0.3], k:1.1, hold:9, drift:0.02 }] });
+  addObj({ key:'barracuda', name:'chevron barracuda', label:'barracuda', type:'a tornado of Sphyraena qenie', kind:'fish', floor:[2300, 60, 8], size:0.9, vsize:8, rad:6,
+    fact:'By day hundreds of chevron barracuda hang in a slowly turning tornado off the reef wall, then split up at dusk to hunt alone. A barracuda can lunge at over 40 km/h, snapping with fang-like teeth.',
+    parts:[part(mkBarracuda, { inst:schoolMill(150, 2.8, 4.5, 717, 0.35), school:[0, 0.9, 1, 0], mat:M_SILVER, shy:4, ...FISH_SWIM(0.05, 1.6, 0.85, 2) })],
+    views:[{ d:[0.3, 0.1, 1], k:1.4, hold:10, drift:0.025, frame:'world' }, { d:[0.2, -0.9, 0.3], k:0.9, hold:9, drift:0.03, frame:'world' }, { d:[1, 0.3, 0.2], k:0.55, hold:9, drift:0.03, frame:'world' }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },

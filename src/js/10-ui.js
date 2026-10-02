@@ -44,13 +44,13 @@ const TOURS = [
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
     stops:['copepod', 'krill', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
-    stops:['reef', 'blacktip', 'snappers', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'gardeneels', 'stingray', 'blacksmith', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'kelp', 'blacksmith', 'garibaldi', 'seaotter'] },
+    stops:['reef', 'blacktip', 'snappers', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'gardeneels', 'stingray', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'barracuda', 'kelp', 'blacksmith', 'garibaldi', 'seaotter'] },
   { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',
     stops:['reef', 'flashlight', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
-    stops:['mangroves', 'seagrass', 'dugong', 'seaice', 'narwhal', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
+    stops:['mangroves', 'seagrass', 'dugong', 'seadragon', 'seaice', 'narwhal', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
-    stops:['spidercrab', 'coelacanth', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
+    stops:['seadragon', 'spidercrab', 'coelacanth', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
     stops:['isopod', 'vents', 'tubeworms', 'yeticrab', 'whalefall', 'sixgill', 'abyss', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'snailfish', 'amphipods', 'challenger'] },
   { id:'sizes', name:'from a whale to a microbe', blurb:'One long zoom through size: every animal at its true size beside the last, from a 25 m blue whale to a single cell under a thousandth of a millimetre.', journey:true },
@@ -439,7 +439,7 @@ $('ladder').querySelector('.lad-cap').onclick = () => { $('depths').hidden = fal
 $('btnNotes').onclick = () => { $('notes').hidden = false; save('notesSeen', NOTES_V); $('btnNotes').classList.remove('fresh'); };
 $('notesClose').onclick = () => { $('notes').hidden = true; };
 $('notes').onclick = e => { if (e.target === $('notes')) $('notes').hidden = true; };
-const NOTES_V = '0.8';
+const NOTES_V = '0.9';
 if (load('notesSeen', '') !== NOTES_V) $('btnNotes').classList.add('fresh');
 $('helpClose').onclick = () => { $('help').hidden = true; };
 $('settingsHelp').onclick = () => { $('help').hidden = false; };
@@ -749,7 +749,8 @@ function addSub() {
     views:[{ d:[0.7, 0.3, 1], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.05, 0.25], k:1.2, hold:8, drift:0.02 }, { d:[-1, 0.4, 0.6], k:1.5, hold:8, drift:0.02 }] });
   // its route: everything it can reach, down to its rated 6,000 m (the trenches are beyond it)
   const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'seaotter', 'garibaldi', 'blacktip', 'snappers', 'flashlight', 'gardeneels', 'stingray', 'seaice', 'narwhal', 'mangroves', 'seagrass', 'dugong'];
-  SUB.stops = byDepth().filter(o => o.kind !== 'micro' && o.size < 200 && o.kind !== 'subs' && o.key !== 'trench' && !SHALLOWS.includes(o.key) && depthOf(o) < 6000);
+  SUB.stops = byDepth().filter(o => o.kind !== 'micro' && o.size < 200 && o.kind !== 'subs' && o.key !== 'trench' && !SHALLOWS.includes(o.key) && depthOf(o) < 6000
+    && floorDepth(o.pos[0], o.pos[2]) > 15);   // (nor into water too shallow for it)
 }
 function updateSubMark() {
   const m = $('subMark'), s = BYKEY.nautile;

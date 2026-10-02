@@ -226,4 +226,9 @@ function addPlaces2() {
     fact:'The only strictly marine plant-eating mammal. It grazes seagrass up roots and all, leaving tell-tale trails across the meadow, and rises every few minutes to breathe. Sailors’ tales of mermaids may owe something to dugongs and manatees.',
     motion:{ type:'still', fn:grazeMotion },
     parts:[part(mkDugong, { scale:3, mat:M_SKIN, ...WHALE_SWIM(0.03, 0.3) })], views:SIDE });
+  addObj({ key:'seadragon', name:'leafy seadragon', type:'Phycodurus eques', kind:'fish', floor:[GRASS[0] + 29, GRASS[1] - 3, 0.6], size:0.35, rad:0.3, yaw:0.6,
+    fact:'A cousin of the seahorse, from the kelp and seagrass of southern Australia. The leafy lobes are only camouflage: it drifts like a scrap of weed, driven by tiny, almost invisible fins on its neck and back. As with seahorses, the male carries the eggs.',
+    motion:{ type:'hover', amp:0.08, turn:0.15 },
+    parts:[part(mkSeadragon, { scale:0.35, mat:M_SKIN, sway:[0.03, 0.7, 3, 0] })],
+    views:[{ d:[0.15, -0.1, 1], k:1.5, hold:10, drift:0.02 }, { d:[0.8, 0.05, 0.6], k:1.6, hold:9, drift:0.02 }] });
 }
