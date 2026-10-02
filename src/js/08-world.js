@@ -255,7 +255,7 @@ function buildCatalog() {
     fact:'Male humpbacks sing songs that last up to about 20 minutes and repeat them for hours. All the males of a population sing the same song, and it changes from year to year.',
     motion:{ type:'circle', R:90, v:1.8, bob:4, bank:0.12 },
     parts:[part(mkHumpback, { scale:15, mat:M_SKIN, ...WHALE_SWIM(0.04, 0.22) })],
-    views:[{ d:[0.3, -0.45, 1], k:1.3, hold:12, drift:0.015 }, { d:[0.2, 0.05, 1], k:1.4, hold:9, drift:0.015 }, { d:[-1, 0.3, 0.6], k:1.6, hold:9, drift:0.02 }] });
+    views:[{ d:[0.3, -0.45, 1], k:1.3, hold:12, drift:0.015 }, { d:[0.2, 0.05, 1], k:1.4, hold:9, drift:0.015 }, { d:[-1, 0.3, 0.6], k:1.6, hold:9, drift:0.02 }, { d:[0.3, 0.12, 1], k:2.2, hold:12, drift:0.01, frame:'world', air:true }] });
   addObj({ key:'bluewhale', name:'blue whale', type:'the largest animal ever known · Balaenoptera musculus', kind:'air', at:[10500, -400, 60], size:25, rad:15,
     fact:'The largest animal ever known: up to about 30 m long and 190 tonnes. Its heart weighs about 180 kg, and its calls, too low for us to hear, carry for hundreds of kilometres.',
     motion:{ type:'circle', R:150, v:2.2, bob:5, bank:0.06 },

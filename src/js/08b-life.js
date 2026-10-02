@@ -79,9 +79,9 @@ function schoolPredators(o, p) {
 
 // ---- flashes in the water: dinoflagellates light up wherever the water is disturbed
 const SPARKS = [];
-function spark(pos, radius, n, power) {
+function spark(pos, radius, n, power, col) {
   if (SPARKS.length > 24) SPARKS.shift();
-  SPARKS.push({ pos:pos.slice(), r:radius, n:Math.min(n, SNOW_N), age:0, power:power ?? 1, seed:Math.random() * 1000 });
+  SPARKS.push({ pos:pos.slice(), r:radius, n:Math.min(n, SNOW_N), age:0, power:power ?? 1, seed:Math.random() * 1000, col:col || [0.25, 0.85, 1.0] });
 }
 // a click on open water: the plankton there flash
 function waterSpark(cx, cy) {
@@ -107,6 +107,7 @@ function tickSparks(dt) {
 const VS_SPARK = GLSL_SCENE + `
 uniform vec4 uBurst;      // xyz: centre relative to the camera, w: radius
 uniform vec3 uAge;        // x: age (s), y: seed, z: power
+uniform vec3 uCol;
 uniform float uPx;
 layout(location = 0) in vec4 aSeed;
 out float vA; out float vW;
@@ -123,11 +124,12 @@ void main(){
   gl_PointSize = clamp(uPx * uBurst.w * 0.08 / max(gl_Position.w, 1e-6), 4.0, 9.0);
 }`;
 const FS_SPARK = GLSL_SCENE + `
+uniform vec3 uCol;
 in float vA; in float vW; out vec4 o;
 void main(){
   vec2 q = gl_PointCoord * 2.0 - 1.0; if (dot(q, q) > 1.0) discard;
   float bright = mix(0.35, 1.0, uLamp.w > 0.0 ? 1.0 : 1.0);
-  o = vec4(vec3(0.25, 0.85, 1.0) * vA * bright * (1.0 - dot(q, q) * 0.6) * 1.8, 0.0);
+  o = vec4(uCol * vA * bright * (1.0 - dot(q, q) * 0.6) * 1.8, 0.0);
   gl_FragDepth = clamp(vW * uMisc.y, 0.0, 1.0);
 }`;
 const P_SPARK = program(VS_SPARK, FS_SPARK, 'sparks');
@@ -140,6 +142,7 @@ function drawSparks() {
     const r = vsub(s.pos, CAM.pos);
     gl.uniform4f(u.uBurst, r[0], r[1], r[2], s.r);
     gl.uniform3f(u.uAge, s.age, s.seed, s.power);
+    gl.uniform3fv(u.uCol, s.col);
     gl.drawArrays(gl.POINTS, 0, s.n);
   }
 }
@@ -189,6 +192,28 @@ function squidPost(o, t) {
   const p = o.parts[0]; if (p.pulse) p.pulse[1] = vlen(o.fleeV) > 0.8 ? 1.4 : 0.35;
 }
 
+// ---- the humpback breach: every couple of minutes it surges up and throws most of its body out of the water, then crashes back
+const BREACH = { T:150, at:0.82, len:0.075 };
+function breachPost(o, t) {
+  const u = ((t % BREACH.T) + BREACH.T) % BREACH.T / BREACH.T, s = (u - BREACH.at) / BREACH.len;
+  o.breaching = s > 0 && s < 1;
+  if (!o.breaching) { o._splashed = false; o._rose = false; return; }
+  // an arc: up from 25 m, out of the water to about two thirds of its length, over and back
+  const L = o.size, y0 = o.pos[1];
+  const h = s < 0.45 ? lerp(y0, L * 0.35, ease(s / 0.45)) : lerp(L * 0.35, y0, ease((s - 0.45) / 0.55));
+  o.pos = [o.pos[0], h, o.pos[2]];
+  const pitch = lerp(1.25, -1.0, smooth(0.15, 0.85, s));
+  const flat = vnorm([o.fwd[0], 0, o.fwd[2]]);
+  o.fwd = vnorm(vadd(vmul(flat, Math.cos(pitch)), [0, Math.sin(pitch), 0]));
+  const sd = vnorm(vcross(o.fwd, [0, 1, 0])); o.up = isFinite(sd[0]) ? vnorm(vcross(sd, o.fwd)) : [0, 1, 0]; o.side = vcross(o.fwd, o.up);
+  const white = [0.85, 0.95, 1.0];
+  if (!o._rose && h > -L * 0.3) { o._rose = true; spark([o.pos[0], 0.3, o.pos[2]], L * 0.35, 400, 1.5, white); }
+  if (!o._splashed && s > 0.75) {
+    o._splashed = true; spark([o.pos[0], 0.5, o.pos[2]], L * 0.6, 600, 2.2, white);
+    if ((VIEW.focus === o || vlen(vsub(o.pos, CAM.pos)) < 200) && !RIDE.on) toast('A breach: 30 tonnes of whale, almost clear of the water. Nobody is sure why they do it: to signal, to shake off parasites, or for play.', 6000);
+  }
+}
+
 // ---- who lights, who hunts, who reacts
 function addLife() {
   const set = (k, v) => { if (BYKEY[k]) Object.assign(BYKEY[k], v); };
@@ -212,6 +237,7 @@ function addLife() {
   // the sperm whale moves in to hunt round the giant squid
   set('spermwhale', { motion:{ type:'still', fn:huntMotion }, hunt:true });
   set('giantsquid', { post:squidPost });
+  set('humpback', { post:breachPost });
   const bb = BYKEY.baitball;
   if (bb) {
     set('sailfish', { anchor:bb.anchor.slice(), motion:{ type:'rose', R:12, v:4.5, k:2, bob:1.2, ph:0.6 } });
