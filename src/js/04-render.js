@@ -47,7 +47,10 @@ function updateUBO(time) {
   const fill = SET.strobe === false ? 0 : 0.28 * smooth(70, 12, CAM.depth) * (CAM.depth > 0.3 ? 1 : 0) * LIGHT.level;
   // (floodlights are tuned for close-ups; a wide view of the deep floor gets more of them, as a sub would turn its lights up)
   const lampLev = Math.max(LIGHT.lamp * 0.8 * clamp(Math.sqrt(Math.max(CAM.scale, 1e-6) / 3), 1, 1.8), fill);
-  const lampI = LAMP_COL.map((c, i) => c * lampLev * att[i]), sunI = LIGHT.sun;
+  // (the strobe is warmed less than full white so that a white belly lit only by it does not turn pink under a balance set for blue water)
+  const sunMax = Math.max(...LIGHT.sun, 1e-9), sf = lampLev > 0 ? clamp(fill / lampLev, 0, 1) * (1 - LIGHT.lamp) : 0;
+  const lampC = LAMP_COL.map((c, i) => c * lerp(1, Math.pow(LIGHT.sun[i] / sunMax, 0.1), sf));
+  const lampI = lampC.map((c, i) => c * lampLev * att[i]), sunI = LIGHT.sun;
   const illum = [0, 1, 2].map(i => sunI[i] + lampI[i]);
   const lf = (lampI[1] + lampI[2]) / Math.max(lampI[1] + lampI[2] + sunI[1] + sunI[2], 1e-9);
   const cap = lerp(LIGHT.wbCap || 12, 2.5, lf), kk = lerp(LIGHT.wbK || 0.9, 0.45, lf);
@@ -55,7 +58,7 @@ function updateUBO(time) {
   U8.set([...beam.map(v => v * fs), 0], 32);
   U8.set([...SCAT.map(v => v * fs), aspect], 36);
   const ls = lampLev;
-  U8.set([LAMP_COL[0] * ls, LAMP_COL[1] * ls, LAMP_COL[2] * ls, Math.max(CAM.lampD || CAM.scale, 1e-4)], 40);
+  U8.set([lampC[0] * ls, lampC[1] * ls, lampC[2] * ls, Math.max(CAM.lampD || CAM.scale, 1e-4)], 40);
   U8.set([...CAM.fwd, 0.82], 44);
   U8.set([lerp(0.6, 1.0, LIGHT.lamp), 1 / CAM.far, LIGHT.night, CAM.scale], 48);
   const cx = Math.floor(CAM.pos[0] / 1024), cz = Math.floor(CAM.pos[2] / 1024);
