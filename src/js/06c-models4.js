@@ -200,7 +200,23 @@ function mkChimaera() {
     } });
 }
 
+function mkSixgill() {
+  // the bluntnose sixgill: a broad, rounded head, six gill slits (most sharks have five), one dorsal fin far back, green-glowing eyes
+  const skin = [0.36, 0.33, 0.31], belly = [0.55, 0.52, 0.48];
+  return fish({ H:0.085, W:0.09, tm:0.32, nose:0.4, ped:0.12, bodyLen:0.74, back:skin, belly, eye:[0.07, 0.25, 0.018], eyeCol:[0.15, 0.6, 0.45], eyeRing:[0.3, 0.75, 0.55], e:2.2,
+    pattern:(t, sy) => mixc(belly, skin, smooth(-0.3, 0.1, sy)),
+    tail:'none', dorsal:[{ at:0.62, len:0.09, h:0.06, col:skin }], anal:[{ at:0.7, len:0.07, h:0.03 }],
+    pect:{ at:0.24, len:0.13, w:0.07, down:0.5, back:0.5, y:-0.5, col:skin }, pelv:{ at:0.55, len:0.06, w:0.04, y:-0.7 },
+    extra:(mb, b) => {
+      gills(mb, b, 0.15, 6);
+      fin(mb, [[0.02, 0.02], [-0.12, 0.06], [-0.28, 0.07], [-0.27, 0.0], [-0.1, -0.04], [-0.02, -0.02]], { origin:[b.tx + 0.02, 0, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(skin), anim:finA, center:[-0.1, 0] });
+    } });
+}
 function addDeepFolk(VENTS) {
+  addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
+    fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
+    motion:{ type:'circle', R:9, v:0.5, bob:0.8, bank:0.08 },
+    parts:[part(mkSixgill, { scale:4.5, mat:M_SKIN, ...FISH_SWIM(0.045, 0.4, 0.85, 2.4) })], views:SIDE });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },

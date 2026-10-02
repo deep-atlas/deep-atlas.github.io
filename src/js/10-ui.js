@@ -52,7 +52,7 @@ const TOURS = [
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
     stops:['spidercrab', 'coelacanth', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
-    stops:['isopod', 'vents', 'tubeworms', 'yeticrab', 'whalefall', 'abyss', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'snailfish', 'amphipods', 'challenger'] },
+    stops:['isopod', 'vents', 'tubeworms', 'yeticrab', 'whalefall', 'sixgill', 'abyss', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'snailfish', 'amphipods', 'challenger'] },
   { id:'sizes', name:'from a whale to a microbe', blurb:'One long zoom through size: every animal at its true size beside the last, from a 25 m blue whale to a single cell under a thousandth of a millimetre.', journey:true },
   { id:'random', name:'a random swim', blurb:'Anywhere in the atlas, places you have not seen first.', random:true },
 ];
@@ -438,7 +438,7 @@ $('ladder').querySelector('.lad-cap').onclick = () => { $('depths').hidden = fal
 $('btnNotes').onclick = () => { $('notes').hidden = false; save('notesSeen', NOTES_V); $('btnNotes').classList.remove('fresh'); };
 $('notesClose').onclick = () => { $('notes').hidden = true; };
 $('notes').onclick = e => { if (e.target === $('notes')) $('notes').hidden = true; };
-const NOTES_V = '0.7';
+const NOTES_V = '0.8';
 if (load('notesSeen', '') !== NOTES_V) $('btnNotes').classList.add('fresh');
 $('helpClose').onclick = () => { $('help').hidden = true; };
 $('settingsHelp').onclick = () => { $('help').hidden = false; };
