@@ -338,7 +338,8 @@ function renderAtlas() {
     r.innerHTML = `<span class="an"></span><span class="ad"></span>`;
     r.firstChild.textContent = o.name;
     if (!SEEN.has(o.key)) { const i = document.createElement('i'); i.textContent = 'new'; r.firstChild.appendChild(i); }
-    r.lastChild.textContent = ATL.sort === 'size' ? fmtLen(o.size) : fmtDepth(depthOf(o));
+    // (the depth, and for animals their length too: the two numbers that matter most here)
+    r.lastChild.textContent = ATL.sort === 'size' ? fmtLen(o.size) : (o.kind === 'places' ? fmtDepth(depthOf(o)) : `${fmtLen(o.size)} · ${fmtInt(depthOf(o))} m`);
     r.onclick = () => userGo(o);
     L.appendChild(r);
   }
