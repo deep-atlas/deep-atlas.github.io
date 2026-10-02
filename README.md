@@ -29,9 +29,9 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **111 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **112 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
-  plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
+  plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill, with Adélie penguins hunting through the swarm), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
   black-smoker vents with giant tube worms, a whale fall, the Titanic's bow, dumbo octopus, the abyssal plain with sea pigs,
   xenophyophores, tripod fish and grenadiers, the Mariana Trench, snailfish, hadal amphipods and the Challenger Deep.

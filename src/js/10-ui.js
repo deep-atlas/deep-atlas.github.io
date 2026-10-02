@@ -42,7 +42,7 @@ const TOURS = [
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
     stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'atolla', 'pyrosome', 'cockeyed', 'helmetjelly', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
-    stops:['copepod', 'krill', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
+    stops:['copepod', 'krill', 'penguin', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
     stops:['reef', 'blacktip', 'snappers', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'gardeneels', 'goby', 'stingray', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'barracuda', 'kelp', 'sealion', 'blacksmith', 'garibaldi', 'seaotter'] },
   { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',

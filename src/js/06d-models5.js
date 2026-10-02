@@ -318,6 +318,27 @@ function mkLeatherback() {
   mb.dup(rear, mirrorZ);
   return mb;
 }
+function mkPenguin() {
+  // Adelie penguin swimming, one unit long, head at +x: a torpedo, black back and head, white belly and the white eye-ring,
+  // stiff flippers it 'flies' with, feet and short tail trailing as a rudder
+  const mb = new MB(), black = [0.08, 0.09, 0.11], white = [0.95, 0.95, 0.93];
+  loft(mb, { n:26, m:16, sec:t => { const f = Math.pow(Math.sin(Math.min(1, t * 1.05 + 0.04) * PI), 0.62); return { x:0.5 - t, y:0.01 * Math.sin(t * PI), w:0.115 * f, h:0.125 * f, e:2 }; },
+    col:(t, u, p, sy, sz) => {
+      if (t < 0.17) return (t > 0.08 && t < 0.13 && Math.abs(sz) > 0.6 && sy > 0.15 && sy < 0.6) ? white : black;   // the head, and the white ring round the eye
+      return sy < 0.1 - 0.15 * Math.abs(sz) ? white : black;
+    }, anim:() => [0, 0, 0, 0] });
+  // the short beak
+  tube(mb, { n:3, m:5, path:t => [0.49 + t * 0.07, 0.01 - t * 0.008, 0], r:t => 0.022 * (1 - t * 0.7), col:fc([0.15, 0.13, 0.12]) });
+  for (const sz of [1, -1]) ellip(mb, [0.42, 0.04, sz * 0.055], [0.008, 0.008, 0.005], { n:3, m:6, col:fc([0.02, 0.02, 0.02]) });
+  // flippers, flapping up and down
+  const fl = mb.mark();
+  fin(mb, [[0, 0.035], [0.06, 0.03], [0.26, -0.01], [0.28, -0.03], [0.05, -0.03]], { origin:[0.24, 0.0, 0.1], ua:vnorm([-0.45, -0.1, 1]), va:[1, 0, 0], col:(a, b) => b < -0.01 ? white : black, anim:(a, b, r, p) => [0, Math.max(0, p[2] - 0.1) * 3, 0, 0] });
+  mb.dup(fl, mirrorZ);
+  // pink feet and the stiff tail, trailing
+  for (const sz of [1, -1]) fin(mb, [[0, 0.02], [-0.07, 0.025], [-0.08, -0.02], [0, -0.015]], { origin:[-0.43, -0.03, sz * 0.03], ua:[1, 0, 0], va:[0, 0, 1], col:fc([0.9, 0.6, 0.6]) });
+  tube(mb, { n:3, m:5, path:t => [-0.48 - t * 0.06, 0.01, 0], r:t => 0.02 * (1 - t * 0.6), col:fc(black) });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,

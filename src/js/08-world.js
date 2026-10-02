@@ -282,6 +282,11 @@ function buildCatalog() {
     motion:{ type:'hover', amp:0.00002, turn:0.6 },
     parts:[part(mkDiatoms, { scale:0.0001, mat:M_GLASS, trans:true })],
     views:[{ d:[0.6, 0.4, 1], k:1.7, hold:10, drift:0.04 }, { d:[1, 0.1, 0.1], k:1.6, hold:8, drift:0.04 }] });
+  addObj({ key:'penguin', name:'Adélie penguins', type:'Pygoscelis adeliae', kind:'air', at:[10001, 200, 29], size:0.7, vsize:2, rad:2.5, predator:true,
+    fact:'Penguins fly underwater: the wing has become a stiff flipper, beaten up and down like a bird’s in the air. Adélies dive to around 50 m, sometimes 180 m, to snap up krill, and can eat about 2 kg of them in a day.',
+    motion:{ type:'eight', R:4, v:2.2, bob:2.5, bank:0.5 },
+    parts:[0, 1, 2].map(i => part(mkPenguin, { scale:0.7 - i * 0.04, off:[[0, 0, 0], [-0.9, 0.4, 0.6], [-1.4, -0.3, -0.5]][i], mat:[1, 0.4, 1, 0.8], swim:[0.02, 2.5 + i * 0.2, 0.6, i * 2], swim2:[1, 2, 0.06, 2.6 + i * 0.3] })),
+    views:[{ d:[0.2, 0.1, 1], k:1.6, hold:10, drift:0.02 }, { d:[0.8, -0.4, 0.6], k:1.5, hold:9, drift:0.02 }] });
   addObj({ key:'radiolarian', name:'radiolarian', type:'a single cell in a glass skeleton · 0.2 mm', kind:'micro', at:[8500, 0, 100], size:0.0002, rad:0.00015,
     fact:'One cell inside a glass lattice, its spines spreading to catch food and slow its sinking. When radiolarians die their skeletons settle into ooze that covers parts of the deep floor.',
     motion:{ type:'hover', amp:0.00002, turn:1 },
