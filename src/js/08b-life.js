@@ -417,6 +417,21 @@ function addLife() {
     snailfish:'deepest fish filmed ~8,336 m · soft body, little hard bone',
     dumbo:'deepest octopus known, to ~7,000 m',
     seamount:'black corals dated at over 4,000 years',
+    leatherback:'up to ~2 m and 900 kg · dives past 1,200 m · migrates ~10,000 km',
+    lionsmane:'bell up to 2 m · tentacles 30 m+',
+    boxjelly:'24 eyes · swims up to ~2 m/s · among the most venomous animals',
+    blueringed:'golf-ball sized · venom enough for ~26 adults · no antidote',
+    penguin:'dives to ~180 m · swims at ~8 km/h · eats ~2 kg of krill a day',
+    beluga:'up to ~5 m · 50 or more distinct calls · turns its head, unlike most whales',
+    sealion:'up to ~40 km/h underwater · dives to ~270 m',
+    barracuda:'lunges at 40 km/h+ · schools of hundreds by day',
+    nautilus:'lineage ~500 million years · up to 90 tentacles, no suckers',
+    pyrosome:'colonies up to 18 m long, big enough for a diver to swim into',
+    scalyfoot:'iron-sulphide scales · lives at 2,400 to 2,900 m',
+    seadragon:'up to ~45 cm · the male carries ~250 eggs on its tail',
+    fireflysquid:'~7 cm · ~1,000 light organs · gathers in millions to spawn',
+    grouper:'giant grouper up to ~2.7 m and 400 kg · swallows prey whole',
+    bubblenet:'nets up to ~30 m across · lunge mouthfuls of ~15 tonnes of water',
   };
   for (const [k, v] of Object.entries(STAT)) if (v && BYKEY[k] && !BYKEY[k].readout) BYKEY[k].readout = () => v;
   set('reef', { readout:() => night() > 0.5 ? 'night: the corals are spawning, bundles of eggs and sperm rising to the surface\n(on real reefs this happens a few nights a year, just after a full moon)' : 'day: the coral polyps are pulled in; at night they open to feed' });
