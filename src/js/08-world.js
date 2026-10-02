@@ -245,8 +245,8 @@ function buildCatalog() {
     parts:[part(mkGreatWhite, { scale:4.5, mat:M_SKIN, ...FISH_SWIM(0.05, 0.6, 0.85, 2.4) })], views:SIDE });
   addObj({ key:'hammerheads', vsize:40, name:'hammerhead school', label:'hammerheads', type:'scalloped hammerheads · Sphyrna lewini', kind:'sharks', at:[8000, 200, 60], size:3, rad:25,
     fact:'By day scalloped hammerheads gather in schools of hundreds around seamounts, then hunt alone at night. The wide head spaces their eyes and electrical sensors far apart.',
-    parts:[part(mkHammerhead, { inst:schoolMill(70, 22, 10, 31, 1.2), school:[0, 3, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.05, 0.7, 0.85, 2.4) })],
-    views:[{ d:[0.2, 0.1, 1], k:1.5, hold:12, drift:0.02, frame:'world' }, { d:[0.2, -0.85, 0.3], k:1.4, hold:9, drift:0.02, frame:'world' }] });
+    parts:[part(mkHammerhead, { inst:schoolMill(60, 13, 7, 31, 1.2), school:[0, 3, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.05, 0.7, 0.85, 2.4) })],
+    views:[{ d:[0.2, 0.05, 1], k:0.75, hold:12, drift:0.02, frame:'world' }, { d:[0.2, -0.8, 0.4], k:0.7, hold:9, drift:0.02, frame:'world' }, { d:[1, 0.1, 0.2], k:0.3, hold:9, drift:0.03, frame:'world', off:[0, 0, 13] }] });
   addObj({ key:'sunfish', name:'ocean sunfish', type:'Mola mola', kind:'fish', at:[9000, -100, 35], size:2.2, rad:1.6,
     fact:'The heaviest bony fish, up to about two tonnes. It hatches from an egg smaller than a millimetre and can gain some 60 million times its weight as it grows.',
     motion:{ type:'circle', R:12, v:0.4, bob:2, bank:0.05 },
@@ -255,7 +255,7 @@ function buildCatalog() {
     fact:'Male humpbacks sing songs that last up to about 20 minutes and repeat them for hours. All the males of a population sing the same song, and it changes from year to year.',
     motion:{ type:'circle', R:90, v:1.8, bob:4, bank:0.12 },
     parts:[part(mkHumpback, { scale:15, mat:M_SKIN, ...WHALE_SWIM(0.04, 0.22) })],
-    views:[{ d:[0.2, 0.05, 1], k:1.9, hold:12, drift:0.015 }, { d:[0.3, -0.6, 0.6], k:1.6, hold:9, drift:0.02 }, { d:[-1, 0.3, 0.6], k:2.0, hold:9, drift:0.02 }] });
+    views:[{ d:[0.3, -0.45, 1], k:1.3, hold:12, drift:0.015 }, { d:[0.2, 0.05, 1], k:1.4, hold:9, drift:0.015 }, { d:[-1, 0.3, 0.6], k:1.6, hold:9, drift:0.02 }] });
   addObj({ key:'bluewhale', name:'blue whale', type:'the largest animal ever known · Balaenoptera musculus', kind:'air', at:[10500, -400, 60], size:25, rad:15,
     fact:'The largest animal ever known: up to about 30 m long and 190 tonnes. Its heart weighs about 180 kg, and its calls, too low for us to hear, carry for hundreds of kilometres.',
     motion:{ type:'circle', R:150, v:2.2, bob:5, bank:0.06 },
