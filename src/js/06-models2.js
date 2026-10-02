@@ -31,7 +31,7 @@ function jelly(o) {
   return mb;
 }
 function mkMoonJelly() {
-  const bell = [0.72, 0.82, 0.95], gonad = [0.95, 0.55, 0.75];
+  const bell = [0.72, 0.82, 0.95], gonad = [1.0, 0.45, 0.7, 0.9];   // (the gonads glow a little so they show through the clear bell)
   return jelly({ h:0.32, bell, flare:1.12,
     pattern:(t, u) => {
       // four horseshoe gonads seen through the bell

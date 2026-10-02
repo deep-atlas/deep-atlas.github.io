@@ -217,7 +217,7 @@ function buildCatalog() {
     fact:'Moon jellies have no brain, heart or bones and are about 95 percent water. The four rings seen through the bell are its reproductive organs.',
     motion:{ type:'drift', amp:0.2, tilt:0.3 },
     parts:[part(mkMoonJelly, { scale:0.3, mat:M_JELLY, trans:true, pulse:[0.18, 0.55, 0, 0], sway:[0.04, 0.7, 6, 0] })],
-    views:[{ d:[0.2, 0.15, 1], k:2.6, hold:10, drift:0.03, frame:'world' }, { d:[0.2, -0.9, 0.3], k:2.6, hold:8, drift:0.03, frame:'world' }] });
+    views:[{ d:[0.25, 0.95, 0.2], k:2.4, hold:10, drift:0.03, frame:'world' }, { d:[0.2, 0.15, 1], k:2.6, hold:8, drift:0.03, frame:'world' }, { d:[0.2, -0.9, 0.3], k:2.6, hold:8, drift:0.03, frame:'world' }] });
   addObj({ key:'combjelly', name:'comb jelly', type:'a ctenophore · Beroe', kind:'jellies', at:[5200, 100, 20], size:0.1, rad:0.07,
     fact:'Comb jellies swim with eight rows of beating cilia. The running rainbows are not their own light: the combs split sunlight like a prism as they beat.',
     motion:{ type:'drift', amp:0.04, tilt:0.2 },
@@ -247,7 +247,7 @@ function buildCatalog() {
     fact:'By day scalloped hammerheads gather in schools of hundreds around seamounts, then hunt alone at night. The wide head spaces their eyes and electrical sensors far apart.',
     parts:[part(mkHammerhead, { inst:schoolMill(60, 13, 7, 31, 1.2), school:[0, 3, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.05, 0.7, 0.85, 2.4) })],
     views:[{ d:[0.2, 0.05, 1], k:0.75, hold:12, drift:0.02, frame:'world' }, { d:[0.2, -0.8, 0.4], k:0.7, hold:9, drift:0.02, frame:'world' }, { d:[1, 0.1, 0.2], k:0.3, hold:9, drift:0.03, frame:'world', off:[0, 0, 13] }] });
-  addObj({ key:'sunfish', name:'ocean sunfish', type:'Mola mola', kind:'fish', at:[9000, -100, 35], size:2.2, rad:1.6,
+  addObj({ key:'sunfish', vsize:3.4, name:'ocean sunfish', type:'Mola mola', kind:'fish', at:[9000, -100, 35], size:2.2, rad:1.6,
     fact:'The heaviest bony fish, up to about two tonnes. It hatches from an egg smaller than a millimetre and can gain some 60 million times its weight as it grows.',
     motion:{ type:'circle', R:12, v:0.4, bob:2, bank:0.05 },
     parts:[part(mkSunfish, { scale:2.2, mat:M_SKIN, swim:[0.015, 0.25, 0.4, 0], swim2:[0, 3, 0, 0] })], views:SIDE });
