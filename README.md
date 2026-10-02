@@ -29,7 +29,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **89 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **90 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -46,6 +46,9 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
   cucumber's flash); click open water and the plankton flash blue, swim through the dark and leave a glowing wake.
+- **Events**: the humpback breaches every couple of minutes; at night the reef spawns and flashlight fish come out; a sperm
+  whale hunts near the giant squid; at dusk you can watch the lanternfish rise (time of day > watch the night migration).
+- **Night**: stars, the moon and its glade above the water; a night dive tour.
 - **From a whale to a microbe**: one long zoom through size, every animal at its true size beside the last, from a 25 m blue
   whale to a single Prochlorococcus cell 0.6 µm across.
 - **Nautile**, Ifremer's real yellow deep submersible (8 m long, rated to 6,000 m, dived on the Titanic in 1987), modelled to its
@@ -55,7 +58,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 - **Where you are**: swimming freely, the info panel names the place you have reached (the coral reef, the kelp forest...) with a
   button to lock on to it.
 - **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, hidden worlds, weird and
-  wonderful, life without the sun, the size journey, and an endless random swim. Screensaver mode (Z).
+  wonderful, life without the sun, a night dive, the size journey, and an endless random swim. Screensaver mode (Z).
 - **Time of day**: sunlight, dusk and night, and the nightly vertical migration (lanternfish rise from 450 m to 60 m).
 - **Interface** modelled on gcdatlas: info panel (name, type, depth, fact, live readout of pressure, temperature and
   sunlight, ruler, angle bar), search, atlas (sort, filter, seen), tours, settings, help, a depth ladder you can drag
