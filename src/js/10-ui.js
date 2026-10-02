@@ -585,13 +585,16 @@ function setupDaily() {
 // ---- share: a link to this place and angle
 function share(o) {
   o = o || VIEW.focus;
-  const url = location.origin + location.pathname + (o ? `#${o.key}${VIEW.focus === o && VIEW.vi ? '/' + VIEW.vi : ''}` : '');
+  // the place, the angle, and the time of day when it is not daytime (a night dive is shared as a night dive)
+  const tod = night() > 0.3 ? `@${String(Math.floor(TOD.min / 60)).padStart(2, '0')}${String(Math.floor(TOD.min % 60)).padStart(2, '0')}` : '';
+  const url = location.origin + location.pathname + (o ? `#${o.key}${VIEW.focus === o && VIEW.vi ? '/' + VIEW.vi : ''}${tod}` : '');
   try { history.replaceState(null, '', url); } catch (e) {}
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('link copied'), () => toast(url, 5000));
 }
 $('btnShare').onclick = () => share();
 function fromHash() {
-  const m = /^#([a-z0-9]+)(?:\/(\d+))?/.exec(location.hash || '');
+  const m = /^#([a-z0-9]+)(?:\/(\d+))?(?:@(\d\d)(\d\d))?/.exec(location.hash || '');
+  if (m && m[3]) { TOD.min = (+m[3] * 60 + +m[4]) % 1440; TOD.live = false; }
   if (m && BYKEY[m[1]]) return { o:BYKEY[m[1]], vi:+(m[2] || 0) };
   return null;
 }
