@@ -181,7 +181,7 @@ function mkSailfish() {
 }
 function mkSunfish() {
   const skin = [0.62, 0.64, 0.66], belly = [0.86, 0.86, 0.84];
-  return fish({ H:0.4, W:0.1, tm:0.35, nose:0.3, ped:0.85, bodyLen:0.86, back:skin, belly, eye:[0.1, 0.25, 0.025], taper:2,
+  return fish({ H:0.42, W:0.1, tm:0.48, nose:0.5, ped:0.62, bodyLen:0.86, back:skin, belly, eye:[0.1, 0.25, 0.025], taper:1.4,
     pattern:(t, sy) => mixc(belly, skin, smooth(-0.6, 0.4, sy + 0.1 * Math.sin(t * 13 + sy * 7))),
     tail:'none',
     dorsal:[{ at:0.55, len:0.2, h:0.5, col:skin, pts:[[0, 0], [-0.15, 0.95], [-0.55, 1], [-1, 0]] }],
