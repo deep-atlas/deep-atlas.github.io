@@ -343,7 +343,7 @@ function addShallows(REEF) {
     post:o => { const e = smooth(0.15, 1, o.reactEnv || 0); o.parts[1].scale = 0.4 * lerp(0.45, 1, e); },
     parts:[part(mkPufferSlim, { scale:0.4, mat:M_SKIN, ...FISH_SWIM(0.04, 1.6, 0.9, 2), show:o => !(o.reactEnv > 0.15) }),
       part(mkPuffer, { scale:0.4, mat:M_SKIN, show:o => o.reactEnv > 0.15 })],
-    views:[{ d:[1, 0.25, 0.6], k:2.2, hold:10, drift:0.025 }, { d:[0.3, 0.55, 1], k:2.4, hold:8, drift:0.03 }] });
+    views:[{ d:[0.25, 0.2, 1], k:2.2, hold:10, drift:0.025 }, { d:[0.8, 0.5, 0.6], k:2.4, hold:8, drift:0.03 }] });
   addObj({ key:'seaotter', name:'sea otter', type:'Enhydra lutris', kind:'air', at:[KELP[0] + 8, KELP[2] + 5, 0.08], size:1.3, rad:0.8, yaw:0.6,
     fact:'The densest fur of any animal, up to about a million hairs per square inch, keeps it warm without blubber. By eating sea urchins it protects the kelp forest: where otters vanished, urchins grazed the forests away.',
     motion:{ type:'hover', amp:0.15, turn:0.4 },

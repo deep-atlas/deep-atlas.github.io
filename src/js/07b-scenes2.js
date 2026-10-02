@@ -194,11 +194,11 @@ function addPlaces2() {
   addObj({ key:'seamount', name:'a seamount', label:'seamount', type:'a deep coral garden on an underwater volcano', kind:'places', floor:[SM[0], SM[1], 0], size:50, rad:30,
     fact:'There may be over 100,000 seamounts over 1,000 m tall, most never visited. Currents sweeping up their flanks bring food to slow-growing deep corals: some black corals have been dated at over 4,000 years old, among the oldest living things known.',
     parts:[part(() => buildSeamountGarden(BYKEY.seamount.anchor, 31), { mat:[1, 0.3, 1, 0.3], sway:[0.05, 0.6, 1.5, 0] }),
-      part(mkOrangeRoughy, { inst:schoolMill(140, 7, 3, 77, 0.6), school:[0, 0.35, 1, 0], off:[0, 7, 0], mat:M_SKIN, shy:6, ...FISH_SWIM(0.05, 1.4, 0.9, 1.8) })],
+      part(mkOrangeRoughy, { inst:schoolMill(220, 5, 2.5, 77, 0.6), school:[0, 0.35, 1, 0], off:[0, 7, 0], mat:M_SKIN, shy:6, ...FISH_SWIM(0.05, 1.4, 0.9, 1.8) })],
     views:[{ d:[0.5, 0.25, 1], k:0.24, hold:12, drift:0.025, frame:'world', off:[0, 1.5, 0] }, { d:[-0.8, 0.12, 0.5], k:0.12, hold:10, drift:0.025, frame:'world', off:[3, 1, -2] }, { d:[0.3, 0.15, 1], k:0.3, hold:9, drift:0.02, frame:'world', off:[0, 6, 0] }] });
   addObj({ key:'roughy', name:'orange roughy', type:'Hoplostethus atlanticus', kind:'fish', place:true, floor:[SM[0], SM[1], 7], size:0.35, vsize:10, rad:7,
     fact:'They gather over seamounts to feed and spawn, and can live for 150 years or more, not breeding until they are about 30. Fished hard from the 1980s, many populations collapsed before anyone knew how slowly they grow.',
-    views:[{ d:[0.3, 0.2, 1], k:1.1, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.1, 0.3], k:0.95, hold:9, drift:0.03, frame:'world' }] });
+    views:[{ d:[0.3, 0.15, 1], k:0.45, hold:10, drift:0.02, frame:'world', off:[4, 0, 0] }, { d:[1, 0.1, 0.3], k:0.35, hold:9, drift:0.02, frame:'world', off:[0, 0, 4] }] });
   addObj({ key:'seep', name:'cold seep & brine pool', label:'brine pool', type:'a lake at the bottom of the sea', kind:'places', floor:[SEEP[0], SEEP[1], 0], size:20, rad:13,
     fact:'Brine seeping up through ancient salt beds is so much denser than seawater that it pools on the floor as a lake, with a shore and waves of its own. Mussels and tube worms line its edge, living on bacteria fed by methane; animals that swim into the brine can die there.',
     parts:[part(() => buildSeep(BYKEY.seep.anchor, 41), { mat:[1, 0.3, 1, 1.4], sway:[0.15, 0.7, 0.8, 0] })],
