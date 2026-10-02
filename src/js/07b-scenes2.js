@@ -140,6 +140,35 @@ function mkBeluga() {
     dorsal:[{ at:0.45, len:0.2, h:0.01, col:ridge }] });
 }
 
+// ---- a raft of sargassum: golden-brown weed that never roots, floating on berry-like air bladders; drawn in metres round its middle
+function buildSargassum(seed) {
+  const mb = new MB(), r = rng(seed), stem = [0.3, 0.2, 0.06], leaf = [0.42, 0.3, 0.08], leaf2 = [0.34, 0.24, 0.06], berry = [0.5, 0.36, 0.1];
+  for (let c = 0; c < 40; c++) {
+    const a = r() * TAU, d = Math.sqrt(r()) * 2.6, c0 = [Math.cos(a) * d * 1.3, -0.05, Math.sin(a) * d];
+    for (let b = 0; b < 6; b++) {
+      const ya = r() * TAU, dip = 0.15 + r() * 0.5, L = 0.3 + r() * 0.35, cv = (r() - 0.5) * 2;
+      const path = t => vadd(c0, [Math.cos(ya + cv * t) * L * t, -dip * t * t, Math.sin(ya + cv * t) * L * t]);
+      tube(mb, { n:6, m:3, path, r:0.006, col:fc(stem), anim:t => [0, 0, t * 0.5, 0] });
+      for (let k = 1; k <= 4; k++) {
+        const p = path(k / 4.2), la = r() * TAU, ll = 0.08 + r() * 0.06, d2 = vnorm([Math.cos(la), (r() - 0.5) * 0.6, Math.sin(la)]);
+        fin(mb, [[0, 0], [ll * 0.5, ll * 0.22], [ll, 0], [ll * 0.5, -ll * 0.22]], { origin:p, ua:d2, va:vnorm(vcross(d2, [0, 1, 0.01])), col:fc(r() < 0.5 ? leaf : leaf2), anim:() => [0, 0, 0.5, 0] });
+        if (r() < 0.6) ellip(mb, vadd(p, [0, 0.01, 0]), [0.012, 0.012, 0.012], { n:3, m:5, col:fc(berry), anim:() => [0, 0, 0.5, 0] });
+      }
+    }
+  }
+  return mb;
+}
+function mkSargassumFish() {
+  // the sargassum fish (Histrio histrio), a frogfish: lumpy, fringed with weed-like tassels, it clambers through the raft on hand-like fins
+  const mb = fish({ H:0.3, W:0.17, tm:0.4, nose:0.35, ped:0.35, bodyLen:0.75, back:[0.75, 0.6, 0.2], belly:[0.9, 0.8, 0.45], eye:[0.12, 0.35, 0.025], n:16, m:12,
+    pattern:(t, sy, sz, p) => Math.sin(p[0] * 50 + p[1] * 20) * Math.sin(p[2] * 45 + p[1] * 30) > 0.45 ? [0.4, 0.3, 0.1] : (Math.sin(p[0] * 80) * Math.sin(p[1] * 70) > 0.85 ? [0.98, 0.95, 0.85] : null),
+    tail:'round', tailH:0.18, tailCol:[0.7, 0.55, 0.2], dorsal:[{ at:0.35, len:0.4, h:0.14, col:[0.7, 0.55, 0.2] }], anal:[{ at:0.55, len:0.2, h:0.1, col:[0.7, 0.55, 0.2] }],
+    pect:{ at:0.3, len:0.13, w:0.08, down:0.7, col:[0.75, 0.6, 0.2] } });
+  const r = rng(77);
+  for (let k = 0; k < 30; k++) { const t = r(), a = r() * TAU, x = 0.4 - t * 0.6, p = [x, Math.cos(a) * 0.12, Math.sin(a) * 0.07]; tube(mb, { n:2, m:3, path:u => vadd(p, [0, Math.cos(a) * u * 0.05, Math.sin(a) * u * 0.05]), r:0.006, col:fc([0.8, 0.65, 0.25]) }); }
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -234,6 +263,17 @@ function addPlaces2() {
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
     parts:[part(mkLionsMane, { scale:1.6, mat:[0.8, 0.7, 1, 0.4], trans:true, pulse:[0.1, 0.3, 0, 0], sway:[0.12, 0.3, 2, 0] })],
     views:[{ d:[0.3, 0.1, 1], k:1.6, hold:11, drift:0.02, frame:'world', off:[0, -1.5, 0] }, { d:[0.2, 0.9, 0.3], k:1.0, hold:9, drift:0.02, frame:'world' }, { d:[0.5, -0.5, 0.8], k:1.2, hold:9, drift:0.02, frame:'world', off:[0, -3, 0] }] });
+  const SARG = [5200, 900];
+  addObj({ key:'sargassum', name:'sargassum raft', label:'sargassum', type:'a floating forest · Sargassum natans', kind:'places', at:[SARG[0], SARG[1], 0.2], size:7, rad:4,
+    fact:'Golden-brown seaweed that never touches the bottom, buoyed up by berry-like air bladders. In the Sargasso Sea rafts of it gather into floating forests that shelter baby turtles, eels on their way from their spawning grounds, and fish found nowhere else.',
+    motion:{ type:'still', fn:(o, t) => { const A = o.anchor; o.pos = [A[0] + 0.5 * Math.sin(t * 0.03), 0, A[2]]; o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1]; } },
+    parts:[part(() => buildSargassum(91), { mat:[1, 0.35, 1, 0.3], sway:[0.06, 0.6, 1.5, 0] })],
+    views:[{ d:[0.3, -0.75, 0.6], k:1.0, hold:11, drift:0.02, frame:'world' }, { d:[0.6, -0.35, 1], k:1.1, hold:9, drift:0.02, frame:'world', off:[0, -0.8, 0] }] });
+  addObj({ key:'sargassumfish', name:'sargassum fish', type:'Histrio histrio · a frogfish', kind:'fish', at:[SARG[0] + 0.6, SARG[1] - 0.4, 0.5], size:0.15, rad:0.12, yaw:2,
+    fact:'A frogfish that lives its whole life in floating weed, coloured and fringed to match it. It clambers through the raft on fins shaped like hands, and swallows prey nearly its own size with a mouth that opens in a few thousandths of a second.',
+    motion:{ type:'hover', amp:0.04, turn:0.4 },
+    parts:[part(mkSargassumFish, { scale:0.15, mat:M_SKIN, ...FISH_SWIM(0.03, 1, 0.9, 2) })],
+    views:[{ d:[0.3, 0.1, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, -0.3, 0.4], k:2.4, hold:9, drift:0.02 }] });
   addObj({ key:'mangroves', name:'the mangroves', label:'mangroves', type:'a forest standing in the sea', kind:'places', floor:[MANG[0], MANG[1], 0], size:44, rad:24,
     fact:'Mangrove trees stand in salt water on arching prop roots, filtering out salt as they drink. The tangle of roots is a nursery: many reef fish spend their first years hiding there. Mangrove forests break storm waves and store several times more carbon than inland forests.',
     parts:[part(() => buildMangroves(BYKEY.mangroves.anchor, 61), { mat:[1, 0.3, 1, 0.3] }),

@@ -29,7 +29,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **109 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
+- **111 places** across five zones (plus Nautile): the surface (Snell's window), a coral reef with clownfish, seahorse, octopus and tangs,
   the kelp forest, a sardine bait ball, whale shark, great white, hammerhead school, sunfish, humpback and blue whales,
   plankton (copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, krill), lanternfish, hatchetfish, a 40 m
   siphonophore, barreleye, giant squid, Atolla, vampire squid, sperm whale, anglerfish, viperfish, gulper eel, beaked whale,
@@ -47,7 +47,8 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
   channel off the mangroves.
 - **Hidden worlds**: a seamount's deep coral garden (bubblegum, bamboo and black corals, sea lilies, orange roughy), a cold seep
   whose brine pool is a lake on the seafloor ringed by mussels, the underside of Arctic sea ice with ice algae, brinicles,
-  narwhals and belugas, a mangrove forest on its prop roots, and a seagrass meadow with a grazing dugong.
+  narwhals and belugas, a mangrove forest on its prop roots, a seagrass meadow with a grazing dugong, and a floating raft of
+  sargassum weed with a sargassum fish hidden in it.
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
