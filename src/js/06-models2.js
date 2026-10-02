@@ -100,18 +100,46 @@ function mkSquid(o = {}) {
   }
   return mb;
 }
+// the dumbo octopus (Grimpoteuthis), about one unit across: a soft domed mantle with an ear-like fin each side near the top,
+// big eyes, and eight short arms joined almost to their tips by a web that opens and closes like an umbrella as it drifts
+function mkDumbo() {
+  const mb = new MB(), skin = [0.98, 0.7, 0.66], pale = [1.0, 0.86, 0.82], deep = [0.85, 0.5, 0.5];
+  ellip(mb, [0, 0.13, 0], [0.19, 0.24, 0.19], { n:14, m:18, shape:p => [p[0], p[1] < 0.02 ? 0.02 + (p[1] - 0.02) * 0.3 : p[1], p[2]],
+    col:(u, v, p) => p[1] > 0.3 ? pale : skin, anim:() => [0, 0, 0, 0.06] });
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.07, 0.06, sz * 0.165], [0.045, 0.05, 0.03], { n:5, m:9, col:(u, v, p) => Math.hypot(p[0] - 0.08, p[1] - 0.06) < 0.025 ? [0.05, 0.03, 0.04] : deep });
+    // the ears: rounded paddles that flap to swim
+    fin(mb, [[0, -0.08], [0.1, -0.06], [0.16, 0.02], [0.11, 0.1], [0.0, 0.1], [-0.05, 0.02]], { origin:[0, 0.25, sz * 0.15], ua:vnorm([0, 0.15, sz]), va:[1, 0, 0], rings:3,
+      col:fc(skin), anim:(a, b, r) => [0, r * 0.9, 0, 0] });
+  }
+  // the web: rings flaring down and out, cut back between the arms so its edge is scalloped
+  const nA = 8, N = 12, M = 64, armA = k => k / nA * TAU + PI / 8;
+  const ry = t => 0.02 - t * 0.2, rr = t => 0.17 + t * 0.3;
+  const rows = [];
+  for (let i = 0; i <= N; i++) {
+    const t = i / N, row = [];
+    for (let j = 0; j < M; j++) {
+      const ang = j / M * TAU, ph = Math.cos(nA * (ang - PI / 8));
+      const tt = t * (0.72 + 0.28 * (1 + ph) / 2);
+      row.push(mb.v([Math.cos(ang) * rr(tt), ry(tt), Math.sin(ang) * rr(tt)], t > 0.9 ? deep : mixc(skin, pale, t * 0.6), [0, 0, tt * 0.1, tt * 0.5]));
+    }
+    rows.push(row);
+  }
+  for (let i = 0; i < N; i++) for (let j = 0; j < M; j++) { const j1 = (j + 1) % M; mb.quad(rows[i][j], rows[i][j1], rows[i + 1][j1], rows[i + 1][j]); }
+  // the arms along the web, their tips curling up past its edge, a row of suckers and fine cirri beneath
+  for (let k = 0; k < nA; k++) {
+    const a = armA(k), ca = Math.cos(a), sa = Math.sin(a);
+    tube(mb, { n:14, m:5, path:t => { const tt = Math.min(t * 1.15, 1), cur = Math.max(0, t * 1.15 - 1) * 4; return [ca * (rr(tt) + cur * 0.02), ry(tt) + cur * 0.05, sa * (rr(tt) + cur * 0.02)]; },
+      r:t => 0.022 * (1 - t * 0.7), col:t => t > 0.8 ? deep : skin, anim:t => [0, 0, t * 0.1, t * 0.5] });
+  }
+  return mb;
+}
 function mkOctopus(o = {}) {
   const mb = new MB(), skin = o.skin || [0.7, 0.4, 0.3], mott = o.mott || [0.45, 0.22, 0.18];
   const pat = p => o.dumbo ? skin : (Math.sin(p[0] * 60 + p[2] * 40) * Math.sin(p[1] * 70) > 0.3 ? mott : skin);
   // the mantle above and behind the head
   ellip(mb, [-0.12, 0.2, 0], [0.22, 0.17, 0.16], { n:12, m:16, col:(u, v, p) => pat(p), anim:() => [0, 0, 0, 0.08] });
   ellip(mb, [0.04, 0.05, 0], [0.11, 0.1, 0.12], { n:8, m:12, col:(u, v, p) => (Math.abs(p[2]) > 0.08 && p[1] > 0.08 && Math.abs(p[0] - 0.06) < 0.03) ? [0.05, 0.05, 0.03] : pat(p), anim:() => [0, 0, 0, 0] });
-  if (o.dumbo) {
-    for (const sz of [1, -1]) fin(mb, [[0, 0], [0.08, 0.12], [-0.08, 0.16], [-0.1, 0.02]], { origin:[-0.15, 0.25, sz * 0.12], ua:[1, 0, 0], va:[0, 0.4, sz], col:fc(skin), anim:(a, b) => [0, Math.abs(b) * 1.8, 0, 0] });
-    // the web between the arms: a skirt
-    loft(mb, { n:8, m:32, capStart:false, capEnd:false, sec:t => ({ x:0.0, y:-0.02 - t * 0.28, w:0.1 + t * 0.3, h:0.1 + t * 0.3, e:2, z:0 }), col:fc(mixc(skin, [1, 0.85, 0.85], 0.3)), anim:t => [0, 0, t * 0.12, 0] });
-    for (let k = 0; k < mb.count; k++) {}
-  }
   for (let k = 0; k < 8; k++) {
     const a = k / 8 * TAU + 0.2, L = o.dumbo ? 0.42 : 0.6 + 0.1 * Math.sin(k * 1.7), curl = o.dumbo ? 0.5 : 2.2 + hash1(k) * 1.5;
     tube(mb, { n:22, m:5, path:t => {

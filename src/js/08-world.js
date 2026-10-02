@@ -364,7 +364,7 @@ function buildCatalog() {
   addObj({ key:'dumbo', name:'dumbo octopus', type:'Grimpoteuthis', kind:'cephs', floor:[27000, 200, 2.5], size:0.25, rad:0.22,
     fact:'Dumbo octopuses live deeper than any other octopus, down to about 7,000 m, hovering over the floor by flapping their ear-like fins. They swallow their prey whole.',
     motion:{ type:'hover', amp:0.15, turn:0.5 },
-    parts:[part(() => mkOctopus({ dumbo:true, skin:[0.98, 0.72, 0.68] }), { scale:0.25, mat:[0.85, 0.7, 1, 0.5], sway:[0.03, 0.5, 4, 0], swim2:[0, 2, 0.35, 0.5] })],
+    parts:[part(mkDumbo, { scale:0.25, mat:[0.9, 0.7, 1, 0.5], sway:[0.03, 0.5, 4, 0], pulse:[0.25, 0.3, 0, 0], swim2:[0, 2, 0.05, 0.6] })],
     views:[{ d:[0.6, 0.3, 1], k:2.6, hold:10, drift:0.025 }, { d:[1, 0.1, 0.2], k:2.3, hold:8, drift:0.025 }] });
 
   // ---------------- the abyss
