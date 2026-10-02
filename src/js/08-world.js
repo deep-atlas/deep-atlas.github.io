@@ -96,6 +96,9 @@ function moveObj(o, t) {
       const d = lerp(m.day, m.night, smooth(0.15, 0.85, night()));
       pos = [A[0], -d, A[2]];
       fwd = [1, 0, 0];
+      // how fast it is climbing (m/s, + up): the fish point the way they swim
+      if (o._lastD != null && o._lastT != null && t !== o._lastT) o.climb = lerp(o.climb || 0, (o._lastD - d) / (t - o._lastT), 0.1);
+      o._lastD = d; o._lastT = t;
       break;
     }
     case 'still': default:
@@ -140,6 +143,7 @@ function drawPart(o, p) {
   _it.fwd = f; _it.up = u; _it.scale = p.scale;
   _it.mesh = p.mesh; _it.mat = p.mat; _it.tint = p.tint; _it.swim = p.swim; _it.swim2 = p.swim2; _it.sway = p.sway; _it.pulse = p.pulse; _it.school = p.school;
   _it.glowSun = p.glowSun;
+  if (p.school && p.school[0] === 1 && o.climb != null) p.school[3] = clamp(Math.atan(o.climb * 40) * 0.9, -1.1, 1.1);
   _it.fx = o.fxDyn ? [(p.fx || ZA)[0], o.fxDyn[1], o.fxDyn[2], o.fxDyn[3]] : p.fx;
   _it.pred = p.school ? schoolPredators(o, p) : null;
   drawCreature(_it, p.school ? P_SCHOOL : P_MESH);
@@ -284,7 +288,7 @@ function buildCatalog() {
   addObj({ key:'lanternfish', vsize:10, name:'lanternfish', type:'myctophids · the nightly migrators', kind:'fish', at:[14500, 0, 450], size:0.07, rad:5,
     fact:'Lanternfish may be the most common vertebrates on Earth. Each night they rise hundreds of metres to feed near the surface and sink before dawn: the largest migration on the planet, every day.',
     motion:{ type:'migrate', day:450, night:60 },
-    parts:[part(mkLanternfish, { inst:schoolCloud(260, 5, 3, 51, 1, 0.3), school:[1, 0.07, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
+    parts:[part(mkLanternfish, { inst:schoolCloud(800, 4, 2.4, 51, 1, 0.3), school:[1, 0.07, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
     views:[{ d:[0.2, 0.1, 1], k:1.3, hold:10, drift:0.03, frame:'world' }, { d:[0.6, 0.1, 0.4], k:0.25, hold:9, drift:0.03, frame:'world' }],
     readout:() => night() > 0.5 ? 'night: risen to feed near the surface' : 'day: hiding in the twilight' });
   addObj({ key:'hatchetfish', vsize:4, name:'hatchetfish', type:'Argyropelecus · silver hatchetfish', kind:'fish', at:[15000, -200, 600], size:0.06, rad:2,

@@ -141,7 +141,8 @@ void main(){
   } else if (mode == 1){
     // a loose cloud, each fish hanging in place and turning slowly (lanternfish, hatchetfish); iA = position, yaw; iB = phase, drift, size, pitch
     float yaw = iA.w + 0.6 * sin(t * 0.07 + iB.x * 6.0);
-    f = vec3(cos(yaw) * cos(iB.w), sin(iB.w), sin(yaw) * cos(iB.w));
+    float pitch = clamp(iB.w + uSchool.w, -1.3, 1.3);   // (w: the whole cloud rising or sinking tips every fish that way)
+    f = vec3(cos(yaw) * cos(pitch), sin(pitch), sin(yaw) * cos(pitch));
     c = iA.xyz + f * iB.y * sin(t * 0.11 + iB.x * 4.0) + vec3(0.0, 0.3 * iB.y * sin(t * 0.05 + iB.x), 0.0);
   } else {
     // a stream along +x, wrapping round a box (a migrating school); iA = position, -; iB = phase, -, size, lane wobble

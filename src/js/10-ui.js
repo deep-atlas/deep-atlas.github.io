@@ -425,7 +425,29 @@ function renderTime() {
 }
 $('tmSlider').oninput = e => { TOD.min = +e.target.value; TOD.live = false; renderTime(); };
 $('tmNow').onclick = () => { const d = new Date(); TOD.min = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60; TOD.live = true; SET.clock = '1'; saveSettings(); syncSettings(); renderTime(); };
+// the night migration, sped up: from late afternoon until the lanternfish are near the surface
+const MIG = { on:false };
+function startMigration() {
+  openPanel(null); stopRide(true); leaveTour();
+  TOD.min = 16 * 60 + 50; TOD.live = false; SET.clock = '45'; saveSettings(); syncSettings();
+  const o = BYKEY.lanternfish; moveObj(o, simTime); lockOn(o, 1); VIEW.auto = false;
+  MIG.on = true; renderTime(); updatePlay();
+  toast('dusk, sped up: watch the lanternfish rise', 4000);
+}
+function tickMigration() {
+  if (!MIG.on) return;
+  const o = BYKEY.lanternfish;
+  if (VIEW.focus !== o || VIEW.mode !== 'orbit') { MIG.on = false; $('caption').hidden = true; return; }
+  const d = -o.pos[1], clock = $('tmClock').textContent;
+  $('caption').hidden = false; $('capBtn').hidden = true;
+  $('capText').textContent = d > 430 ? `${clock} · day: the lanternfish wait in the twilight zone at ${fmtInt(d)} m, where hunters cannot see them`
+    : d > 70 ? `${clock} · dusk: the migration has begun. ${fmtInt(d)} m deep and rising, ${Math.max(1, Math.round((o.climb || 0) * 60 / (+SET.clock || 1) * 60))} m an hour in real time`
+    : `${clock} · night: risen to ${fmtInt(d)} m to feed on the plankton near the surface. They will sink again before dawn.`;
+  if (d <= 70 && TOD.min > 19 * 60) { SET.clock = '0'; saveSettings(); syncSettings(); }
+}
+$('tmMigrate').onclick = startMigration;
 function tickTime(dt) {
+  tickMigration();
   const rate = +SET.clock || 0;
   if (rate) TOD.min = (TOD.min + dt * rate / 60 + 1440) % 1440;
 }
