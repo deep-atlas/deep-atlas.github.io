@@ -268,6 +268,35 @@ function mkSeaLion() {
   }
   return mb;
 }
+function mkPistolShrimp() {
+  // a snapping (pistol) shrimp, one unit long, head at +x: one claw hugely oversized; snapping it shut fires a jet that makes a
+  // collapsing bubble, as loud as a gunshot underwater and briefly as hot as the sun's surface
+  const mb = new MB(), body = [0.95, 0.6, 0.45], band = [0.85, 0.35, 0.3], claw = [1.0, 0.5, 0.35];
+  loft(mb, { n:22, m:10, sec:t => { const w = 0.09 * Math.sin(Math.min(1, t * 2 + 0.3) * PI / 2) * (1 - t * 0.35); return { x:0.3 - t * 0.7, y:0.015 * Math.sin(t * PI), w, h:w * 0.85, e:2.4 }; },
+    col:t => t > 0.3 && Math.abs(Math.sin(t * 30)) < 0.2 ? band : body, anim:t => [0, 0, 0, 0] });
+  fin(mb, [[0, 0.04], [-0.1, 0.09], [-0.12, 0], [-0.1, -0.09], [0, -0.04]], { origin:[-0.4, 0.01, 0], ua:[1, 0, 0], va:[0, 0, 1], col:fc(body) });
+  // the big snapping claw on the right, a slim one on the left
+  tube(mb, { n:4, m:5, path:t => [0.28 + t * 0.12, -0.02, 0.07 + t * 0.03], r:0.025, col:fc(claw) });
+  ellip(mb, [0.5, -0.01, 0.1], [0.12, 0.06, 0.05], { n:6, m:10, col:(u, v, p) => p[0] > 0.58 ? [1.0, 0.85, 0.75] : claw });
+  tube(mb, { n:3, m:4, path:t => [0.6 + t * 0.06, -0.035, 0.1], r:0.018, col:fc([1.0, 0.85, 0.75]) });
+  tube(mb, { n:5, m:4, path:t => [0.28 + t * 0.2, -0.03, -0.06], r:t => 0.014 - t * 0.006, col:fc(body) });
+  // long antennae: one is always kept touching the goby, which warns it of danger with a flick of its tail
+  for (const sz of [1, -1]) tube(mb, { n:10, m:3, path:t => [0.32 + t * 0.55, 0.03 + t * 0.12, sz * (0.03 + t * 0.15)], r:0.004, col:fc(band), anim:t => [0, 0, t * 0.2, 0] });
+  for (const sz of [1, -1]) ellip(mb, [0.33, 0.04, sz * 0.03], [0.015, 0.015, 0.015], { n:3, m:6, col:fc([0.1, 0.05, 0.05]) });
+  return mb;
+}
+function mkWatchmanGoby() {
+  const yel = [1.0, 0.85, 0.2], dot = [0.3, 0.6, 1.0];
+  return fish({ H:0.15, W:0.1, tm:0.25, nose:0.35, ped:0.3, bodyLen:0.82, back:yel, belly:[1.0, 0.92, 0.6], eye:[0.09, 0.42, 0.05], n:16, m:10,
+    pattern:(t, sy, sz, p) => Math.sin(p[0] * 70) * Math.sin(p[1] * 60 + p[2] * 40) > 0.75 ? dot : null,
+    tail:'round', tailH:0.13, tailCol:yel, dorsal:[{ at:0.15, len:0.22, h:0.14, col:yel }, { at:0.45, len:0.35, h:0.1, col:yel }], anal:[{ at:0.5, len:0.3, h:0.08, col:yel }], pect:{ at:0.2, len:0.12, w:0.07, col:yel } });
+}
+function mkBurrow() {
+  // a mound of sand round the burrow's mouth, in metres
+  const mb = new MB();
+  ellip(mb, [0, 0, 0], [0.1, 0.018, 0.09], { n:6, m:12, col:(u, v, p) => Math.hypot(p[0] - 0.02, p[2] - 0.01) < 0.035 && p[1] > 0.008 ? [0.04, 0.03, 0.02] : [0.7, 0.66, 0.55] });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -330,6 +359,14 @@ function addShallows(REEF) {
     fact:'Hundreds live together in a sand flat, each in its own burrow, rising half out of the sand to pick plankton from the current. Come too close and the whole garden sinks out of sight.',
     parts:[part(mkGardenEels, { mat:M_SKIN, sway:[0.03, 0.9, 3, 0] })],
     views:[{ d:[0.5, 0.25, 1], k:1.1, hold:10, drift:0.03, frame:'world', off:[0, 0.2, 0] }, { d:[1, 0.08, 0.3], k:0.6, hold:9, drift:0.03, frame:'world', off:[0, 0.2, 0] }] });
+  addObj({ key:'goby', name:'goby and pistol shrimp', label:'goby and shrimp', type:'a partnership · Cryptocentrus and Alpheus', kind:'fish', floor:[REEF[0] + 33, REEF[1] - 9, 0], size:0.1, vsize:0.25, rad:0.25, yaw:0.4,
+    fact:'The nearly blind shrimp digs and keeps up a burrow for both of them; the goby stands guard at its mouth. The shrimp keeps an antenna on the goby, and a flick of the goby’s tail sends both diving inside. The shrimp’s snapping claw is one of the loudest sounds in the sea.',
+    // the shrimp bulldozes sand out of the burrow and goes back in for more; the goby stays on watch
+    post:(o, t) => { const c = (t * 0.25) % 1, out = smooth(0, 0.25, c) * smooth(0.75, 0.5, c); o.parts[2].off = [0.02 + out * 0.1, 0.012 + out * 0.004, 0.02 - out * 0.06]; },
+    parts:[part(mkBurrow, { mat:[1, 0.2, 1, 0.2] }),
+      part(mkWatchmanGoby, { scale:0.1, off:[0.08, 0.03, -0.03], mat:M_SKIN, swim:[0.03, 0.8, 0.9, 0], swim2:[0, 2, 0, 0] }),
+      part(mkPistolShrimp, { scale:0.045, off:[0.06, 0.012, 0.04], mat:M_SKIN, sway:[0.004, 2, 30, 0] })],
+    views:[{ d:[0.3, 0.06, 1], k:1.2, hold:10, drift:0.02, off:[0.07, 0.03, 0] }, { d:[1, 0.08, 0.3], k:1.1, hold:9, drift:0.02, off:[0.07, 0.02, 0] }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
