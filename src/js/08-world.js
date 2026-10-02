@@ -293,10 +293,10 @@ function buildCatalog() {
     parts:[part(mkLanternfish, { inst:schoolCloud(800, 4, 2.4, 51, 1, 0.3), school:[1, 0.07, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
     views:[{ d:[0.2, 0.1, 1], k:1.3, hold:10, drift:0.03, frame:'world' }, { d:[0.6, 0.1, 0.4], k:0.25, hold:9, drift:0.03, frame:'world' }],
     readout:() => night() > 0.5 ? 'night: risen to feed near the surface' : 'day: hiding in the twilight' });
-  addObj({ key:'hatchetfish', vsize:4, name:'hatchetfish', type:'Argyropelecus · silver hatchetfish', kind:'fish', at:[15000, -200, 600], size:0.06, rad:2,
+  addObj({ key:'hatchetfish', vsize:2.4, name:'hatchetfish', type:'Argyropelecus · silver hatchetfish', kind:'fish', at:[15000, -200, 600], size:0.06, rad:2,
     fact:'Lights along its belly match the faint glow from above, erasing its silhouette for hunters looking up: counter-illumination. Its tubular eyes look straight up.',
-    parts:[part(mkHatchetfish, { inst:schoolCloud(40, 1.8, 1, 61, 1, 0.1), school:[1, 0.06, 1, 0], mat:M_SILVER, ...FISH_SWIM(0.05, 2.5, 0.9, 2) })],
-    views:[{ d:[0.2, 0.1, 1], k:1.2, hold:10, drift:0.03, frame:'world' }, { d:[0.4, -0.3, 0.6], k:0.4, hold:9, drift:0.03, frame:'world' }] });
+    parts:[part(mkHatchetfish, { inst:schoolCloud(40, 1.1, 0.8, 61, 1, 0.1), school:[1, 0.06, 1, 0], shy:4, mat:M_SILVER, ...FISH_SWIM(0.05, 2.5, 0.9, 2) })],
+    views:[{ d:[0.2, 0.1, 1], k:0.8, hold:10, drift:0.03, frame:'world' }, { d:[0.4, -0.3, 0.6], k:0.3, hold:9, drift:0.03, frame:'world' }] });
   addObj({ key:'siphonophore', vsize:9, name:'giant siphonophore', label:'siphonophore', type:'a colony longer than a blue whale · Apolemia', kind:'jellies', at:[16000, 300, 700], size:40, rad:22,
     fact:'One colony of thousands of linked bodies, each specialised to swim, sting, feed or breed. Some grow longer than a blue whale: a coiled one about 45 m long was found in 2020.',
     motion:{ type:'hover', amp:1.5, turn:0.15 },
@@ -398,10 +398,10 @@ function buildCatalog() {
     parts:[part(() => { const A = BYKEY.trench.anchor, mb = buildHadal(A, 37), r = rng(41); for (let k = 0; k < 40; k++) { const dx = (r() - 0.5) * 36, dz = (r() - 0.5) * 36, sz = 0.3 + r() * 2.2; ellip(mb, [dx, groundAt(A, dx, dz) - sz * 0.3, dz], [sz, sz * 0.55, sz * 0.8], { n:6, m:9, shape:p => [p[0] + Math.sin(p[1] * 6) * sz * 0.08, p[1], p[2]], col:(u, v, p) => Math.sin(p[0] * 4 + p[2] * 3) > 0.4 ? [0.34, 0.3, 0.27] : [0.2, 0.19, 0.18] }); } return mb; }, { mat:[0.95, 0.4, 1, 0.3], sway:[0.02, 0.4, 3, 0] })],
     fact:'The trench forms where the Pacific plate dives beneath the Mariana plate. It runs about 2,550 km; Everest set on its floor would still be under more than 2 km of water.',
     views:[{ d:[-1, 0.55, 0.35], k:0.03, hold:12, drift:0.02, frame:'world', off:[0, 1, 0] }, { d:[0.4, 0.6, 1], k:0.025, hold:10, drift:0.02, frame:'world', off:[0, 1, 0] }] });
-  addObj({ key:'snailfish', vsize:3.5, name:'Mariana snailfish', label:'snailfish', type:'Pseudoliparis swirei', kind:'fish', floor:[75200, 0, 3], size:0.11, rad:2,
+  addObj({ key:'snailfish', vsize:1.4, name:'Mariana snailfish', label:'snailfish', type:'Pseudoliparis swirei', kind:'fish', floor:[75200, 0, 3], size:0.11, rad:2,
     fact:'Among the deepest-living fish known, at home near 8,000 m. Its body is soft and jelly-like with little hard bone, built for a pressure some 800 times that at the surface.',
-    parts:[part(mkSnailfish, { inst:schoolCloud(7, 1.6, 0.4, 81, 1, 0.5), school:[1, 0.11, 0.6, 0], mat:[0.85, 0.8, 1, 0.5], ...FISH_SWIM(0.07, 0.7, 1.2, 1.2) })],
-    views:[{ d:[0.3, 0.2, 1], k:0.8, hold:10, drift:0.02, frame:'world' }, { d:[1, 0.15, 0.2], k:0.6, hold:9, drift:0.02, frame:'world' }] });
+    parts:[part(mkSnailfish, { inst:schoolCloud(7, 0.6, 0.3, 81, 1, 0.5), school:[1, 0.11, 0.6, 0], shy:2, mat:[0.85, 0.8, 1, 0.5], ...FISH_SWIM(0.07, 0.7, 1.2, 1.2) })],
+    views:[{ d:[0.3, 0.2, 1], k:0.38, hold:10, drift:0.02, frame:'world' }, { d:[1, 0.15, 0.2], k:0.32, hold:9, drift:0.02, frame:'world' }] });
   const DEEP = [84500, 0];
   addObj({ key:'challenger', name:'the Challenger Deep', label:'Challenger Deep', type:'the deepest point of the ocean', kind:'places', floor:[DEEP[0], DEEP[1], 0], size:30, rad:14,
     fact:'The deepest known point of the ocean, about 10,935 m down in the Mariana Trench, at over 1,000 times the pressure at the surface. Jacques Piccard and Don Walsh first reached it in 1960 in the bathyscaphe Trieste.',
