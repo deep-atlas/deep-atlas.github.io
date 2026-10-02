@@ -573,12 +573,14 @@ function updateLabels() {
 
 // ---- today's discovery
 function setupDaily() {
-  const day = Math.floor(Date.now() / 864e5), L = byDepth().filter(o => o.kind !== 'subs');
-  const o = L[hashU(day * 31 + 7) % L.length];
+  const day = Math.floor(Date.now() / 864e5), all = byDepth().filter(o => o.kind !== 'subs');
+  // today's pick, chosen from what you have not seen yet (the same pick all day); "another" deals a fresh one
+  let roll = 0;
+  const pick = () => { const un = all.filter(o => !SEEN.has(o.key)), L = un.length ? un : all; return L[hashU(day * 31 + 7 + roll * 977) % L.length]; };
   if (load('dailyX', -1) === day) return;
-  $('daily').hidden = false; $('dailyName').textContent = o.name; $('dailyType').textContent = o.type;
-  $('dailyGo').onclick = () => userGo(o);
-  $('dailyShare').onclick = () => share(o);
+  const show = () => { const o = pick(); $('dailyName').textContent = o.name; $('dailyType').textContent = o.type; $('dailyGo').onclick = () => userGo(o); $('dailyShare').onclick = () => share(o); };
+  $('daily').hidden = false; show();
+  $('dailyAnother').onclick = () => { roll++; show(); };
   $('dailyClose').onclick = () => { $('daily').hidden = true; save('dailyX', day); };
 }
 
