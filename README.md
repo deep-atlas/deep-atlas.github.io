@@ -97,6 +97,7 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 | ← → | previous / next place by depth |
 | H | home (the reef) |
 | B, P, Z, I | ride along with Nautile, photo, screensaver, info panel |
+| N, X | day or night, disturb what you're locked on |
 | V, Y, G, L, M | detail, travel speed, glow, labels, sound |
 
 ## How it renders

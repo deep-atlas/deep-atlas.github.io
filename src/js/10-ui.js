@@ -842,6 +842,8 @@ window.addEventListener('keydown', e => {
     case 'z': startSaver(); break;
     case 'b': RIDE.on ? stopRide() : startRide(); break;
     case 'c': toggleCockpit(); break;
+    case 'n': { const dark = night() > 0.45; TOD.min = dark ? 10 * 60 + 30 : 22 * 60 + 30; TOD.live = false; SET.clock = '0'; saveSettings(); syncSettings(); renderTime(); toast(dark ? 'day: 10:30' : 'night: 22:30'); break; }
+    case 'x': if (VIEW.focus && VIEW.focus.react) triggerReact(VIEW.focus); else if (VIEW.focus) toast(`${VIEW.focus.name}: nothing happens when disturbed`); break;
     case 'g': SET.glow = !SET.glow; saveSettings(); syncSettings(); toast('glow ' + (SET.glow ? 'on' : 'off')); break;
     case 'l': SET.labels = !SET.labels; saveSettings(); syncSettings(); toast('labels ' + (SET.labels ? 'on' : 'off')); break;
     case 'm': SET.sound = !SET.sound; saveSettings(); syncSettings(); soundOn(SET.sound); break;
