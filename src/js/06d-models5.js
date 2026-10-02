@@ -132,6 +132,29 @@ function mkSnapper() {
     pattern:(t, sy) => Math.abs(sy - 0.05) < 0.1 && t > 0.1 ? [1.0, 0.75, 0.05] : (Math.abs(sy - 0.45) < 0.06 && t > 0.15 ? [0.35, 0.55, 0.95] : (sy > 0.2 ? [0.85, 0.85, 0.6] : silver)),
     tail:'fork', tailH:0.12, tailCol:yellow, dorsal:[{ at:0.25, len:0.45, h:0.07, col:yellow }], anal:[{ at:0.6, len:0.15, h:0.06, col:yellow }], pect:{ at:0.24, len:0.1, w:0.04, col:yellow } });
 }
+function mkGardenEels() {
+  // a colony of garden eels, drawn in metres: each stands half out of its burrow in the sand, facing the current to catch plankton
+  const mb = new MB(), r = rng(919);
+  for (let k = 0; k < 40; k++) {
+    const a = r() * TAU, d = Math.sqrt(r()) * 2.2, x = Math.cos(a) * d, z = Math.sin(a) * d, H = 0.25 + r() * 0.2, lean = 0.4 + r() * 0.2;
+    const path = t => [x + Math.sin(t * PI * 0.6) * H * lean * 0.6, t * H, z];
+    tube(mb, { n:10, m:5, path, r:t => 0.008 * (1 - t * 0.25), col:t => (fract(t * 9 + k * 0.3) < 0.35 ? [0.98, 0.95, 0.9] : [0.95, 0.6, 0.2]), anim:t => [0, 0, t * 0.6, 0] });
+    const top = path(1); ellip(mb, vadd(top, [0.01, 0, 0]), [0.012, 0.01, 0.009], { n:4, m:6, col:fc([0.1, 0.1, 0.1]), anim:() => [0, 0, 0.6, 0] });
+    // the burrow's rim
+    ellip(mb, [x, 0, z], [0.02, 0.006, 0.02], { n:3, m:6, col:fc([0.2, 0.18, 0.15]) });
+  }
+  return mb;
+}
+function mkStingray() {
+  // a southern stingray, half buried in sand: a flat rhomboid disc, eyes and spiracles on top, a long whip tail with its barb
+  const mb = new MB(), back = [0.11, 0.1, 0.09], belly = [0.95, 0.94, 0.9];
+  loft(mb, { n:20, m:24, sec:t => { const f = Math.sin(clamp(t / 0.9, 0, 1) * PI); return { x:0.3 - t * 0.55, y:0, w:0.4 * Math.pow(f, 0.9) + 0.01, h:0.035 * Math.pow(f, 0.6) + 0.003, e:1.4 }; },
+    col:(t, u, p, sy) => sy < 0 ? belly : (Math.sin(p[0] * 50 + p[2] * 30) > 0.85 ? [0.28, 0.24, 0.2] : back), anim:(t, u, p) => [0, Math.pow(Math.abs(p[2]) * 2.5, 2) * 0.1, 0, 0] });
+  for (const sz of [1, -1]) { ellip(mb, [0.12, 0.035, sz * 0.045], [0.018, 0.012, 0.012], { n:3, m:6, col:fc([0.08, 0.08, 0.08]) }); ellip(mb, [0.07, 0.03, sz * 0.05], [0.015, 0.006, 0.01], { n:3, m:6, col:fc([0.2, 0.17, 0.14]) }); }
+  tube(mb, { n:12, m:4, path:t => [-0.25 - t * 0.6, 0, Math.sin(t * 3) * 0.04], r:t => 0.012 * (1 - t * 0.8), col:fc(back), anim:t => [0, 0, t * 0.15, 0] });
+  tube(mb, { n:2, m:3, path:t => [-0.4 - t * 0.06, 0.012, 0], r:t => 0.004 * (1 - t), col:fc([0.85, 0.82, 0.75]) });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -174,6 +197,14 @@ function addShallows(REEF) {
     fact:'By day they mill in tight schools beside coral heads, then scatter to hunt over the sand at night. Schooling confuses predators: it is hard to pick out one fish from a glittering, turning crowd.',
     parts:[part(mkSnapper, { inst:schoolMill(120, 3, 1.5, 515, 0.5), school:[0, 0.3, 1, 0], mat:M_SKIN, shy:8, ...FISH_SWIM(0.06, 2.6, 0.9, 1.8) })],
     views:[{ d:[0.3, 0.15, 1], k:1.0, hold:10, drift:0.03, frame:'world' }, { d:[1, -0.3, 0.2], k:0.8, hold:9, drift:0.03, frame:'world' }] });
+  addObj({ key:'gardeneels', name:'garden eels', type:'spotted garden eels · Heteroconger hassi', kind:'fish', floor:[REEF[0] + 38, REEF[1] - 12, 0], size:0.4, vsize:3, rad:2.5,
+    fact:'Hundreds live together in a sand flat, each in its own burrow, rising half out of the sand to pick plankton from the current. Come too close and the whole garden sinks out of sight.',
+    parts:[part(mkGardenEels, { mat:M_SKIN, sway:[0.03, 0.9, 3, 0] })],
+    views:[{ d:[0.5, 0.25, 1], k:1.1, hold:10, drift:0.03, frame:'world', off:[0, 0.2, 0] }, { d:[1, 0.08, 0.3], k:0.6, hold:9, drift:0.03, frame:'world', off:[0, 0.2, 0] }] });
+  addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
+    fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
+    parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
+    views:[{ d:[0.3, 1.2, 0.5], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.25, 0.3], k:1.1, hold:9, drift:0.02 }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },
