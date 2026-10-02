@@ -137,7 +137,7 @@ void main(){
   chroma = mix(chroma, vec3(0.62, 0.84, 1.0), 0.35 * (1.0 - smoothstep(0.1, 0.45, b)) * (1.0 - uMono));
   float I = clamp(b / ink, 0.35, 1.0);
   // very bright cells wash towards white, as an overexposed photo does
-  vec3 col = mix(chroma * I, vec3(1.0), smoothstep(0.85, 1.0, b) * 0.35);
+  vec3 col = mix(chroma * I, vec3(1.0), smoothstep(0.92, 1.0, b) * 0.12);
   o = vec4(col, g / 255.0);
 }`;
 

@@ -42,14 +42,18 @@ function updateUBO(time) {
   // Where the lamps dominate the balance is gentle, so the deep keeps a cool blue cast and nothing near the lamps turns red.
   const D = Math.max(CAM.lampD || CAM.scale, 1e-4), path = Math.min(D, 3) * 0.7 + D;
   const att = beam.map(c => Math.exp(-c * fs * path));
-  const lampI = LAMP_COL.map((c, i) => c * LIGHT.lamp * 0.8 * att[i]), sunI = LIGHT.sun;
+  // in the sunlit shallows a photographer's strobe fills in what the water has taken: red returns near the camera,
+  // distant things still fade to blue. It hands over to the floodlights as the sunlight fails.
+  const fill = SET.strobe === false ? 0 : 0.28 * smooth(70, 12, CAM.depth) * (CAM.depth > 0.3 ? 1 : 0) * LIGHT.level;
+  const lampLev = Math.max(LIGHT.lamp * 0.8, fill);
+  const lampI = LAMP_COL.map((c, i) => c * lampLev * att[i]), sunI = LIGHT.sun;
   const illum = [0, 1, 2].map(i => sunI[i] + lampI[i]);
   const lf = (lampI[1] + lampI[2]) / Math.max(lampI[1] + lampI[2] + sunI[1] + sunI[2], 1e-9);
   const cap = lerp(LIGHT.wbCap || 12, 2.5, lf), kk = lerp(LIGHT.wbK || 0.9, 0.45, lf);
   ASCII.wb = illum.map(c => Math.pow(clamp(illum[2] / Math.max(c, 1e-9), 1, cap), kk));
   U8.set([...beam.map(v => v * fs), 0], 32);
   U8.set([...SCAT.map(v => v * fs), aspect], 36);
-  const ls = LIGHT.lamp * 0.8;
+  const ls = lampLev;
   U8.set([LAMP_COL[0] * ls, LAMP_COL[1] * ls, LAMP_COL[2] * ls, Math.max(CAM.lampD || CAM.scale, 1e-4)], 40);
   U8.set([...CAM.fwd, 0.82], 44);
   U8.set([lerp(0.6, 1.0, LIGHT.lamp), 1 / CAM.far, LIGHT.night, CAM.scale], 48);
