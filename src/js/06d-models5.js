@@ -397,6 +397,27 @@ function mkXmasWorms() {
   }
   return mb;
 }
+function mkBaskingShark() {
+  // basking shark, one unit long: mouth gaping wide as it filter-feeds, the gill slits so long they nearly ring the head,
+  // a pointed snout, mottled grey-brown
+  const back = [0.32, 0.31, 0.3], belly = [0.6, 0.58, 0.56];
+  return fish({ H:0.11, W:0.1, tm:0.35, nose:0.55, ped:0.12, bodyLen:0.8, back, belly, eye:[0.05, 0.2, 0.008], e:2.1,
+    camber:t => -0.08 * Math.sin(t * PI), pattern:(t, sy, sz, p) => mixc(belly, back, smooth(-0.3, 0.1, sy)) .map((c, i) => c * (Math.sin(p[0] * 40 + p[1] * 25) * Math.sin(p[2] * 30) > 0.5 ? 0.8 : 1)),
+    tail:'lunate', tailH:0.16, tailL:0.2, tailCol:back,
+    dorsal:[{ at:0.36, len:0.14, h:0.13, sweep:0.6 }, { at:0.78, len:0.03, h:0.03 }], anal:[{ at:0.8, len:0.03, h:0.025 }],
+    pect:{ at:0.32, len:0.16, w:0.07, down:0.55, back:0.5, y:-0.45, col:back }, pelv:{ at:0.62, len:0.05, w:0.03, y:-0.7 },
+    extra:(mb, b) => {
+      // the gill slits, almost meeting above and below
+      for (let k = 0; k < 5; k++) for (const sz of [1, -1]) {
+        const t = 0.15 + k * 0.028, x = 0.5 - t * b.bl, w = b.W * b.prof(t) * 1.03, h = b.H * b.prof(t);
+        fin(mb, [[0, -0.95], [0.005, -0.95], [0.005, 0.9], [0, 0.9]].map(([a, c]) => [a, c * h]), { origin:[x, -0.01, sz * w * 0.9], ua:[1, 0, 0], va:[0, 1, 0], col:fc([0.05, 0.05, 0.06]), anim:finA, rings:1 });
+      }
+      // the open mouth: a dark ring-shaped cavern below the snout, with pale gill rakers inside
+      // (a short wide funnel just under the snout: its rim pale, its inside black, the gill rakers a pale ring deep inside)
+      const mx = 0.5 - 0.035 * b.bl;
+      tube(mb, { n:4, m:18, path:t => [mx + 0.01 - t * 0.09, -0.03, 0], r:t => 0.06 - t * 0.012, col:t => t < 0.12 ? [0.7, 0.66, 0.6] : t > 0.85 ? [0.8, 0.78, 0.72] : [0.015, 0.012, 0.012], capEnd:true });
+    } });
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -515,6 +536,11 @@ function addShallows(REEF) {
     motion:{ type:'circle', R:18, v:0.8, bob:3, bank:0.12 },
     parts:[part(mkLeatherback, { scale:2, mat:M_SKIN, swim2:[0, 2, 0.28, 0.25] })],
     views:[{ d:[0.2, 0.15, 1], k:1.9, hold:10, drift:0.02 }, { d:[0.5, 0.8, 0.5], k:1.8, hold:9, drift:0.02 }, { d:[1, -0.3, 0.4], k:2, hold:8, drift:0.02 }] });
+  addObj({ key:'baskingshark', name:'basking shark', type:'Cetorhinus maximus · the second-largest fish', kind:'sharks', at:[6800, 1400, 4], size:8, rad:5,
+    fact:'The second-largest fish, up to about 10 m, swims slowly at the surface with its mouth wide open, straining up to 2,000 tonnes of water an hour for plankton through bristly gill rakers. Its gill slits nearly encircle its head.',
+    motion:{ type:'circle', R:30, v:1.0, bob:0.6, bank:0.05 },
+    parts:[part(mkBaskingShark, { scale:8, mat:M_SKIN, ...FISH_SWIM(0.04, 0.28, 0.8, 2.4) })],
+    views:[{ d:[0.6, 0.05, 1], k:1.4, hold:11, drift:0.015 }, { d:[1, -0.05, 0.25], k:1.0, hold:9, drift:0.015 }, { d:[0.2, 0.6, 1], k:1.6, hold:9, drift:0.015 }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },

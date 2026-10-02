@@ -29,10 +29,10 @@ The workflow in `.github/workflows/pages.yml` builds and publishes the page on e
 
 ## What's in it
 
-- **121 places** across five zones, plus Nautile. By zone:
+- **122 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
-    sailfish, whale shark (with remoras), great white,
+    sailfish, whale shark (with remoras), a basking shark, great white,
     hammerheads, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school) and
     the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
     penguins hunting through it.
