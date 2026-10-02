@@ -203,9 +203,11 @@ function buildCatalog() {
     views:[{ d:[0.6, -0.45, 1], k:0.28, hold:12, drift:0.02, frame:'world', off:[0, 10, 0] }, { d:[0.2, -0.85, 0.4], k:0.22, hold:10, drift:0.02, frame:'world', off:[2, 8, 3] }, { d:[1, 0.05, 0.3], k:0.3, hold:9, drift:0.02, frame:'world', off:[0, 4, 0] }] });
   addObj({ key:'manowar', vsize:4, name:'Portuguese man o’ war', label:'man o’ war', type:'a siphonophore that sails · Physalia physalis', kind:'jellies', at:[4000, 40, 0.15], size:0.3, rad:4,
     fact:'Not one animal but a colony of specialised individuals. Its gas float sails before the wind, while venomous tentacles trail beneath it, usually about 10 m and sometimes 30 m long.',
-    motion:{ type:'hover', amp:0.15, turn:0.4 },
+    // it floats: the bladder rides half out of the water, drifting and turning slowly before the wind
+    motion:{ type:'still', fn:(o, t) => { const A = o.anchor; o.pos = [A[0] + 0.4 * Math.sin(t * 0.05), -0.02 + 0.015 * Math.sin(t * 1.3), A[2] + 0.4 * Math.cos(t * 0.04)];
+      o.fwd = dirYP(o.yaw + 0.5 * Math.sin(t * 0.03), 0.04 * Math.sin(t * 1.1)); o.up = [0, 1, 0]; o.side = vnorm(vcross(o.fwd, o.up)); } },
     parts:[part(mkManOWar, { scale:1, mat:[0.55, 1.2, 1, 0.8], trans:true, sway:[0.35, 0.5, 0.5, 0] })],
-    views:[{ d:[1, -0.55, 0.4], k:0.75, hold:10, drift:0.02, frame:'world', off:[0, -0.6, 0] }, { d:[1, -0.1, 0.2], k:1.3, hold:9, drift:0.02, frame:'world', off:[0, -2.5, 0] }] });
+    views:[{ d:[0.7, 0.55, 1], k:0.3, hold:10, drift:0.02, frame:'world', off:[0, 0.05, 0], air:true }, { d:[1, -0.55, 0.4], k:0.75, hold:10, drift:0.02, frame:'world', off:[0, -0.6, 0] }, { d:[1, -0.1, 0.2], k:1.3, hold:9, drift:0.02, frame:'world', off:[0, -2.5, 0] }] });
   // a smack of moon jellies drifting under the surface (scenery)
   addObj({ key:'smack', name:'moon jellies', place:false, at:[4002.2, 34.9, 3.4], size:4, rad:5, motion:{ type:'drift', amp:0.25, tilt:0.15 },
     parts:[[0, 0, 0, 0.32], [1.6, 1.1, -0.9, 0.26], [-1.4, -0.8, 1.3, 0.3], [0.6, 2.2, 1.8, 0.22], [-2.1, 1.5, -1.6, 0.28], [2.4, -1.7, 0.9, 0.24]].map(([x, y, z, s], i) =>
@@ -291,7 +293,7 @@ function buildCatalog() {
     fact:'Lanternfish may be the most common vertebrates on Earth. Each night they rise hundreds of metres to feed near the surface and sink before dawn: the largest migration on the planet, every day.',
     motion:{ type:'migrate', day:450, night:60 },
     parts:[part(mkLanternfish, { inst:schoolCloud(800, 4, 2.4, 51, 1, 0.3), school:[1, 0.07, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
-    views:[{ d:[0.2, 0.1, 1], k:1.3, hold:10, drift:0.03, frame:'world' }, { d:[0.6, 0.1, 0.4], k:0.25, hold:9, drift:0.03, frame:'world' }],
+    views:[{ d:[0.2, 0.1, 1], k:0.75, hold:10, drift:0.03, frame:'world' }, { d:[0.6, 0.1, 0.4], k:0.25, hold:9, drift:0.03, frame:'world' }],
     readout:() => night() > 0.5 ? 'night: risen to feed near the surface' : 'day: hiding in the twilight' });
   addObj({ key:'hatchetfish', vsize:2.4, name:'hatchetfish', type:'Argyropelecus · silver hatchetfish', kind:'fish', at:[15000, -200, 600], size:0.06, rad:2,
     fact:'Lights along its belly match the faint glow from above, erasing its silhouette for hunters looking up: counter-illumination. Its tubular eyes look straight up.',

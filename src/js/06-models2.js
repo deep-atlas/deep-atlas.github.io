@@ -55,9 +55,9 @@ function mkAtolla() {
     tentacles:{ n:20, len:0.45, r:0.004, col:[0.55, 0.08, 0.1], seg:8, sway:0.2 } });
 }
 function mkManOWar() {
-  const mb = new MB(), fl = [0.55, 0.55, 0.98], crest = [0.85, 0.45, 0.85];
+  const mb = new MB(), fl = [0.35, 0.42, 1.0], crest = [0.95, 0.4, 0.75];
   // the float: a gas bladder with a crest it sails by, tentacles hanging below (this one is drawn in metres)
-  ellip(mb, [0, 0, 0], [0.15, 0.05, 0.055], { n:10, m:16, shape:p => [p[0], p[1] + 0.02 * Math.cos(p[0] * 10), p[2]], col:(u, v, p) => p[1] > 0.03 ? [0.75, 0.7, 1.0] : fl, anim:() => [0, 0, 0.04, 0] });
+  ellip(mb, [0, 0, 0], [0.15, 0.05, 0.055], { n:10, m:16, shape:p => [p[0], p[1] + 0.02 * Math.cos(p[0] * 10), p[2]], col:(u, v, p) => p[1] > 0.03 ? [0.6, 0.5, 1.0] : fl, anim:() => [0, 0, 0.04, 0] });
   fin(mb, [[-0.12, 0], [-0.06, 0.06], [0.04, 0.075], [0.11, 0.03], [0.13, 0]], { origin:[0, 0.035, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(crest), center:[0, 0.03], anim:() => [0, 0, 0.03, 0] });
   for (let k = 0; k < 40; k++) {
     const r = rng(k + 20), x0 = (r() - 0.6) * 0.18, z0 = (r() - 0.5) * 0.06, L = 1.5 + r() * (k < 6 ? 9 : 2.5);
