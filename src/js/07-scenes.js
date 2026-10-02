@@ -256,14 +256,19 @@ function buildTitanic(A) {
   return mb;
 }
 
+// a herd of sea pigs in its own frame, on flat ground, all facing +x into the current
+function mkSeaPigHerd() {
+  const mb = new MB(), r = rng(23);
+  for (let k = 0; k < 9; k++) {
+    const dx = (r() - 0.5) * 3, dz = (r() - 0.5) * 3, s = 0.12 + r() * 0.06, yaw = (r() - 0.5) * 0.4;
+    const mk = mb.mark(); mergeInto(mb, mkSeaPig());
+    mb.xform(mk, chain(scl(s), rotY(yaw), move([dx, s * 0.2, dz])));
+  }
+  return mb;
+}
 function buildAbyss(A, seed) {
   const mb = new MB(), r = rng(seed);
-  // a herd of sea pigs on the ooze, all facing into the current
-  for (let k = 0; k < 9; k++) {
-    const dx = 3 + (r() - 0.5) * 6, dz = (r() - 0.5) * 6, s = 0.12 + r() * 0.06, yaw = 0.3 + (r() - 0.5) * 0.4;
-    const mk = mb.mark(); const pig = mkSeaPig(); mergeInto(mb, pig);
-    mb.xform(mk, chain(scl(s), rotY(yaw), move([dx, groundAt(A, dx, dz) + s * 0.2, dz])));
-  }
+  for (let k = 0; k < 9; k++) { r(); r(); r(); r(); r(); }   // (the sea pigs now walk: see their own entry)
   for (let k = 0; k < 7; k++) {
     const dx = (r() - 0.5) * 24, dz = (r() - 0.5) * 24, s = 0.1 + r() * 0.12;
     const mk = mb.mark(); mergeInto(mb, mkXenophyophore(k + 3));

@@ -374,6 +374,8 @@ function buildCatalog() {
     parts:[part(() => buildAbyss(BYKEY.abyss.anchor, 23), { mat:[0.95, 0.5, 1, 0.4], sway:[0.02, 0.4, 3, 0] })],
     views:[{ d:[0.5, 0.35, 1], k:0.9, hold:12, drift:0.02, frame:'world' }, { d:[1, 0.15, 0.3], k:0.35, hold:9, drift:0.02, frame:'world', off:[3, 0, 0] }] });
   addObj({ key:'seapig', vsize:2.5, name:'sea pigs', type:'Scotoplanes · a sea cucumber', kind:'floor', floor:[ABYSS[0] + 3, ABYSS[1], 0.05], size:0.15, rad:1.6,
+    motion:{ type:'crawl', R:5, v:0.012, h:0 },
+    parts:[part(mkSeaPigHerd, { mat:[1, 0.5, 1, 0.4], sway:[0.012, 1.4, 25, 0] })],
     fact:'Sea pigs are sea cucumbers that walk on inflated tube feet, grazing the ooze in herds. They tend to face into the current, perhaps to smell fresh food falling from above.',
     views:[{ d:[1, 0.3, 0.6], k:2.0, hold:10, drift:0.02, frame:'world' }, { d:[0.9, 0.12, 0.1], k:0.9, hold:8, drift:0.02, frame:'world' }] });
   addObj({ key:'xeno', name:'xenophyophore', type:'a single cell the size of a fist', kind:'floor', floor:[ABYSS[0] - 1, ABYSS[1] + 8, 0.06], size:0.12, rad:0.1, place:true,
