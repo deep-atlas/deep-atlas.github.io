@@ -167,6 +167,21 @@ function tickSound(dt) {
       what = k === 'bluewhale' ? 'a blue whale calling, almost too low to hear' : 'a humpback singing nearby';
     }
   }
+  // dolphins whistle (each has its own signature whistle, a name of sorts); orcas call in long pulsed screams
+  const dl = near('dolphin', 120);
+  if (dl && due('whistle')) {
+    SND.next.whistle = 1.5 + Math.random() * 3;
+    const loud = clamp(1 - dl.d / 120, 0.15, 1), f = 5000 + Math.random() * 4000;
+    blip({ f0:f, curve:[f * 1.3, f * 0.8, f * 1.5, f * 1.1], dur:0.5 + Math.random() * 0.6, amp:0.018 * loud, att:0.03, pan:dl.pan, dry:false });
+    what = 'dolphins whistling';
+  }
+  const oc = near('orca', 220);
+  if (oc && due('orcaCall')) {
+    SND.next.orcaCall = 3 + Math.random() * 5;
+    const loud = clamp(1 - oc.d / 220, 0.15, 1), f = 900 + Math.random() * 600;
+    blip({ type:'sawtooth', f0:f, curve:[f * 1.6, f * 2.2, f * 1.1], dur:1.1, amp:0.022 * loud, att:0.08, pan:oc.pan, bp:f * 2, q:1.5, dry:false });
+    what = 'orcas calling';
+  }
   // sea lions bark underwater too: short buzzy honks, in runs
   const sl = near('sealion', 60);
   if (sl && due('bark')) {
