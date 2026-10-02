@@ -19,7 +19,7 @@ const VP = new Float32Array(16);
 const LAMP_COL = [0.86, 0.95, 1.0];   // cool white LED floodlights
 function updateUBO(time) {
   const A = ASCII, aspect = (A.cols * A.cw) / (A.rows * A.ch);
-  const f = 1 / Math.tan(CAM.fov / 2), n = Math.max(1e-5, CAM.scale * 2e-4), fa = CAM.far;
+  const f = 1 / Math.tan(CAM.fov / 2), n = Math.max(1e-9, CAM.scale * 2e-4), fa = CAM.far;   // (depth is written linearly, so a tiny near plane costs nothing)
   const P = [f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (fa + n) / (n - fa), -1, 0, 0, 2 * fa * n / (n - fa), 0];
   const R = CAM.right, U = CAM.up, F = CAM.fwd;
   const V = [R[0], U[0], -F[0], 0, R[1], U[1], -F[1], 0, R[2], U[2], -F[2], 0, 0, 0, 0, 1];
@@ -45,7 +45,8 @@ function updateUBO(time) {
   // in the sunlit shallows a photographer's strobe fills in what the water has taken: red returns near the camera,
   // distant things still fade to blue. It hands over to the floodlights as the sunlight fails.
   const fill = SET.strobe === false ? 0 : 0.28 * smooth(70, 12, CAM.depth) * (CAM.depth > 0.3 ? 1 : 0) * LIGHT.level;
-  const lampLev = Math.max(LIGHT.lamp * 0.8, fill);
+  // (floodlights are tuned for close-ups; a wide view of the deep floor gets more of them, as a sub would turn its lights up)
+  const lampLev = Math.max(LIGHT.lamp * 0.8 * clamp(Math.sqrt(Math.max(CAM.scale, 1e-6) / 3), 1, 1.8), fill);
   const lampI = LAMP_COL.map((c, i) => c * lampLev * att[i]), sunI = LIGHT.sun;
   const illum = [0, 1, 2].map(i => sunI[i] + lampI[i]);
   const lf = (lampI[1] + lampI[2]) / Math.max(lampI[1] + lampI[2] + sunI[1] + sunI[2], 1e-9);

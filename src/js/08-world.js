@@ -390,9 +390,10 @@ function buildCatalog() {
     parts:[part(mkGrenadier, { scale:0.7, mat:M_SKIN, ...FISH_SWIM(0.07, 0.6, 1.3, 1.3) })], views:SIDE });
 
   // ---------------- the trenches
-  addObj({ key:'trench', name:'the Mariana Trench', label:'Mariana Trench', type:'where one plate dives under another', kind:'places', at:[79000, 0, 8800], size:400, rad:150,
+  addObj({ key:'trench', name:'the Mariana Trench', label:'Mariana Trench', type:'where one plate dives under another', kind:'places', floor:[77000, 0, 2], size:400, rad:150,
+    parts:[part(() => { const A = BYKEY.trench.anchor, mb = buildHadal(A, 37), r = rng(41); for (let k = 0; k < 40; k++) { const dx = (r() - 0.5) * 36, dz = (r() - 0.5) * 36, sz = 0.3 + r() * 2.2; ellip(mb, [dx, groundAt(A, dx, dz) - sz * 0.3, dz], [sz, sz * 0.55, sz * 0.8], { n:6, m:9, shape:p => [p[0] + Math.sin(p[1] * 6) * sz * 0.08, p[1], p[2]], col:(u, v, p) => Math.sin(p[0] * 4 + p[2] * 3) > 0.4 ? [0.34, 0.3, 0.27] : [0.2, 0.19, 0.18] }); } return mb; }, { mat:[0.95, 0.4, 1, 0.3], sway:[0.02, 0.4, 3, 0] })],
     fact:'The trench forms where the Pacific plate dives beneath the Mariana plate. It runs about 2,550 km; Everest set on its floor would still be under more than 2 km of water.',
-    views:[{ d:[-1, 0.12, 0.25], k:0.3, hold:12, drift:0.01, frame:'world' }, { d:[-0.6, 0.6, 0.6], k:0.25, hold:10, drift:0.01, frame:'world' }] });
+    views:[{ d:[-1, 0.55, 0.35], k:0.03, hold:12, drift:0.02, frame:'world', off:[0, 1, 0] }, { d:[0.4, 0.6, 1], k:0.025, hold:10, drift:0.02, frame:'world', off:[0, 1, 0] }] });
   addObj({ key:'snailfish', vsize:3.5, name:'Mariana snailfish', label:'snailfish', type:'Pseudoliparis swirei', kind:'fish', floor:[75200, 0, 3], size:0.11, rad:2,
     fact:'Among the deepest-living fish known, at home near 8,000 m. Its body is soft and jelly-like with little hard bone, built for a pressure some 800 times that at the surface.',
     parts:[part(mkSnailfish, { inst:schoolCloud(7, 1.6, 0.4, 81, 1, 0.5), school:[1, 0.11, 0.6, 0], mat:[0.85, 0.8, 1, 0.5], ...FISH_SWIM(0.07, 0.7, 1.2, 1.2) })],
