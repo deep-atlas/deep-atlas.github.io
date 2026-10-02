@@ -130,6 +130,20 @@ function tickSound(dt) {
   // what is close by: a sperm whale's clicks get louder and come faster as it closes in (a "creak" of rapid clicks when it charges);
   // the great whales sing louder when you are near them. Sound comes from their side of you.
   const near = (k, R) => { const o = BYKEY[k]; if (!o) return null; const r = vsub(o.pos, CAM.pos), dd = vlen(r); return dd < R ? { o, d:dd, pan:clamp(vdot(vnorm(r), CAM.right), -0.9, 0.9) } : null; };
+  // a reef crackles: snapping shrimp, thousands of them, each snap a collapsing bubble
+  const rf = near('reef', 70) || near('seagrass', 60) || near('mangroves', 60);
+  if (rf && due('snap')) {
+    SND.next.snap = 0.12 + Math.random() * 0.25;
+    const loud = clamp(1 - rf.d / 70, 0.2, 1), n = 2 + Math.floor(Math.random() * 6);
+    for (let i = 0; i < n; i++) noiseBurst({ f:3500 + Math.random() * 4000, q:1.5, amp:0.012 + 0.03 * loud * Math.random(), att:0.001, dur:0.012, delay:Math.random() * 0.12, dry:true });
+    what = 'the crackle of a reef: snapping shrimp';
+  }
+  const vt = near('vents', 60);
+  if (vt && due('vent')) {
+    SND.next.vent = 1.2 + Math.random();
+    noiseBurst({ f:160 + Math.random() * 120, q:3, amp:0.06 * clamp(1 - vt.d / 60, 0.2, 1), att:0.3, dur:2.2, dry:true });
+    what = 'the roar of a black smoker';
+  }
   const sw = near('spermwhale', 260);
   if (sw && due('nearClick')) {
     const loud = clamp(1 - sw.d / 260, 0, 1), charge = sw.o.charging;
