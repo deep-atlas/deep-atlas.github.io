@@ -198,7 +198,7 @@ function addPlaces2() {
     views:[{ d:[0.5, 0.25, 1], k:0.24, hold:12, drift:0.025, frame:'world', off:[0, 1.5, 0] }, { d:[-0.8, 0.12, 0.5], k:0.12, hold:10, drift:0.025, frame:'world', off:[3, 1, -2] }, { d:[0.3, 0.15, 1], k:0.3, hold:9, drift:0.02, frame:'world', off:[0, 6, 0] }] });
   addObj({ key:'roughy', name:'orange roughy', type:'Hoplostethus atlanticus', kind:'fish', place:true, floor:[SM[0], SM[1], 7], size:0.35, vsize:10, rad:7,
     fact:'They gather over seamounts to feed and spawn, and can live for 150 years or more, not breeding until they are about 30. Fished hard from the 1980s, many populations collapsed before anyone knew how slowly they grow.',
-    views:[{ d:[0.3, 0.2, 1], k:1.1, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.1, 0.3], k:0.35, hold:9, drift:0.03, frame:'world' }] });
+    views:[{ d:[0.3, 0.2, 1], k:1.1, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.1, 0.3], k:0.95, hold:9, drift:0.03, frame:'world' }] });
   addObj({ key:'seep', name:'cold seep & brine pool', label:'brine pool', type:'a lake at the bottom of the sea', kind:'places', floor:[SEEP[0], SEEP[1], 0], size:20, rad:13,
     fact:'Brine seeping up through ancient salt beds is so much denser than seawater that it pools on the floor as a lake, with a shore and waves of its own. Mussels and tube worms line its edge, living on bacteria fed by methane; animals that swim into the brine can die there.',
     parts:[part(() => buildSeep(BYKEY.seep.anchor, 41), { mat:[1, 0.3, 1, 1.4], sway:[0.15, 0.7, 0.8, 0] })],
