@@ -290,6 +290,22 @@ function mkPyrosome() {
   }
   return mb;
 }
+function mkScalyFoot() {
+  // a cluster of scaly-foot snails (Chrysomallon squamiferum) on the vent rock, in metres: each about 4 cm, the foot
+  // armoured with overlapping scales of iron sulphide, the shell's outer layer iron too
+  const mb = new MB(), r = rng(4545), iron = [0.3, 0.3, 0.33], sheen = [0.75, 0.72, 0.65], shell = [0.55, 0.45, 0.35];
+  for (let k = 0; k < 14; k++) {
+    const a = r() * TAU, d = Math.sqrt(r()) * 0.09, c = [Math.cos(a) * d, 0.006, Math.sin(a) * d], yaw = r() * TAU, s = 0.9 + r() * 0.4;
+    const fw = [Math.cos(yaw), 0, Math.sin(yaw)], sd = [-fw[2], 0, fw[0]];
+    const at = (x, y, z) => vadd(c, vadd(vmul(fw, x * s), vadd([0, y * s, 0], vmul(sd, z * s))));
+    // the shell: a few whorls coiling up off the back
+    for (let w = 0; w < 4; w++) { const rr = 0.014 * Math.pow(0.7, w); ellip(mb, at(-0.004 - w * 0.004, 0.012 + w * 0.006, 0.002 * w), [rr, rr * 0.8, rr], { n:4, m:7, col:fc(w ? shell : sheen) }); }
+    // the foot, and the scales tiled along its sides
+    ellip(mb, at(0.006, 0.0, 0), [0.016, 0.006, 0.011], { n:4, m:8, col:fc(iron) });
+    for (let j = 0; j < 6; j++) for (const z of [1, -1]) ellip(mb, at(0.016 - j * 0.006, 0.002, z * 0.011), [0.004, 0.0035, 0.002], { n:2, m:4, col:fc(j % 2 ? iron : sheen) });
+  }
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -323,6 +339,10 @@ function addDeepFolk(VENTS) {
     fact:'First found at vents in the South Pacific in 2005. Yeti crabs farm bacteria on the bristles of their arms and chest, waving them through the vent’s chemical-rich water, then comb the bacteria off with their mouthparts to eat.',
     parts:[part(mkYetiCrabs, { scale:1, mat:[1, 0.5, 1, 0.4], sway:[0.006, 1.5, 10, 0] })],
     views:[{ d:[0.6, 0.55, 1], k:1.8, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.25, 0.3], k:1.3, hold:9, drift:0.025, frame:'world' }] });
+  addObj({ key:'scalyfoot', name:'scaly-foot snails', type:'Chrysomallon squamiferum · armoured with iron', kind:'floor', floor:[VENTS[0] - 2, VENTS[1] - 5, 0.04], size:0.05, vsize:0.4, rad:0.3,
+    fact:'The only animal known to build its armour from iron: its foot is covered in hundreds of scales of iron sulphide, drawn from the vent water. It does not need to hunt: bacteria living in a swollen gland in its throat make its food from the vent’s chemicals.',
+    parts:[part(mkScalyFoot, { mat:[1, 0.5, 1, 1.4] })],
+    views:[{ d:[0.5, 0.6, 1], k:0.65, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.3, 0.3], k:0.5, hold:9, drift:0.025, frame:'world' }] });
   addObj({ key:'spidercrab', name:'Japanese spider crab', type:'the widest legs of any arthropod · Macrocheira kaempferi', kind:'floor', floor:[11150, 200, 0.0], size:3.7, rad:2,
     fact:'Its legs can span about 3.7 m, the widest of any arthropod. It lives on the floor off Japan between about 50 and 600 m down and may live a hundred years.',
     motion:{ type:'crawl', R:3, v:0.04, h:0 },
