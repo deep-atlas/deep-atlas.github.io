@@ -306,6 +306,16 @@ function mkScalyFoot() {
   }
   return mb;
 }
+function mkFireflySquid() {
+  // Watasenia scintillans, about 7 cm: a small squid studded with hundreds of tiny blue light organs, and three big ones at the
+  // tip of each of the fourth pair of arms
+  const mb = mkSquid({ mantle:0.45, mw:0.09, arms:0.3, tent:0.3, fin:0.08, finLen:0.14, eye:0.03, skin:[0.3, 0.5, 0.9, 0.6], dark:[0.2, 0.45, 1.0, 1.2] });
+  const r = rng(6262);
+  for (let k = 0; k < 50; k++) { const t = r(), a = r() * TAU, x = 0.5 - t * 0.45, w = 0.09 * Math.pow(Math.sin(Math.min(1, t * 1.25) * PI / 2), 0.7);
+    ellip(mb, [x, Math.cos(a) * w * 1.04, Math.sin(a) * w * 1.04], [0.018, 0.018, 0.018], { n:2, m:4, col:fc([0.2, 0.55, 1.0, 3.0]) }); }
+  for (const sz of [1, -1]) ellip(mb, [0.5 - 0.45 - 0.33, -0.02, sz * 0.04], [0.025, 0.025, 0.025], { n:3, m:6, col:fc([0.3, 0.7, 1.0, 4.0]) });
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -325,6 +335,10 @@ function addDeepFolk(VENTS) {
     motion:{ type:'hover', amp:0.3, turn:0.25, pitch:-0.15 },
     parts:[part(mkPyrosome, { scale:0.5, mat:[0.55, 0.9, 0.5, 0.5], trans:true, sway:[0.01, 0.6, 4, 0] })],
     views:[{ d:[0.25, 0.15, 1], k:2.2, hold:10, drift:0.02 }, { d:[-1, 0.2, 0.3], k:2, hold:8, drift:0.02 }] });
+  addObj({ key:'fireflysquid', name:'firefly squid', type:'Watasenia scintillans · out only at night', kind:'cephs', at:[6200, 1600, 6], size:0.07, vsize:2, rad:2,
+    fact:'By day it lives 200 to 400 m down; at night it rises to feed, and in spring millions gather to spawn in the shallows of Toyama Bay, Japan, lighting the water blue. Its hundreds of light organs can flash, and the three on the tip of each of two arms are bright enough to dazzle.',
+    parts:[part(mkFireflySquid, { inst:schoolCloud(500, 1.6, 1.1, 627, 1, 0.3), school:[1, 0.07, 1, 0], mat:[1, 0.4, 2.2, 0.5], shy:6, pulse:[0.5, 1.4, 0, 0], sway:[0.01, 2, 20, 0] })],
+    views:[{ d:[0.3, 0.1, 1], k:0.75, hold:10, drift:0.02, frame:'world' }, { d:[1, -0.3, 0.3], k:0.35, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },

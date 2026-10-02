@@ -46,7 +46,7 @@ const TOURS = [
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
     stops:['reef', 'blacktip', 'snappers', 'grouper', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'gardeneels', 'goby', 'blueringed', 'flounder', 'stingray', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'barracuda', 'kelp', 'sealion', 'blacksmith', 'garibaldi', 'seaotter'] },
   { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',
-    stops:['reef', 'flashlight', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
+    stops:['reef', 'flashlight', 'fireflysquid', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
     stops:['sargassum', 'sargassumfish', 'mangroves', 'boxjelly', 'seagrass', 'dugong', 'seadragon', 'seaice', 'narwhal', 'beluga', 'lionsmane', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
@@ -117,7 +117,7 @@ function onViewDone(o) {
 // ---- going somewhere because the user asked
 function userGo(o, vi = 0) {
   if (!o) return;
-  if (o.key === 'flashlight' && night() < 0.45) { TOD.min = 22 * 60 + 30; TOD.live = false; SET.clock = '0'; saveSettings(); syncSettings(); renderTime(); toast('flashlight fish only come out at night: the clock is set to 22:30', 4000); }
+  if (NIGHT_ONLY.includes(o.key) && night() < 0.45) { TOD.min = 22 * 60 + 30; TOD.live = false; SET.clock = '0'; saveSettings(); syncSettings(); renderTime(); toast(`${o.name} only come out at night: the clock is set to 22:30`, 4000); }
   if (JOURNEY.on) endJourney(true);
   if (o.key === 'nautile') { startRide(); return; }
   stopRide(true);
@@ -338,7 +338,7 @@ function renderAtlas() {
     r.innerHTML = `<span class="an"></span><span class="ad"></span>`;
     r.firstChild.textContent = o.name;
     if (!SEEN.has(o.key)) { const i = document.createElement('i'); i.textContent = 'new'; r.firstChild.appendChild(i); }
-    if (o.key === 'flashlight') { const i = document.createElement('i'); i.textContent = 'night'; i.style.color = 'var(--sub)'; r.firstChild.appendChild(i); }
+    if (NIGHT_ONLY.includes(o.key)) { const i = document.createElement('i'); i.textContent = 'night'; i.style.color = 'var(--sub)'; r.firstChild.appendChild(i); }
     if (o.react) { const i = document.createElement('i'); i.textContent = 'reacts'; i.title = 'disturb it to see what it does'; i.style.color = 'var(--sub)'; r.firstChild.appendChild(i); }
     // (the depth, and for animals their length too: the two numbers that matter most here)
     r.lastChild.textContent = ATL.sort === 'size' ? fmtLen(o.size) : (o.kind === 'places' ? fmtDepth(depthOf(o)) : `${fmtLen(o.size)} · ${fmtInt(depthOf(o))} m`);
@@ -749,7 +749,7 @@ function addSub() {
     parts:[part(mkNautile, { mat:[1, 0.3, 1.6, 0.9] })],
     views:[{ d:[0.7, 0.3, 1], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.05, 0.25], k:1.2, hold:8, drift:0.02 }, { d:[-1, 0.4, 0.6], k:1.5, hold:8, drift:0.02 }] });
   // its route: everything it can reach, down to its rated 6,000 m (the trenches are beyond it)
-  const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'seaotter', 'garibaldi', 'blacktip', 'snappers', 'flashlight', 'gardeneels', 'stingray', 'seaice', 'narwhal', 'mangroves', 'seagrass', 'dugong', 'sargassum', 'sargassumfish', 'grouper', 'blueringed', 'bubblenet', 'beluga', 'lionsmane', 'boxjelly', 'seadragon', 'sealion', 'goby', 'barracuda', 'leatherback'];
+  const SHALLOWS = ['surface', 'manowar', 'noctiluca', 'reef', 'clownfish', 'seahorse', 'octopus', 'bluetang', 'kelp', 'turtle', 'lionfish', 'parrotfish', 'moray', 'flyingfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'seaotter', 'garibaldi', 'blacktip', 'snappers', 'flashlight', 'gardeneels', 'stingray', 'seaice', 'narwhal', 'mangroves', 'seagrass', 'dugong', 'sargassum', 'sargassumfish', 'grouper', 'blueringed', 'bubblenet', 'beluga', 'lionsmane', 'boxjelly', 'seadragon', 'sealion', 'goby', 'barracuda', 'leatherback', 'fireflysquid', 'flounder'];
   SUB.stops = byDepth().filter(o => o.kind !== 'micro' && o.size < 200 && o.kind !== 'subs' && o.key !== 'trench' && !SHALLOWS.includes(o.key) && depthOf(o) < 6000
     && floorDepth(o.pos[0], o.pos[2]) > 15);   // (nor into water too shallow for it)
 }
