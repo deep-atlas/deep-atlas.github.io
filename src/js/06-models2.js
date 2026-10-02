@@ -5,7 +5,7 @@ function jelly(o) {
   const mb = new MB(), R = 0.5, Hb = (o.h || 0.5) * 1.0;
   loft(mb, { n:16, m:28, capEnd:false,
     sec:t => { if (o.cone) { const w = R * 0.92 * Math.pow(t, 0.62) * (1 + 0.12 * t * t); return { x:Hb * (1 - t) - Hb * 0.4, y:0, w, h:w, e:2 }; }
-      const a = t * PI / 2 * (o.flare || 1.08); return { x:Hb * Math.cos(a) - Hb * 0.4, y:0, w:R * Math.sin(Math.min(a, PI / 2)) * (1 + (o.flare ? 0.1 * t * t : 0)), h:R * Math.sin(Math.min(a, PI / 2)) * (1 + (o.flare ? 0.1 * t * t : 0)), e:2 }; },
+      const a = t * PI / 2 * (o.flare || 1.08); return { x:Hb * Math.cos(a) - Hb * 0.4, y:0, w:R * Math.sin(Math.min(a, PI / 2)) * (1 + (o.flare ? 0.1 * t * t : 0)), h:R * Math.sin(Math.min(a, PI / 2)) * (1 + (o.flare ? 0.1 * t * t : 0)), e:o.e || 2 }; },
     col:(t, u, p) => {
       if (o.pattern) { const c = o.pattern(t, u, p); if (c) return c; }
       return o.bell;

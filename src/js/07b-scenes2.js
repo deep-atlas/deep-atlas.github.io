@@ -223,6 +223,11 @@ function addPlaces2() {
     parts:[part(() => buildMangroves(BYKEY.mangroves.anchor, 61), { mat:[1, 0.3, 1, 0.3] }),
       part(mkAnthias, { inst:schoolCloud(90, 8, 0.3, 66, 1, 0.4), school:[1, 0.08, 1, 0], off:[0, 0.5, 0], tint:[0.6, 0.7, 0.55], mat:M_SKIN, shy:16, ...FISH_SWIM(0.07, 3, 0.9, 1.8) })],
     views:[{ d:[0.6, -0.1, 1], k:0.2, hold:12, drift:0.02, frame:'world', off:[0, 0.4, 0] }, { d:[0.6, 0.35, 1], k:0.75, hold:10, drift:0.015, frame:'world', off:[0, 3, 0], air:true }, { d:[1, 0.02, 0.2], k:0.12, hold:9, drift:0.02, frame:'world', off:[2, 0.2, 2] }] });
+  addObj({ key:'boxjelly', name:'box jellyfish', type:'sea wasp · Chironex fleckeri', kind:'jellies', at:[MANG[0] + 115, MANG[1], 0.9], size:0.25, vsize:0.6, rad:0.6,
+    fact:'One of the most venomous animals alive: its tentacles carry millions of stinging cells. Unlike most jellyfish it swims fast and sees: 24 eyes in four clusters, some with lenses, steer it along the channels off the mangroves, where it hunts shrimp and small fish.',
+    motion:{ type:'drift', amp:0.25, tilt:0.35 },
+    parts:[part(mkBoxJelly, { scale:0.25, mat:[0.4, 0.8, 0.2, 0.4], trans:true, pulse:[0.16, 0.9, 0, 0], sway:[0.05, 0.7, 4, 0] })],
+    views:[{ d:[0.3, 0.05, 1], k:2.6, hold:10, drift:0.02, frame:'world', off:[0, -0.15, 0] }, { d:[0.5, -0.3, 0.8], k:2.4, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'seagrass', name:'seagrass meadow', label:'seagrass', type:'turtle grass · a flowering plant of the sea', kind:'places', floor:[GRASS[0], GRASS[1], 0], size:50, rad:26,
     fact:'Seagrasses are flowering plants that returned to the sea about 100 million years ago; they even pollinate underwater. Meadows cover a fraction of a percent of the seafloor but bury a tenth of the ocean’s carbon each year.',
     parts:[part(() => buildSeagrass(BYKEY.seagrass.anchor, 71), { mat:[1, 0.2, 1, 0.2], sway:[0.12, 0.9, 2, 0] })],

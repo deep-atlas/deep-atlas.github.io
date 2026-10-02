@@ -257,6 +257,25 @@ function mkLionsMane() {
   }
   return mb;
 }
+function mkBoxJelly() {
+  // box jellyfish (Chironex), one unit = the bell's width: a clear, squarish bell, a cluster of eyes on each of its four sides,
+  // and from each corner a fleshy arm (pedalium) carrying a bunch of long tentacles
+  const mb = jelly({ h:0.9, bell:[0.8, 0.88, 0.95], flare:1.0, e:3.2,
+    pattern:(t, u) => (t > 0.55 && t < 0.62 && fract(u * 4 + 0.125) < 0.06) ? [0.15, 0.12, 0.1] : null });
+  const rimX = -0.9 * 0.4;
+  for (let k = 0; k < 4; k++) {
+    const a = (k + 0.5) / 4 * TAU, cy = Math.cos(a) * 0.5, cz = Math.sin(a) * 0.5, base = [rimX + 0.05, cy, cz];
+    tube(mb, { n:4, m:5, path:t => [base[0] - t * 0.18, cy * (1 - t * 0.15), cz * (1 - t * 0.15)], r:t => 0.04 * (1 - t * 0.4), col:fc([0.75, 0.82, 0.9]) });
+    for (let j = 0; j < 8; j++) {
+      const sp = (j - 3.5) * 0.02, ph = j * 1.3 + k;
+      tube(mb, { n:18, m:3, path:t => [base[0] - 0.18 - t * (2.2 + j * 0.15), cy * 0.85 + sp * Math.sin(a) + Math.sin(t * 5 + ph) * 0.06 * t, cz * 0.85 - sp * Math.cos(a) + Math.cos(t * 4 + ph) * 0.06 * t],
+        r:t => 0.006 * (1 - t * 0.5), col:fc([0.8, 0.85, 0.95]), anim:t => [0, 0, t * 0.5, 0.5 - t * 0.4] });
+    }
+  }
+  // the eye clusters (rhopalia), one on each flat side
+  for (let k = 0; k < 4; k++) { const a = k / 4 * TAU; ellip(mb, [rimX + 0.12, Math.cos(a) * 0.47, Math.sin(a) * 0.47], [0.03, 0.03, 0.03], { n:3, m:6, col:fc([0.12, 0.1, 0.08]) }); }
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
