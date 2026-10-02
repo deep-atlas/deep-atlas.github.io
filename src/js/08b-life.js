@@ -294,6 +294,33 @@ function addLife() {
   set('giantsquid', { post:squidPost });
   set('humpback', { post:breachPost });
   set('turtle', { post:breathePost, breatheT:120, readout:() => BYKEY.turtle.breathing ? 'up at the surface for a breath' : 'can stay under for hours when resting, minutes when active' });
+  // a line of numbers for the animals that have a striking one
+  const STAT = {
+    bluewhale:'up to 30 m and 190 t · heart ~180 kg · calls heard 1,000 km away',
+    spermwhale:'dives to 2,000 m+ · holds its breath ~90 min · brain 8 kg, the largest of any animal',
+    beakedwhale:'record dive 2,992 m · record breath-hold 3 h 42 min',
+    humpback:'flippers up to 5 m · migrates ~8,000 km each way',
+    greenlandshark:'lives 270 to ~400 years · grows ~1 cm a year · cruises at ~1 km/h',
+    sailfish:'bursts often quoted at 100 km/h; measured strikes ~30 km/h',
+    greatwhite:'up to 6 m · senses a billionth of a volt · bursts to ~40 km/h',
+    whaleshark:'up to ~18 m · filters ~6,000 litres of water an hour',
+    colossal:'eyes ~27 cm across · ~495 kg · swivelling hooks on its arms',
+    giantsquid:'up to ~12 m · eyes up to 27 cm · first filmed alive in 2012',
+    mantisshrimp:'strike ~23 m/s · 12 to 16 kinds of colour receptor (we have 3)',
+    coelacanth:'lineage ~400 million years · lives ~100 years · pregnancy ~5 years',
+    frilledshark:'pregnancy up to 3.5 years · ~300 three-pronged teeth',
+    oarfish:'up to ~8 m long · hangs upright in the water',
+    narwhal:'tusk up to 3 m · dives below 1,500 m under the ice',
+    seaotter:'up to ~1 million hairs per square inch · eats ~25% of its weight a day',
+    orca:'up to ~9 m · pods with their own dialects · bursts to ~50 km/h',
+    blobfish:'lives 600 to 1,200 m down · flesh a little less dense than water',
+    tubeworms:'up to 2 m · grows up to 85 cm a year · no mouth, no gut',
+    amphipods:'lives at 10,900 m · pressure ~1,100 atmospheres',
+    snailfish:'deepest fish filmed ~8,336 m · soft body, little hard bone',
+    dumbo:'deepest octopus known, to ~7,000 m',
+    seamount:'black corals dated at over 4,000 years',
+  };
+  for (const [k, v] of Object.entries(STAT)) if (v && BYKEY[k] && !BYKEY[k].readout) BYKEY[k].readout = () => v;
   set('reef', { readout:() => night() > 0.5 ? 'night: the corals are spawning, bundles of eggs and sperm rising to the surface\n(on real reefs this happens a few nights a year, just after a full moon)' : 'day: the coral polyps are pulled in; at night they open to feed' });
   const bb = BYKEY.baitball;
   if (bb) {
