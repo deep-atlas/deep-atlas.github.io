@@ -38,7 +38,10 @@ function triggerReact(o) {
   o.reactT = o.react.dur; o.reactAge = 0; o.reactCool = o.react.dur + 6;
   toast(o.react.text, 5200);
 }
+// animals that only come out at night
+function tickNightLife() { const f = BYKEY.flashlight; if (f) f.hidden = night() < 0.45; }
 function tickReactions(dt) {
+  tickNightLife();
   for (const o of OBJS) {
     if (!o.react) continue;
     if (o.reactCool > 0) o.reactCool -= dt;

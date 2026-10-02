@@ -45,6 +45,8 @@ const TOURS = [
     stops:['copepod', 'krill', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
     stops:['reef', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'kelp', 'garibaldi', 'seaotter'] },
+  { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',
+    stops:['reef', 'flashlight', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
     stops:['mangroves', 'seagrass', 'dugong', 'seaice', 'narwhal', 'kelp', 'seep', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
@@ -64,6 +66,7 @@ function tourStops(t) {
 function startTour(id, i = 0) {
   const t = TOURS.find(t => t.id === id); if (!t) return;
   if (t.journey) { startJourney(); renderTours(); return; }
+  if (t.night && night() < 0.5) { TOD.min = 22 * 60 + 30; TOD.live = false; SET.clock = '0'; saveSettings(); syncSettings(); renderTime(); toast('a night dive: the clock is set to 22:30', 3500); }
   endJourney(true);
   stopRide(true);
   TOUR.id = id; TOUR.list = (TOUR.last && TOUR.last.id === id && TOUR.last.list) ? TOUR.last.list : tourStops(t);
@@ -108,6 +111,7 @@ function onViewDone(o) {
 // ---- going somewhere because the user asked
 function userGo(o, vi = 0) {
   if (!o) return;
+  if (o.key === 'flashlight' && night() < 0.45) { TOD.min = 22 * 60 + 30; TOD.live = false; SET.clock = '0'; saveSettings(); syncSettings(); renderTime(); toast('flashlight fish only come out at night: the clock is set to 22:30', 4000); }
   if (JOURNEY.on) endJourney(true);
   if (o.key === 'nautile') { startRide(); return; }
   stopRide(true);

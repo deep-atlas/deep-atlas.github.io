@@ -108,6 +108,13 @@ function mkOrca() {
     pect:{ at:0.22, len:0.16, w:0.09, down:0.65, back:0.45, y:-0.55, col:black, pts:[[0, 0.06], [0, -0.06], [0.1, -0.09], [0.16, -0.05], [0.14, 0.02], [0.07, 0.06]] } });
 }
 
+function mkFlashlightFish() {
+  // Anomalops: a small dark fish with a big light organ under each eye, full of glowing bacteria; it blinks them by rolling them down
+  const black = [0.06, 0.06, 0.08];
+  return fish({ H:0.15, W:0.07, tm:0.3, nose:0.4, ped:0.18, bodyLen:0.8, back:black, belly:[0.1, 0.1, 0.12], eye:[0.1, 0.35, 0.04], eyeCol:[0.05, 0.05, 0.06], eyeRing:[0.3, 0.3, 0.35],
+    tail:'fork', tailH:0.12, dorsal:[{ at:0.3, len:0.15, h:0.08 }, { at:0.55, len:0.2, h:0.06 }], anal:[{ at:0.6, len:0.18, h:0.06 }], pect:{ at:0.24, len:0.1, w:0.05 },
+    extra:(mb) => { for (const sz of [1, -1]) ellip(mb, [0.42, -0.02, sz * 0.05], [0.04, 0.025, 0.02], { n:4, m:8, col:fc([0.55, 1.0, 0.9, 5]), anim:p => swimA(p) }); } });
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -137,6 +144,10 @@ function addShallows(REEF) {
     fact:'California’s state marine fish, bright orange and fiercely territorial. The male clears a nest of red algae and defends it, clicking loudly at intruders, even divers.',
     motion:{ type:'circle', R:1.2, v:0.25, bob:0.2, bank:0.1 },
     parts:[part(mkGaribaldi, { scale:0.3, mat:M_SKIN, ...FISH_SWIM(0.06, 2, 1, 1.8) })], views:SIDE });
+  addObj({ key:'flashlight', name:'flashlight fish', type:'Anomalops katoptron · out only at night', kind:'fish', floor:[REEF[0] - 6, REEF[1] + 6, 2.5], size:0.3, vsize:5, rad:3,
+    fact:'By day it hides in caves on the reef. At night schools come out, flashing the light organs under their eyes, glowing with bacteria, on and off to find food, signal to each other and confuse hunters.',
+    parts:[part(mkFlashlightFish, { inst:schoolCloud(40, 2.5, 1, 303, 1, 0.4), school:[1, 0.3, 1.4, 0], mat:M_SKIN, ...FISH_SWIM(0.05, 2.5, 0.9, 1.8) })],
+    views:[{ d:[0.3, 0.2, 1], k:1.1, hold:10, drift:0.03, frame:'world' }, { d:[1, 0.1, 0.3], k:0.6, hold:9, drift:0.03, frame:'world' }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },
