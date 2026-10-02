@@ -44,7 +44,7 @@ const TOURS = [
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
     stops:['copepod', 'krill', 'penguin', 'seaangel', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
-    stops:['reef', 'blacktip', 'snappers', 'grouper', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'puffer', 'gardeneels', 'goby', 'blueringed', 'flounder', 'stingray', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'barracuda', 'kelp', 'sealion', 'blacksmith', 'garibaldi', 'seaotter'] },
+    stops:['reef', 'blacktip', 'snappers', 'grouper', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'xmastree', 'puffer', 'gardeneels', 'goby', 'blueringed', 'flounder', 'stingray', 'moray', 'octopus', 'bluetang', 'turtle', 'manta', 'barracuda', 'kelp', 'sealion', 'blacksmith', 'garibaldi', 'seaotter'] },
   { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',
     stops:['reef', 'flashlight', 'fireflysquid', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
@@ -908,7 +908,7 @@ function tickIdle(dt) {
 // ---- every frame
 function tick(dt) {
   tickTime(dt);
-  if (RIDE.on) { for (const o of OBJS) if (o.motion.type !== 'still' || o.motion.fn || !o._placed) { moveObj(o, simTime); o._placed = true; } updateRide(dt); }
+  if (RIDE.on) { for (const o of OBJS) if (o.motion.type !== 'still' || o.motion.fn || o.post || !o._placed) { moveObj(o, simTime); o._placed = true; } updateRide(dt); }
   else updateCamera(dt);
   if (RIDE.on && RIDE.cockpit) CAM.lampD = 8;
   else if (VIEW.mode === 'free' || VIEW.mode === 'flight') CAM.lampD = Math.max(CAM.scale, 2); else CAM.lampD = CAM.scale;

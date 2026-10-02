@@ -148,7 +148,7 @@ const FREE_DEPTH = { target:null, dragging:false };
 
 // ---- every frame
 function updateCamera(dt) {
-  for (const o of OBJS) if (o.motion.type !== 'still' || o.motion.fn || !o._placed) { moveObj(o, simTime); o._placed = true; }
+  for (const o of OBJS) if (o.motion.type !== 'still' || o.motion.fn || o.post || !o._placed) { moveObj(o, simTime); o._placed = true; }
   VIEW.manualT += dt;
   if (VIEW.mode === 'journey') { updateJourney(dt); return; }
   if (VIEW.mode === 'flight') { updateFlight(dt); return; }

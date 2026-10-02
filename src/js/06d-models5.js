@@ -376,6 +376,27 @@ function mkFlounder() {
   for (const [x, z] of [[0.3, 0.05], [0.24, -0.04]]) { tube(mb, { n:2, m:6, path:t => [x, 0.04 + t * 0.03, z], r:0.025, col:fc(sand) }); ellip(mb, [x, 0.075, z], [0.022, 0.022, 0.022], { n:5, m:8, col:(u, v, p) => p[1] > 0.085 ? [0.02, 0.02, 0.02] : [0.55, 0.5, 0.4] }); }
   return mb;
 }
+function mkXmasBoulder() {
+  // a boulder of brain coral, in metres, about 40 cm across
+  const mb = new MB();
+  ellip(mb, [0, 0.05, 0], [0.22, 0.15, 0.2], { n:10, m:16, shape:p => [p[0], Math.max(p[1], -0.02), p[2]], col:(u, v, p) => Math.sin(p[0] * 70 + Math.sin(p[2] * 50) * 2) > 0.2 ? [0.3, 0.26, 0.15] : [0.2, 0.17, 0.1] });
+  return mb;
+}
+function mkXmasWorms() {
+  // Christmas tree worms (Spirobranchus): each shows two spiral crowns of feeding tentacles, like little fir trees, from a tube
+  // bored into the coral; every one a different colour
+  const mb = new MB(), r = rng(1225), cols = [[1.0, 0.3, 0.2], [0.2, 0.45, 1.0], [1.0, 0.85, 0.2], [1.0, 0.55, 0.15], [0.95, 0.95, 0.95], [0.75, 0.3, 0.9], [0.3, 0.85, 0.5]];
+  for (let k = 0; k < 9; k++) {
+    const a = r() * TAU, el = 0.7 + r() * 0.75, n = [Math.cos(a) * Math.cos(el), Math.sin(el), Math.sin(a) * Math.cos(el)];
+    const base = [n[0] * 0.21, 0.05 + n[1] * 0.145, n[2] * 0.19], col = cols[k % cols.length];
+    for (const side of [1, -1]) {
+      const c0 = vadd(base, [-n[2] * side * 0.02, 0, n[0] * side * 0.02]);
+      // a spiral cone, wide at the bottom: a ribbon wound five times round the axis
+      tube(mb, { n:40, m:3, path:t => { const ang = t * TAU * 5 + side, rr = 0.024 * (1 - t); return vadd(c0, [Math.cos(ang) * rr, 0.004 + t * 0.055, Math.sin(ang) * rr]); }, r:t => 0.005 * (1 - t * 0.5), col:fc(col), anim:t => [0, 0, t * 0.2, 0] });
+    }
+  }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -467,6 +488,15 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.005, turn:0.05 },
     parts:[part(mkFlounder, { scale:0.4, mat:[1, 0.3, 1, 0.4], swim:[0.02, 0.6, 0.8, 0], swim2:[0, 2, 0, 0] })],
     views:[{ d:[0.3, 0.9, 0.5], k:2.0, hold:10, drift:0.02 }, { d:[1, 0.3, 0.4], k:2.0, hold:9, drift:0.02 }] });
+  addObj({ key:'xmastree', name:'Christmas tree worms', type:'Spirobranchus giganteus', kind:'floor', floor:[REEF[0] + 2.5, REEF[1] - 3.2, 0], size:0.08, vsize:0.4, rad:0.3,
+    fact:'Each worm lives in a tube it bores into living coral, and shows only two spiral crowns of feathery tentacles that catch plankton and serve as gills. A shadow or a ripple and they snap back into the tube in a split second, sealing it with a lid.',
+    // they vanish into their tubes when you come close, and slowly come out again
+    post:o => { const close = vlen(vsub(vadd(o.pos, [0, 0.18, 0]), CAM.pos)) < 0.12 && VIEW.mode !== 'flight'; o.hide = clamp((o.hide || 0) + (close ? 0.25 : -0.006), 0, 1);
+      o.parts[1].scale = lerp(1, 0.05, o.hide); o.parts[1].off = [0, -0.03 * o.hide, 0];
+      if (o.hide > 0.95 && !o._told) { o._told = true; toast('Snap: the Christmas tree worms have shot back into their tubes. Keep still a while and they will come out again.', 4500); }
+      if (o.hide < 0.1) o._told = false; },
+    parts:[part(mkXmasBoulder, { mat:[1, 0.2, 1, 0.3] }), part(mkXmasWorms, { mat:M_SKIN, sway:[0.004, 1.2, 40, 0] })],
+    views:[{ d:[0.4, 0.5, 1], k:0.75, hold:10, drift:0.025, off:[0, 0.17, 0] }, { d:[1, 0.35, 0.3], k:0.7, hold:9, drift:0.025, off:[0, 0.17, 0] }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
