@@ -276,6 +276,20 @@ function mkBoxJelly() {
   for (let k = 0; k < 4; k++) { const a = k / 4 * TAU; ellip(mb, [rimX + 0.12, Math.cos(a) * 0.47, Math.sin(a) * 0.47], [0.03, 0.03, 0.03], { n:3, m:6, col:fc([0.12, 0.1, 0.08]) }); }
   return mb;
 }
+function mkPyrosome() {
+  // Pyrosoma: a colony of thousands of tiny filter-feeders (zooids) living as one closed-ended tube, one unit long, open end at -x;
+  // each zooid pumps water through the wall into the tube, and the outflow jets the whole colony slowly along
+  const mb = new MB(), wall = [0.95, 0.75, 0.8];
+  const R = t => 0.13 * Math.pow(Math.sin(Math.min(1, t * 1.6 + 0.12) * PI / 2), 0.8) * (1 - 0.1 * t);
+  loft(mb, { n:24, m:18, capEnd:false, sec:t => ({ x:0.5 - t, y:0, w:R(t), h:R(t), e:2 }), col:fc(wall), anim:t => [0, 0, 0, 0] });
+  // the zooids, studding the wall, each with its pair of light organs
+  const r = rng(321);
+  for (let k = 0; k < 140; k++) {
+    const t = 0.03 + r() * 0.95, a = r() * TAU, rr = R(t) * 1.02, p = [0.5 - t, Math.cos(a) * rr, Math.sin(a) * rr], n = [0, Math.cos(a), Math.sin(a)];
+    tube(mb, { n:2, m:4, path:u => vmad(p, vnorm(vadd(n, [0.35, 0, 0])), u * 0.035), r:u => 0.012 * (1 - u * 0.6), col:u => u > 0.7 ? [0.4, 1.0, 0.85, 0.6] : wall });
+  }
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -290,6 +304,11 @@ function addDeepFolk(VENTS) {
     fact:'One eye is twice the size of the other. It swims tilted, the big eye looking up for the silhouettes of prey against the last faint daylight, the small one looking down for flashes of living light.',
     motion:{ type:'hover', amp:0.05, turn:0.4 },
     parts:[part(mkCockeyedSquid, { scale:0.3, mat:M_SKIN, pulse:[0.6, 0.3, 0, 0], sway:[0.02, 0.5, 4, 0], swim2:[0, 2, 0.2, 0.35] })], views:[{ d:[0.2, 0.3, 1], k:1.3, hold:10, drift:0.025 }, { d:[-0.5, 0.2, 0.8], k:1.4, hold:8, drift:-0.03 }] });
+  addObj({ key:'pyrosome', name:'pyrosome', type:'a glowing colony · Pyrosoma atlanticum', kind:'jellies', at:[15400, 500, 550], size:0.5, rad:0.4,
+    fact:'Not one animal but thousands of tiny clones sharing a tube, each pumping water through the wall to feed. Touch it and it glows: one zooid lights up, its neighbours see the light and answer, and a wave of blue-green light runs along the colony. Some kinds grow to over 10 m long.',
+    motion:{ type:'hover', amp:0.3, turn:0.25, pitch:-0.15 },
+    parts:[part(mkPyrosome, { scale:0.5, mat:[0.55, 0.9, 0.5, 0.5], trans:true, sway:[0.01, 0.6, 4, 0] })],
+    views:[{ d:[0.25, 0.15, 1], k:2.2, hold:10, drift:0.02 }, { d:[-1, 0.2, 0.3], k:2, hold:8, drift:0.02 }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },

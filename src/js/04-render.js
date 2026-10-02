@@ -200,8 +200,9 @@ void main(){
     // an alarm: Atolla's wheel of light chasing round its rim, or a whole-body flash
     float ang = atan(vObj.z, vObj.y);
     float wheel = uFx.w < 1.5 ? pow(0.5 + 0.5 * sin(ang * 3.0 - uKd.w * 7.0), 5.0) * step(0.01, vCol.a) * 4.0
-                              : 0.5 + 0.5 * sin(uKd.w * 21.0 + vObj.x * 37.0 + ang * 3.0);
-    col += vec3(0.25, 0.85, 1.0) * wheel * uFx.y * 1.6;
+                 : uFx.w < 2.5 ? 0.5 + 0.5 * sin(uKd.w * 21.0 + vObj.x * 37.0 + ang * 3.0)
+                              : pow(0.5 + 0.5 * sin(vObj.x * 9.0 + uKd.w * 3.0), 8.0) * 0.9;   // a wave of light running along a colony
+    col += (uFx.w > 2.5 ? vec3(0.3, 1.0, 0.75) : vec3(0.25, 0.85, 1.0)) * wheel * uFx.y * 1.6;
   }
   if (uFx.x < 0.0){
     // a cuttlefish's 'passing cloud': dark bands sweeping from tail to head over its skin, to startle prey into moving
