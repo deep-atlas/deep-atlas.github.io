@@ -379,14 +379,15 @@ function mkGulperEel() {
   return mb;
 }
 function mkViperfish() {
-  const skin = [0.08, 0.1, 0.12], fang = [0.95, 0.95, 0.9];
+  const skin = [0.14, 0.17, 0.2], fang = [0.95, 0.95, 0.9];
   return fish({ H:0.07, W:0.04, tm:0.25, nose:0.35, ped:0.12, bodyLen:0.86, back:skin, belly:[0.2, 0.25, 0.3], eye:[0.07, 0.3, 0.025], eyeCol:[0.1, 0.25, 0.3],
     tail:'fork', tailH:0.06, dorsal:[{ at:0.16, len:0.04, h:0.2, col:skin, pts:[[0, 0], [-0.2, 1], [-1, 0.1], [-1, 0]] }], anal:[{ at:0.75, len:0.08, h:0.05 }],
     pect:{ at:0.18, len:0.06, w:0.02 },
     extra:(mb, b) => {
       photophores(mb, b, [[0.1, 0.85, -0.7, 16]], BIO, 0.008);
-      for (const [x, z, up] of [[0.47, 0.02, 1], [0.47, -0.02, 1], [0.44, 0.025, -1], [0.44, -0.025, -1]])
-        tube(mb, { n:3, m:4, path:t => [x + t * 0.03, -0.01 + up * t * 0.07, z], r:t => 0.005 * (1 - t), col:fc(fang), anim:() => [0, 0, 0, 0] });
+      // fangs too long to fit inside its mouth: the lower ones curve up outside the head, past the eye
+      for (const [x, z, up, L] of [[0.47, 0.02, 1, 0.12], [0.47, -0.02, 1, 0.12], [0.45, 0.026, -1, 0.06], [0.45, -0.026, -1, 0.06], [0.43, 0.03, 1, 0.06], [0.43, -0.03, 1, 0.06]])
+        tube(mb, { n:6, m:4, path:t => [x + Math.sin(t * PI * 0.8) * 0.02 - t * t * 0.03 * up, -0.012 + up * t * L, z * (1 + t * 0.4)], r:t => 0.006 * (1 - t * 0.85), col:fc(fang), anim:() => [0, 0, 0, 0] });
       ellip(mb, [0.42, 0.07 + 0.12, 0], [0.012, 0.012, 0.012], { n:4, m:6, col:fc([...BIO, 4]) });
     } });
 }
