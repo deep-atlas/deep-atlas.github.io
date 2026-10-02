@@ -108,6 +108,7 @@ function moveObj(o, t) {
   const sd = vnorm(vcross(o.fwd, up));
   o.up = isFinite(sd[0]) ? vnorm(vcross(sd, o.fwd)) : [0, 1, 0];
   o.side = vcross(o.fwd, o.up);
+  if (o.post) o.post(o, t);
 }
 
 // ---- drawing: everything within sight, solid things first, see-through things after (far to near)

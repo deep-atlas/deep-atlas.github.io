@@ -144,6 +144,51 @@ function drawSparks() {
   }
 }
 
+// ---- the hunt: a sperm whale patrols near the giant squid, then charges through; the squid jets away and drifts back
+const HUNT = { T:130, start:0.55, len:0.2 };
+function huntMotion(o, t) {
+  const S = BYKEY.giantsquid, A = S.anchor, R = 70, v = 1.4;
+  const patrol = tt => { const a = tt * v / R; return [A[0] + R * Math.cos(a), A[1] - 40 + 15 * Math.sin(tt * 0.05), A[2] + R * Math.sin(a)]; };
+  const at = tt => {
+    const u = ((tt % HUNT.T) + HUNT.T) % HUNT.T / HUNT.T, c0 = tt - (u - HUNT.start) * HUNT.T;
+    const p = patrol(tt);
+    if (u < HUNT.start || u > HUNT.start + HUNT.len) return p;
+    const s = (u - HUNT.start) / HUNT.len, P0 = patrol(c0), sq = S.basePos || S.pos;   // (it charges where the squid was)
+    const charge = vadd(P0, vmul(vsub(sq, P0), 2 * s));
+    const w = smooth(0, 0.2, s) * (1 - smooth(0.8, 1, s));
+    return vlerp(p, charge, w);
+  };
+  o.pos = at(t);
+  const d = vsub(at(t + 0.1), o.pos);
+  o.fwd = vlen(d) > 1e-6 ? vnorm(d) : o.fwd;
+  const sd = vnorm(vcross(o.fwd, [0, 1, 0])); o.up = isFinite(sd[0]) ? vnorm(vcross(sd, o.fwd)) : [0, 1, 0]; o.side = vcross(o.fwd, o.up);
+  const u = ((t % HUNT.T) + HUNT.T) % HUNT.T / HUNT.T;
+  o.charging = u > HUNT.start && u < HUNT.start + HUNT.len;
+  if (o.charging && !o._toldHunt && (VIEW.focus === o || VIEW.focus === S) && VIEW.mode === 'orbit') {
+    toast('The sperm whale closes in, clicking. Nobody has filmed this fight; the sucker scars on sperm whales tell how it goes.', 6000);
+    o._toldHunt = true;
+  }
+  if (!o.charging) o._toldHunt = false;
+}
+// the squid: when the whale comes within reach it jets away, its mantle pumping, then drifts back to its patch
+function squidPost(o, t) {
+  const W = BYKEY.spermwhale, dt = o._pt == null ? 0 : clamp(t - o._pt, 0, 0.5); o._pt = t;
+  o.fleeOff = o.fleeOff || [0, 0, 0]; o.fleeV = o.fleeV || [0, 0, 0];
+  o.basePos = o.pos.slice();
+  const away = vsub(vadd(o.pos, o.fleeOff), W.pos), dist = vlen(away);
+  if (dist < 30 && vlen(o.fleeV) < 1) {
+    // dodge sideways, out of the whale's path, rather than racing straight ahead of it
+    let side = vsub(away, vmul(W.fwd, vdot(away, W.fwd)));
+    if (vlen(side) < 1e-3) side = vcross(W.fwd, [0, 1, 0]);
+    o.fleeV = vmul(vnorm(vadd(vnorm(side), vmul(vnorm(away), 0.4))), 9);
+  }
+  o.fleeOff = vadd(vmul(o.fleeOff, 1 - dt * 0.04), vmul(o.fleeV, dt));
+  o.fleeV = vmul(o.fleeV, Math.exp(-dt * 0.45));
+  o.pos = vadd(o.pos, o.fleeOff);
+  if (vlen(o.fleeV) > 0.8) { o.fwd = vnorm(o.fleeV); const sd = vnorm(vcross(o.fwd, [0, 1, 0])); o.up = isFinite(sd[0]) ? vnorm(vcross(sd, o.fwd)) : [0, 1, 0]; o.side = vcross(o.fwd, o.up); }   // (jetting, a squid goes mantle first, arms trailing)
+  const p = o.parts[0]; if (p.pulse) p.pulse[1] = vlen(o.fleeV) > 0.8 ? 1.4 : 0.35;
+}
+
 // ---- who lights, who hunts, who reacts
 function addLife() {
   const set = (k, v) => { if (BYKEY[k]) Object.assign(BYKEY[k], v); };
@@ -164,6 +209,9 @@ function addLife() {
   set('nautile', { lights:[{ at:[6.5, 0, 0], col:[0.9, 0.95, 1.0], power:o => 0.9 * deep(o), reach:7, metres:true }] });
   // the hunters at the bait ball, and everything else schools keep clear of
   for (const k of ['sailfish', 'dolphin', 'greatwhite', 'whaleshark', 'humpback', 'manta', 'bluewhale']) set(k, { predator:true });
+  // the sperm whale moves in to hunt round the giant squid
+  set('spermwhale', { motion:{ type:'still', fn:huntMotion }, hunt:true });
+  set('giantsquid', { post:squidPost });
   const bb = BYKEY.baitball;
   if (bb) {
     set('sailfish', { anchor:bb.anchor.slice(), motion:{ type:'rose', R:12, v:4.5, k:2, bob:1.2, ph:0.6 } });
