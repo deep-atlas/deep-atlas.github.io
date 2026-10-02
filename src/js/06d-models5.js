@@ -155,6 +155,12 @@ function mkStingray() {
   tube(mb, { n:2, m:3, path:t => [-0.4 - t * 0.06, 0.012, 0], r:t => 0.004 * (1 - t), col:fc([0.85, 0.82, 0.75]) });
   return mb;
 }
+function mkBlacksmith() {
+  const navy = [0.15, 0.2, 0.32], spot = [0.05, 0.06, 0.1];
+  return fish({ H:0.16, W:0.06, tm:0.33, nose:0.5, ped:0.2, bodyLen:0.8, back:navy, belly:[0.3, 0.35, 0.45], eye:[0.1, 0.28, 0.035], n:14, m:9,
+    pattern:(t, sy) => t > 0.6 && sy > 0 && Math.sin(t * 60) * Math.sin(sy * 30) > 0.6 ? spot : null,
+    tail:'fork', tailH:0.13, tailCol:navy, dorsal:[{ at:0.25, len:0.45, h:0.07 }], anal:[{ at:0.6, len:0.15, h:0.06 }], pect:{ at:0.24, len:0.1, w:0.04 } });
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -180,6 +186,10 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.15, turn:0.4 },
     parts:[part(mkSeaOtter, { scale:1.3, mat:[1, 0.5, 1, 0.4] })],
     views:[{ d:[0.6, 0.55, 1], k:2.4, hold:10, drift:0.02, air:true }, { d:[0.4, -0.55, 0.8], k:2.6, hold:9, drift:0.02 }] });
+  addObj({ key:'blacksmith', name:'blacksmith', type:'a school of Chromis punctipinnis', kind:'fish', at:[KELP[0] + 2, KELP[2] - 3, 9], size:0.25, vsize:6, rad:5,
+    fact:'Dark blue damselfish that hang in loose schools in the kelp’s open spaces, picking plankton from the current. At night they shelter in cracks in the rock below.',
+    parts:[part(mkBlacksmith, { inst:schoolCloud(150, 5, 2.5, 727, 1, 0.5), school:[1, 0.25, 1, 0], mat:M_SKIN, shy:8, ...FISH_SWIM(0.06, 2.4, 0.9, 1.8) })],
+    views:[{ d:[0.3, 0.1, 1], k:1.0, hold:10, drift:0.03, frame:'world' }, { d:[1, -0.4, 0.3], k:0.9, hold:9, drift:0.03, frame:'world' }] });
   addObj({ key:'garibaldi', name:'garibaldi', type:'Hypsypops rubicundus', kind:'fish', floor:[KELP[0] - 3, KELP[2] + 4, 1.2], size:0.3, rad:0.22,
     fact:'California’s state marine fish, bright orange and fiercely territorial. The male clears a nest of red algae and defends it, clicking loudly at intruders, even divers.',
     motion:{ type:'circle', R:1.2, v:0.25, bob:0.2, bank:0.1 },
