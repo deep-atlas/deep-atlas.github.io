@@ -40,7 +40,7 @@ const TOURS = [
   { id:'giants', name:'giants', blurb:'The biggest animals there are, and one that is a colony.',
     stops:['bluewhale', 'humpback', 'whaleshark', 'orca', 'spermwhale', 'colossal', 'giantsquid', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'sunfish', 'greatwhite'] },
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
-    stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'atolla', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
+    stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'atolla', 'cockeyed', 'helmetjelly', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
     stops:['copepod', 'krill', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',

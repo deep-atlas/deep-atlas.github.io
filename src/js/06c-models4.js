@@ -212,11 +212,43 @@ function mkSixgill() {
       fin(mb, [[0.02, 0.02], [-0.12, 0.06], [-0.28, 0.07], [-0.27, 0.0], [-0.1, -0.04], [-0.02, -0.02]], { origin:[b.tx + 0.02, 0, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(skin), anim:finA, center:[-0.1, 0] });
     } });
 }
+function mkHelmetJelly() {
+  // Periphylla: a tall conical bell, deep red-brown (red is invisible in the deep: it hides the glow of the prey in its gut)
+  return jelly({ h:0.8, bell:[0.5, 0.08, 0.1], cone:true,
+    pattern:(t, u) => {
+      if (Math.abs(t - 0.55) < 0.03) return [0.3, 0.04, 0.06];
+      if (t > 0.6 && Math.abs(Math.sin(u * PI * 12)) < 0.2) return [0.65, 0.12, 0.14];
+      if (t < 0.25 && Math.sin(u * TAU * 4) > 0.6) return [...BIO, 2.0];   // flashes on the bell
+      return null;
+    },
+    tentacles:{ n:12, len:0.6, r:0.008, col:[0.55, 0.15, 0.15], seg:8, sway:0.18 } });
+}
+function mkCockeyedSquid() {
+  // Histioteuthis: one huge upward-looking eye for daylight from above, one small downward eye for living lights below
+  const mb = mkSquid({ mantle:0.42, mw:0.11, arms:0.3, tent:0.4, fin:0.08, finLen:0.12, eye:0.001, skin:[0.75, 0.15, 0.2], dark:[0.5, 0.08, 0.12] });
+  const hx = 0.5 - 0.42 - 0.035;
+  ellip(mb, [hx, 0.03, 0.09], [0.045, 0.05, 0.035], { n:6, m:10, col:(u, v, p) => Math.hypot(p[0] - hx, p[1] - 0.03) < 0.028 ? [0.05, 0.05, 0.06] : [0.85, 0.8, 0.5] });
+  ellip(mb, [hx, -0.01, -0.09], [0.02, 0.022, 0.015], { n:4, m:8, col:fc([0.05, 0.05, 0.06]) });
+  // photophores all over the mantle and arms
+  const r = rng(5150);
+  for (let k = 0; k < 60; k++) { const t = r(), a = r() * TAU, x = 0.5 - t * 0.42, w = 0.11 * Math.pow(Math.sin(Math.min(1, t * 1.25) * PI / 2), 0.7);
+    ellip(mb, [x, Math.cos(a) * w * 1.04, Math.sin(a) * w * 1.04], [0.008, 0.008, 0.008], { n:2, m:4, col:fc([...BIO, 2.5]) }); }
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
     motion:{ type:'circle', R:9, v:0.5, bob:0.8, bank:0.08 },
     parts:[part(mkSixgill, { scale:4.5, mat:M_SKIN, ...FISH_SWIM(0.045, 0.4, 0.85, 2.4) })], views:SIDE });
+  addObj({ key:'helmetjelly', name:'helmet jellyfish', type:'Periphylla periphylla', kind:'jellies', at:[18600, -800, 1300], size:0.3, rad:0.4,
+    fact:'Its deep red bell is a disguise: red light does not reach the deep, so red looks black, and it hides the glow of the bioluminescent prey it has swallowed. Disturbed, it sets off waves of blue light round its bell.',
+    motion:{ type:'drift', amp:0.15, tilt:0.2 },
+    parts:[part(mkHelmetJelly, { scale:0.3, mat:[0.75, 0.8, 1, 0.5], trans:true, pulse:[0.12, 0.35, 0, 0], sway:[0.04, 0.4, 4, 0] })],
+    views:[{ d:[0.3, 0.15, 1], k:3.2, hold:10, drift:0.03, frame:'world' }, { d:[0.2, -0.8, 0.3], k:3, hold:8, drift:0.03, frame:'world' }] });
+  addObj({ key:'cockeyed', name:'cock-eyed squid', type:'Histioteuthis heteropsis', kind:'cephs', at:[17800, 700, 950], size:0.3, rad:0.25,
+    fact:'One eye is twice the size of the other. It swims tilted, the big eye looking up for the silhouettes of prey against the last faint daylight, the small one looking down for flashes of living light.',
+    motion:{ type:'hover', amp:0.05, turn:0.4 },
+    parts:[part(mkCockeyedSquid, { scale:0.3, mat:M_SKIN, pulse:[0.6, 0.3, 0, 0], sway:[0.02, 0.5, 4, 0], swim2:[0, 2, 0.2, 0.35] })], views:[{ d:[0.2, 0.3, 1], k:1.3, hold:10, drift:0.025 }, { d:[-0.5, 0.2, 0.8], k:1.4, hold:8, drift:-0.03 }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },

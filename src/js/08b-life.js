@@ -295,6 +295,8 @@ function addLife() {
     react:{ type:'alarm', wheel:true, dur:7, text:'Atolla’s burglar alarm: a wheel of blue light that can be seen far off, and may bring a bigger hunter to eat whatever grabbed it.' } });
   set('chickenmonster', { lights:[{ at:[0, 0, 0], col:BIO, power:o => (o.reactEnv || 0) * 1.0, reach:0.8, flick:7 }],
     react:{ type:'flash', dur:5, text:'Disturbed, the swimming sea cucumber flashes blue, and can shed glowing skin to stick to an attacker while it rows away.' } });
+  set('helmetjelly', { lights:[{ at:[0, 0, 0], col:BIO, power:o => (o.reactEnv || 0) * 1.2, reach:0.7, flick:6 }],
+    react:{ type:'alarm', dur:6, text:'Disturbed, the helmet jelly sends rings of blue light rippling round its bell.' } });
   set('combjelly', { react:{ type:'flash', dur:4, text:'Some comb jellies glow when touched: the rainbows are reflected sunlight, but this blue flash is their own.' } });
   // Nautile's floodlights light whatever it passes, once it is deep enough to need them
   set('nautile', { lights:[{ at:[6.5, 0, 0], col:[0.9, 0.95, 1.0], power:o => 0.9 * deep(o), reach:7, metres:true }] });
