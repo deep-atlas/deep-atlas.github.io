@@ -310,7 +310,8 @@ function buildCatalog() {
   addObj({ key:'barreleye', name:'barreleye', type:'Macropinna microstoma', kind:'fish', at:[15500, 100, 700], size:0.15, rad:0.12,
     fact:'The green tubes in its see-through head are its eyes, looking up for the silhouettes of prey. They can swivel forward to watch as it eats. Its true shape was only seen alive in 2009.',
     motion:{ type:'hover', amp:0.03, turn:0.3 },
-    parts:[part(mkBarreleye, { scale:0.15, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.9, 2) }), part(mkBarreleyeDome, { scale:0.15, mat:M_GLASS, trans:true, ...FISH_SWIM(0.03, 0.8, 0.9, 2) })], views:SIDE });
+    parts:[part(mkBarreleye, { scale:0.15, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.9, 2) }), part(mkBarreleyeDome, { scale:0.15, mat:M_GLASS, trans:true, ...FISH_SWIM(0.03, 0.8, 0.9, 2) })],
+    views:[{ d:[0.15, 0.25, 1], k:1.5, hold:10, drift:0.02 }, { d:[0.8, 0.45, 0.5], k:1.4, hold:9, drift:0.02 }, { d:[1, 0.15, 0.6], k:1.7, hold:8, drift:0.02 }] });
   addObj({ key:'giantsquid', name:'giant squid', type:'Architeuthis dux', kind:'cephs', at:[17000, -300, 800], size:12, rad:7,
     fact:'Giant squid have eyes up to about 27 cm across, the largest of any animal alongside the colossal squid, perhaps to spot the glow stirred up by an approaching sperm whale. It was first filmed alive in its deep home in 2012.',
     motion:{ type:'circle', R:20, v:0.6, bob:2, bank:0.05 },

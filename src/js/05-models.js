@@ -395,13 +395,17 @@ function mkBarreleye() {
     pattern:(t, sy, sz) => Math.sin(t * 50 + sy * 9) > 0.6 ? [0.2, 0.18, 0.18] : null,
     tail:'fork', tailH:0.09, dorsal:[{ at:0.42, len:0.1, h:0.05 }], pect:{ at:0.24, len:0.12, w:0.06, down:0.2 }, anal:[{ at:0.7, len:0.06, h:0.04 }] });
   // the green tubular eyes, pointing up inside a clear dome
-  for (const sz of [1, -1]) tube(mb, { n:3, m:8, path:t => [0.34, 0.06 + t * 0.07, sz * 0.025], r:0.022, col:t => t > 0.8 ? [0.2, 1.0, 0.4, 1.4] : [0.15, 0.55, 0.25, 0.4], anim:() => [0.1, 0, 0, 0] });
+  for (const sz of [1, -1]) {
+    tube(mb, { n:4, m:8, path:t => [0.33 + t * 0.01, 0.05 + t * 0.09, sz * 0.026], r:t => 0.024 + t * 0.004, col:t => t > 0.75 ? [0.3, 1.0, 0.45, 1.6] : [0.2, 0.7, 0.3, 0.6], anim:() => [0.1, 0, 0, 0] });
+    // the nostrils above the mouth: they look like eyes, which is why it went unrecognised for so long
+    ellip(mb, [0.405, 0.035, sz * 0.022], [0.009, 0.009, 0.006], { n:3, m:6, col:fc([0.05, 0.05, 0.06]), anim:() => [0.1, 0, 0, 0] });
+  }
   return mb;
 }
 function mkBarreleyeDome() {
   // the transparent shield over the head, drawn as a separate see-through part
   const mb = new MB();
-  ellip(mb, [0.34, 0.08, 0], [0.13, 0.11, 0.065], { n:10, m:14, shape:p => p[1] < 0.04 ? [p[0], 0.04, p[2]] : p, col:fc([0.6, 0.85, 0.9, 0.15]), anim:p => [0.1, 0, 0, 0] });
+  ellip(mb, [0.33, 0.08, 0], [0.12, 0.1, 0.06], { n:10, m:14, shape:p => p[1] < 0.04 ? [p[0], 0.04, p[2]] : p, col:fc([0.7, 0.9, 0.95, 0.3]), anim:p => [0.1, 0, 0, 0] });
   return mb;
 }
 function mkSnailfish() {
