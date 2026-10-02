@@ -414,20 +414,20 @@ $('btnHelp').onclick = () => { $('help').hidden = false; };
 // ---- how deep is deep: famous depths on one scale (linear, so the true emptiness of the deep shows)
 const DEPTH_FACTS = [
   [40, 'recreational scuba limit'], [214, 'deepest free dive, one breath'], [332, 'deepest scuba dive'],
-  [450, 'lanternfish by day'], [828, 'Burj Khalifa, stood on the floor'], [1000, 'last trace of sunlight'],
-  [2000, 'sperm whales hunting'], [2992, 'beaked whale, record dive'], [3800, 'the Titanic'], [4900, 'the abyssal plain'],
-  [6000, 'Nautile’s rated depth'], [8336, 'deepest fish filmed'], [8849, 'Everest, floor to surface'], [10935, 'the Challenger Deep']];
+  [450, 'lanternfish by day', 'lanternfish'], [828, 'Burj Khalifa, stood on the floor'], [1000, 'last trace of sunlight'],
+  [2000, 'sperm whales hunting', 'spermwhale'], [2992, 'beaked whale, record dive', 'beakedwhale'], [3800, 'the Titanic', 'titanic'], [4900, 'the abyssal plain', 'abyss'],
+  [6000, 'Nautile’s rated depth'], [8336, 'deepest fish filmed', 'snailfish'], [8849, 'Everest, floor to surface'], [10935, 'the Challenger Deep', 'challenger']];
 function renderDepths() {
   const C = $('depthChart'); C.innerHTML = '';
   const y = d => (d / 11000 * 100).toFixed(2) + '%';
   for (const z of ZONES) { const e = document.createElement('div'); e.className = 'dz'; e.style.top = y(z.from); e.textContent = z.from ? z.name : ''; C.appendChild(e); }
   // (labels too close together on one side are nudged apart, so the crowded top of the scale stays readable)
   const H = C.clientHeight || 600, last = [-1e9, -1e9];
-  DEPTH_FACTS.forEach(([d, t], i) => {
+  DEPTH_FACTS.forEach(([d, t, key], i) => {
     const side = i % 2, px = Math.max(d / 11000 * H, last[side] + 17); last[side] = px;
     const b = document.createElement('button'); b.className = 'dl' + (side ? ' r' : ''); b.style.top = px + 'px';
     b.innerHTML = '<i></i><b></b><span></span>'; b.children[1].textContent = fmtInt(d) + ' m'; b.children[2].textContent = t;
-    b.onclick = () => { $('depths').hidden = true; diveTo(d === 10935 ? 10900 : d); };
+    b.onclick = () => { $('depths').hidden = true; if (key && BYKEY[key]) userGo(BYKEY[key]); else diveTo(d); };
     C.appendChild(b);
   });
 }
