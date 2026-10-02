@@ -148,6 +148,14 @@ function mkHammerhead() {
       gills(mb, b, 0.17, 5);
     } });
 }
+function mkRemora() {
+  // a remora: slim, grey, the first dorsal fin turned into a ridged sucking disc on top of the head that holds it to its host
+  const grey = [0.45, 0.45, 0.46], pale = [0.75, 0.75, 0.74];
+  return fish({ H:0.075, W:0.07, tm:0.3, nose:0.4, ped:0.18, bodyLen:0.86, back:grey, belly:pale, eye:[0.08, 0.25, 0.022], n:14, m:8,
+    pattern:(t, sy) => Math.abs(sy) < 0.12 ? [0.22, 0.22, 0.24] : null,
+    tail:'truncate', tailH:0.08, tailCol:grey, dorsal:[{ at:0.5, len:0.32, h:0.04, col:grey }], anal:[{ at:0.5, len:0.32, h:0.04, col:grey }], pect:{ at:0.24, len:0.07, w:0.03, col:grey },
+    extra:mb => ellip(mb, [0.25, 0.07, 0], [0.13, 0.012, 0.04], { n:3, m:10, col:(u, v, p) => fract(p[0] * 60) < 0.4 ? [0.2, 0.2, 0.2] : [0.6, 0.6, 0.6] }) });
+}
 function mkWhaleShark() {
   const back = [0.22, 0.28, 0.36], belly = [0.88, 0.88, 0.85], spot = [0.92, 0.92, 0.88];
   return fish({ H:0.085, W:0.12, tm:0.3, nose:0.35, ped:0.12, bodyLen:0.8, back, belly, eye:[0.05, 0.05, 0.01], e:t => lerp(3.2, 2, smooth(0, 0.4, t)),

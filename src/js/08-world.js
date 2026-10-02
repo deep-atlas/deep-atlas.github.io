@@ -203,7 +203,8 @@ function buildCatalog() {
   addObj({ key:'manta', name:'manta ray', type:'reef manta · Mobula alfredi', kind:'sharks', at:[2900, -150, 13], size:4.5, rad:2.6,
     fact:'Mantas have one of the largest brains for their size of any fish, and come to cleaning stations on the reef to have small fish pick them clean. A reef manta’s wings span up to 5 m.',
     motion:{ type:'circle', R:22, v:1.0, bob:1.5, bank:0.25 },
-    parts:[part(mkManta, { scale:4.5, mat:M_SKIN, swim2:[0, 2, 0.32, 0.2] })],
+    parts:[part(mkManta, { scale:4.5, mat:M_SKIN, swim2:[0, 2, 0.32, 0.2] }),
+      ...[[0.1, -0.16, 0.18], [-0.25, -0.15, -0.15]].map((off, i) => part(mkRemora, { scale:0.45, off, up:o => vmul(o.up, -1), mat:M_SKIN, swim:[0.02, 1.5, 0.8, i], swim2:[0, 2, 0, 0] }))],
     views:[{ d:[0.3, -0.4, 1], k:2.4, hold:10, drift:0.02 }, { d:[0.2, 0.9, 0.4], k:2.2, hold:8, drift:0.02 }, { d:[1, -0.3, 0.2], k:2.6, hold:8, drift:0.02 }] });
   addObj({ key:'kelp', name:'the kelp forest', label:'kelp forest', type:'giant kelp · Macrocystis pyrifera', kind:'places', floor:[2600, 400, 0], size:60, rad:32,
     fact:'Giant kelp can grow 60 cm in a day, among the fastest of anything alive. Gas-filled floats hold its blades up to the light, and the forest shelters fish, seals and sea otters.',
@@ -249,7 +250,9 @@ function buildCatalog() {
   addObj({ key:'whaleshark', name:'whale shark', type:'the largest fish · Rhincodon typus', kind:'sharks', at:[5500, 400, 15], size:12, rad:7,
     fact:'The largest fish alive, up to about 18 m long, eats some of the smallest food in the sea: plankton and fish eggs, sieved through a mouth more than a metre wide. Every whale shark’s pattern of spots is its own.',
     motion:{ type:'circle', R:60, v:1.1, bob:3, bank:0.06 },
-    parts:[part(mkWhaleShark, { scale:12, mat:M_SKIN, ...FISH_SWIM(0.045, 0.32, 0.8, 2.4) })], views:SIDE });
+    // remoras ride underneath, held by the sucking discs on their heads (upside down against the belly, so their discs are on it)
+    parts:[part(mkWhaleShark, { scale:12, mat:M_SKIN, ...FISH_SWIM(0.045, 0.32, 0.8, 2.4) }),
+      ...[[1.8, -0.75, 0.25], [0.6, -0.95, -0.2], [-0.8, -0.8, 0.35]].map((off, i) => part(mkRemora, { scale:0.55 - i * 0.05, off, up:o => vmul(o.up, -1), mat:M_SKIN, swim:[0.02, 1.5, 0.8, i], swim2:[0, 2, 0, 0] }))], views:SIDE });
   addObj({ key:'greatwhite', name:'great white shark', type:'Carcharodon carcharias', kind:'sharks', at:[7000, -300, 30], size:4.5, rad:2.8,
     fact:'Great whites sense the faint electric fields of living animals through jelly-filled pores on the snout, and keep their muscles warmer than the water around them.',
     motion:{ type:'circle', R:25, v:1.4, bob:3, bank:0.12 },
