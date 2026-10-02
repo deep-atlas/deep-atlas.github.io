@@ -97,7 +97,7 @@ function tickSound(dt) {
   SND.padG.gain.setTargetAtTime(lerp(0.55, 0.9, deep) * (1 - shallow * 0.5), now, 2);
   SND.chordT += dt;
   if (SND.chordT > 14) { SND.chordT = 0; SND.chord++; setChord(SND.chord); }
-  const due = k => (SND.next[k] -= dt) <= 0;
+  const due = k => (SND.next[k] = (SND.next[k] ?? 0) - dt) <= 0;
   let what = shallow > 0.5 ? 'waves overhead, bubbles' : deep < 0.3 ? 'the open sea, whales far off' : abyss > 0.5 ? 'the deep floor: pressure creaks, a sonar' : 'the hum of the deep, a sonar';
   // whale song: long moaning glides (humpback-like in the upper ocean, slow low calls deeper)
   if (due('whale')) {
@@ -126,6 +126,32 @@ function tickSound(dt) {
     SND.next.click = 14 + Math.random() * 14;
     const n = 6 + Math.floor(Math.random() * 10), gap = 0.4 + Math.random() * 0.4;
     for (let i = 0; i < n; i++) noiseBurst({ f:3000 + Math.random() * 1000, q:2, amp:0.03, att:0.002, dur:0.03, delay:i * gap, dry:true });
+  }
+  // what is close by: a sperm whale's clicks get louder and come faster as it closes in (a "creak" of rapid clicks when it charges);
+  // the great whales sing louder when you are near them. Sound comes from their side of you.
+  const near = (k, R) => { const o = BYKEY[k]; if (!o) return null; const r = vsub(o.pos, CAM.pos), dd = vlen(r); return dd < R ? { o, d:dd, pan:clamp(vdot(vnorm(r), CAM.right), -0.9, 0.9) } : null; };
+  const sw = near('spermwhale', 260);
+  if (sw && due('nearClick')) {
+    const loud = clamp(1 - sw.d / 260, 0, 1), charge = sw.o.charging;
+    SND.next.nearClick = charge ? 0.9 : 2.5 + Math.random() * 2;
+    const n = charge ? 30 : 8 + Math.floor(Math.random() * 6), gap = charge ? 0.025 : 0.35 + Math.random() * 0.2;
+    for (let i = 0; i < n; i++) noiseBurst({ f:2400 + Math.random() * 900, q:2, amp:0.02 + 0.09 * loud, att:0.0015, dur:0.025, delay:i * gap, dry:true });
+    what = charge ? 'a sperm whale closing in: a buzz of clicks' : 'a sperm whale nearby, clicking';
+  }
+  for (const k of ['humpback', 'bluewhale']) {
+    const w = near(k, 400);
+    if (w && due('song_' + k)) {
+      SND.next['song_' + k] = 5 + Math.random() * 6;
+      const loud = clamp(1 - w.d / 400, 0.15, 1), base = k === 'bluewhale' ? 18 + Math.random() * 4 : 150 + Math.random() * 250;
+      if (k === 'bluewhale') {
+        // a blue whale's call is mostly below hearing: a long low moan, given an audible overtone here
+        blip({ f0:base * 4, curve:[base * 4.2, base * 3.6, base * 3.4], dur:6, amp:0.05 * loud, att:1.2, pan:w.pan, bp:base * 4, q:0.8, dry:false });
+      } else {
+        const n = 2 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < n; i++) blip({ f0:base, curve:[base * 1.8, base * 2.5, base * 1.2, base * 0.7], dur:1.5 + Math.random() * 1.4, amp:0.06 * loud, att:0.3, vib:[6, base * 0.025], delay:i * 2.2, pan:w.pan, bp:base * 1.6, q:0.7, dry:false });
+      }
+      what = k === 'bluewhale' ? 'a blue whale calling, almost too low to hear' : 'a humpback singing nearby';
+    }
   }
   if (what !== SND.what) { SND.what = what; $('nowPlaying').textContent = what; }
 }
