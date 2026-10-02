@@ -371,6 +371,14 @@ function mkNautile() {
   }
   return mb;
 }
+// a red double-decker bus, 11 m long, for comparing sizes (in metres)
+function mkBus() {
+  const mb = new MB(), red = [0.85, 0.08, 0.06], win = [0.08, 0.1, 0.14], black = [0.05, 0.05, 0.05];
+  loft(mb, { n:6, m:4, sec:t => ({ x:5.5 - t * 11, y:2.2, w:1.25, h:2.0, e:8 }),
+    col:(t, u, p, sy, sz) => (Math.abs(sz) > 0.9 || t < 0.02) && ((p[1] > 1.3 && p[1] < 2.0) || (p[1] > 2.8 && p[1] < 3.6)) && fract(p[0] * 0.55) < 0.8 ? win : red });
+  for (const x of [3.6, -3.4]) for (const sz of [1, -1]) loft(mb, { n:2, m:12, sec:t => ({ x, y:0.5, z:sz * (1.15 + t * 0.15), w:0.5, h:0.5, e:2 }), col:fc(black) });
+  return mb;
+}
 // a scuba diver, for comparing sizes (1.8 m, swimming flat, head at +x; in metres)
 function mkDiver() {
   const mb = new MB(), suit = [0.08, 0.09, 0.1], tank = [1.0, 0.8, 0.1], skin = [0.85, 0.65, 0.5];

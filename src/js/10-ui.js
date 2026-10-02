@@ -621,7 +621,7 @@ const CMP = { obj:null };
 function openCompare() {
   const o = VIEW.focus; if (!o || VIEW.mode !== 'orbit') { toast('lock on to something first'); return; }
   const L = $('cmpList'); L.innerHTML = '';
-  const choices = [{ key:'diver', name:'a scuba diver', size:1.8, build:mkDiver }, ...PLACES().filter(p => p !== o && p.parts.length && p.kind !== 'places' && !p.parts[0].inst && p.kind !== 'subs').map(p => ({ key:p.key, name:p.name, size:p.size, src:p }))];
+  const choices = [{ key:'diver', name:'a scuba diver', size:1.8, build:mkDiver }, { key:'bus', name:'a double-decker bus', size:11, build:mkBus }, ...PLACES().filter(p => p !== o && p.parts.length && p.kind !== 'places' && !p.parts[0].inst && p.kind !== 'subs').map(p => ({ key:p.key, name:p.name, size:p.size, src:p }))];
   choices.sort((a, b) => a.size - b.size);
   for (const c of choices) {
     const b = document.createElement('button'); b.className = 'arow'; b.innerHTML = '<span class="an"></span><span class="ad"></span>';
@@ -634,17 +634,17 @@ function openCompare() {
 function startCompare(o, c) {
   endCompare();
   const src = c.src ? c.src.parts[0] : { build:c.build, scale:1, mat:M_SKIN };
-  const gap = Math.max(o.size, c.size) * 0.25;
-  const off = o.size * 0.5 + c.size * 0.5 + gap;
+  // stacked one above the other, both in profile, so their lengths line up for comparing
+  const big = Math.max(o.size, c.size), off = (o.size + c.size) * 0.22 + big * 0.12;
   const p = Object.assign({}, src, { off:[0, 0, 0], school:null, inst:null, mesh:src.inst ? null : src.mesh });
   const cmp = { key:'cmp', name:c.name, label:c.name, type:'for comparison', kind:'subs', size:c.size, rad:c.size * 0.6, place:false, temp:true, hidden:false,
     anchor:[0, 0, 0], pos:[0, 0, 0], fwd:[1, 0, 0], up:[0, 1, 0], parts:[p], views:[], motion:{ type:'still', fn:(me) => {
-      const f = vnorm([o.fwd[0], 0, o.fwd[2]]), sd = vnorm(vcross(f, [0, 1, 0]));
-      me.pos = vmad(o.pos, sd, off); me.fwd = isFinite(f[0]) ? f : [1, 0, 0]; me.up = [0, 1, 0]; me.side = vcross(me.fwd, me.up);
+      const f = vnorm([o.fwd[0], 0, o.fwd[2]]);
+      me.pos = vadd(o.pos, [0, -off, 0]); me.fwd = isFinite(f[0]) ? f : [1, 0, 0]; me.up = [0, 1, 0]; me.side = vcross(me.fwd, me.up);
     } } };
   cmp.idx = OBJS.length; OBJS.push(cmp); CMP.obj = cmp;
   // frame both from the side
-  VIEW.trans = { t:0, T:3, from:{ yaw:VIEW.yaw, pitch:VIEW.pitch, dist:VIEW.dist, off:VIEW.off.slice() }, to:{ yaw:PI / 2 * 0.9 + 0.3, pitch:0.12, dist:(off + Math.max(o.size, c.size)) * 1.8, off:[0, 0, off / 2], frame:'obj' } };
+  VIEW.trans = { t:0, T:3, from:{ yaw:VIEW.yaw, pitch:VIEW.pitch, dist:VIEW.dist, off:VIEW.off.slice() }, to:{ yaw:PI / 2, pitch:0.05, dist:Math.max(big * 0.78, off * 2.4) * portraitK(), off:[0, -off / 2, 0], frame:'obj' } };
   VIEW.frame = 'obj'; VIEW.auto = false; updatePlay();
   $('caption').hidden = false; $('capBtn').hidden = false;
   $('capText').textContent = `${c.name} (${fmtLen(c.size)}) beside ${o.name} (${fmtLen(o.size)}), at true scale`;
