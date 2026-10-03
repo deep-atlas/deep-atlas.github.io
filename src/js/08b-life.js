@@ -452,6 +452,8 @@ function addLife() {
     torpedo:'up to 220 volts · up to ~1.8 m and 90 kg',
     humboldt:'up to ~1.5 m and 50 kg · hunts in packs of hundreds',
     batfish:'~20 cm · walks rather than swims · found only around the Galapagos',
+    mimic:'~60 cm across · impersonates at least 3 venomous animals · only discovered in 1998',
+    sleepingwhales:'naps of ~10 to 15 minutes · about 7% of the day asleep',
   };
   for (const [k, v] of Object.entries(STAT)) if (v && BYKEY[k] && !BYKEY[k].readout) BYKEY[k].readout = () => v;
   set('reef', { readout:() => night() > 0.5 ? 'night: the corals are spawning, bundles of eggs and sperm rising to the surface\n(on real reefs this happens a few nights a year, just after a full moon)' : 'day: the coral polyps are pulled in; at night they open to feed' });
