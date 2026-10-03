@@ -40,6 +40,7 @@ const WHERE = {
   puffer:[18, -78, 'tropical reefs worldwide; here the Caribbean'],
   seaotter:[36.6, -121.9, 'the North Pacific coast; here Monterey, California'],
   sealion:[33.9, -119.5, 'California and Mexico'],
+  giantoctopus:[48.4, -123.2, 'the North Pacific coasts, from California to Japan'],
   blacksmith:[33.4, -118.4, 'kelp forests of southern California'],
   garibaldi:[33.3, -118.5, 'kelp forests of southern California'],
   flashlight:[-4.5, 129.9, 'Indonesian reefs, such as the Banda Sea'],

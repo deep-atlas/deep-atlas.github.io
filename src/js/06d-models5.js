@@ -599,6 +599,11 @@ function addShallows(REEF) {
     parts:[part(mkSeaLion, { scale:2, mat:[1, 0.45, 1, 0.5], swim:[0.025, 1.1, 0.6, 0], swim2:[1, 2.2, 0.06, 1.1] }),
       part(mkSeaLion, { scale:1.7, off:[-3, 0.8, 1.6], mat:[1, 0.45, 1, 0.5], swim:[0.025, 1.2, 0.6, 2], swim2:[1, 2.2, 0.05, 1.2] })],
     views:[{ d:[0.2, 0.1, 1], k:1.6, hold:10, drift:0.02 }, { d:[0.8, -0.3, 0.6], k:1.5, hold:9, drift:0.02 }, { d:[-0.5, 0.5, 0.7], k:1.8, hold:8, drift:-0.02 }] });
+  addObj({ key:'giantoctopus', name:'giant Pacific octopus', type:'Enteroctopus dofleini', kind:'cephs', floor:[KELP[0] - 5, KELP[2] - 6, 0.3], size:4, vsize:2.5, rad:1.6, yaw:2.2,
+    fact:'The largest octopus: arms spanning up to about 6 m and weights over 50 kg have been recorded. It can squeeze through any gap larger than its beak, solves puzzles and recognises individual people. It lives only three to five years, and the female dies after guarding her eggs for months.',
+    motion:{ type:'crawl', R:1.5, v:0.06 },
+    parts:[part(() => mkOctopus({ skin:[0.85, 0.3, 0.2], mott:[0.6, 0.15, 0.12] }), { scale:2.2, mat:M_SKIN, sway:[0.1, 0.6, 3, 0], pulse:[0.5, 0.2, 0, 0] })],
+    views:[{ d:[0.6, 0.45, 1], k:1.6, hold:10, drift:0.02 }, { d:[1, 0.15, 0.3], k:1.4, hold:9, drift:0.02 }] });
   addObj({ key:'blacksmith', name:'blacksmith', type:'a school of Chromis punctipinnis', kind:'fish', at:[KELP[0] + 2, KELP[2] - 3, 9], size:0.25, vsize:6, rad:5,
     fact:'Dark blue damselfish that hang in loose schools in the kelp’s open spaces, picking plankton from the current. At night they shelter in cracks in the rock below.',
     parts:[part(mkBlacksmith, { inst:schoolCloud(150, 5, 2.5, 727, 1, 0.5), school:[1, 0.25, 1, 0], mat:M_SKIN, shy:8, ...FISH_SWIM(0.06, 2.4, 0.9, 1.8) })],
