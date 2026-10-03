@@ -353,7 +353,7 @@ function buildCatalog() {
     fact:'Giant squid have eyes up to about 27 cm across, the largest of any animal alongside the colossal squid, perhaps to spot the glow stirred up by an approaching sperm whale. It was first filmed alive in its deep home in 2012.',
     motion:{ type:'circle', R:20, v:0.6, bob:2, bank:0.05 },
     parts:[part(() => mkSquid({ mantle:0.2, arms:0.2, tent:0.55, mw:0.045, eye:0.03, fin:0.05 }), { scale:12, mat:M_SKIN, pulse:[1, 0.35, 0, 0], sway:[0.25, 0.4, 0.5, 0], swim2:[0, 2, 0.25, 0.35] })],
-    views:[{ d:[0.2, 0.15, 1], k:1.6, hold:11, drift:0.02 }, { d:[-1, 0.2, 0.4], k:1.3, hold:9, drift:0.02 }, { d:[0.9, 0.1, 0.4], k:0.5, hold:8, drift:0.02, off:[2.5, 0, 0] }] });
+    views:[{ d:[0.2, 0.15, 1], k:0.95, hold:11, drift:0.02, off:[1.5, 0, 0] }, { d:[-1, 0.2, 0.4], k:1.0, hold:9, drift:0.02 }, { d:[0.9, 0.1, 0.4], k:0.4, hold:8, drift:0.02, off:[2.5, 0, 0] }] });
   addObj({ key:'atolla', name:'Atolla jellyfish', label:'Atolla', type:'the alarm jellyfish · Atolla wyvillei', kind:'jellies', at:[16500, 200, 850], size:0.15, rad:0.25,
     fact:'When grabbed, Atolla sets off a spinning wheel of blue light. This burglar alarm may draw bigger hunters to eat whatever is attacking it.',
     motion:{ type:'drift', amp:0.08, tilt:0.2 },
