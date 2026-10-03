@@ -80,6 +80,10 @@ const SET = Object.assign({
   subMark:false, palette:'true', sound:false, volume:0.6, clock:'0',
 }, load('settings', {}));
 const saveSettings = () => save('settings', SET);
+// people who ask their system for less motion start with the water still (no shimmer) and the camera drifting more slowly;
+// they can still turn the shimmer back on in settings
+const CALM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+if (CALM && load('settings', null) == null) SET.shimmer = false;
 
 // ---- WebGL helpers
 const GLSL_HEAD = `#version 300 es

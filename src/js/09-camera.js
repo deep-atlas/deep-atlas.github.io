@@ -166,7 +166,7 @@ function updateCamera(dt) {
     VIEW.off = vlerp(T.from.off, T.to.off, e);
     if (T.t >= 1) VIEW.trans = null;
   } else if (VIEW.auto && VIEW.manualT > 4) {
-    VIEW.yaw += (v.drift || 0) * dt;
+    VIEW.yaw += (v.drift || 0) * dt * (CALM ? 0.35 : 1);
   }
   if (VIEW.auto && !VIEW.trans) {
     VIEW.vt += dt;
