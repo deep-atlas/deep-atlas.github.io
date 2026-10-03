@@ -564,29 +564,29 @@ function labelFor(o) {
   if (!el) { el = document.createElement('button'); el.className = 'lab' + (o.key === 'nautile' ? ' sub' : ''); el.textContent = o.label; el.tabIndex = -1; el.onclick = () => userGo(o); $('labels').appendChild(el); LABELS.set(o, el); }
   return el;
 }
+// (a label is only written to when it moves or turns on or off)
+const labelOn = (el, on) => { if (el._on !== on) { el._on = on; el.classList.toggle('on', on); } };
 function updateLabels() {
-  if (!SET.labels || body.classList.contains('photo') && !PHOTO.labels) { for (const el of LABELS.values()) el.classList.remove('on'); return; }
+  if (!SET.labels || body.classList.contains('photo') && !PHOTO.labels) { for (const el of LABELS.values()) labelOn(el, false); return; }
   const R = visRange() * 2.2, cand = [];
   for (const o of OBJS) {
     if (!o.place || o.hidden) continue;
+    if (o === VIEW.focus && VIEW.mode === 'orbit' && !RIDE.on) continue;
     const d = vlen(vsub(o.pos, CAM.pos));
-    if (o === VIEW.focus && VIEW.mode === 'orbit' && !RIDE.on) { if (LABELS.has(o)) LABELS.get(o).classList.remove('on'); continue; }
-    if (d - o.rad > R || o.rad / d < 0.0004) { if (LABELS.has(o)) LABELS.get(o).classList.remove('on'); continue; }
+    if (d - o.rad > R || o.rad / d < 0.0004) continue;
     const s = project(vadd(o.pos, [0, o.rad * 0.6, 0]));
-    if (!s || s.x < 10 || s.y < 40 || s.x > innerWidth - 90 || s.y > innerHeight - 20) { if (LABELS.has(o)) LABELS.get(o).classList.remove('on'); continue; }
+    if (!s || s.x < 10 || s.y < 40 || s.x > innerWidth - 90 || s.y > innerHeight - 20) continue;
     cand.push({ o, d, s });
   }
   cand.sort((a, b) => a.d - b.d);
-  const shown = [];
+  const shown = [], lit = new Set();
   cand.forEach((c, i) => {
-    const el = labelFor(c.o);
-    const clash = shown.some(p => Math.abs(p.x - c.s.x) < 90 && Math.abs(p.y - c.s.y) < 16);
-    if (i > 9 || clash) { el.classList.remove('on'); return; }
-    shown.push(c.s);
-    el.style.transform = `translate(${Math.round(c.s.x + 8)}px, ${Math.round(c.s.y - 10)}px)`;
-    el.classList.add('on');
+    if (i > 9 || shown.some(p => Math.abs(p.x - c.s.x) < 90 && Math.abs(p.y - c.s.y) < 16)) return;
+    shown.push(c.s); lit.add(c.o);
+    const el = labelFor(c.o), tf = `translate(${Math.round(c.s.x + 8)}px, ${Math.round(c.s.y - 10)}px)`;
+    if (el._tf !== tf) el.style.transform = el._tf = tf;
   });
-  for (const [o, el] of LABELS) if (!cand.some(c => c.o === o)) el.classList.remove('on');
+  for (const [o, el] of LABELS) labelOn(el, lit.has(o));
 }
 
 // ---- today's discovery
