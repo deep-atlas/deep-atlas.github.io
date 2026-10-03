@@ -74,6 +74,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   true size; it roams the atlas down to its rated depth, keeping clear of everything, and you can ride along with it (B).
 - **Above the waves**: swim up (R) through Snell's window and out of the water to see the sky, the clouds and the sea from above,
   with the reef glowing through it. The grand dive starts up there.
+- **Map** (O): a cross-section of this ocean from the shore to the Challenger Deep, drawn in characters, with every place,
+  Nautile and you marked. Click a dot to swim there; where places crowd together (the reef) it lists them to choose from.
 - **Where you are**: swimming freely, the info panel names the place you have reached (the coral reef, the kelp forest...) with a
   button to lock on to it.
 - **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, hidden worlds, weird and
@@ -100,7 +102,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 | ← → | previous / next place by depth |
 | H | home (the reef) |
 | B, P, Z, I | ride along with Nautile, photo, screensaver, info panel |
-| N, X | day or night, disturb what you're locked on |
+| N, X, O | day or night, disturb what you're locked on, map |
 | V, Y, G, L, M | detail, travel speed, glow, labels, sound |
 
 ## How it renders
@@ -154,6 +156,7 @@ yellow hull is given a faint glow (its own work lights) so it reads as yellow at
 | `08b-life.js` | living lights, reactions, schools parting round predators, plankton flashes |
 | `09-camera.js` | orbit, angle loop, flights, free swimming, picking |
 | `10-ui.js` | the interface, tours, atlas, search, ladder, labels, photo, compare, ride, screensaver |
+| `10c-map.js` | the cross-section map |
 | `10b-journey.js` | the size journey, from a whale to a microbe |
 | `11-sound.js` | the generative soundscape |
 | `99-main.js` | the frame loop and test hooks (`window.__deep`; `__deep.save(name)` posts a PNG of the canvas to the dev server, which writes it to `.shots/`) |

@@ -156,6 +156,10 @@ body.info-hidden .info{display:none}
   display:flex;flex-direction:column;background:rgba(3,8,15,.88);border:1px solid var(--line);border-radius:4px;backdrop-filter:blur(8px);z-index:5;overflow:hidden}
 .atlas{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
 .panel{z-index:7;max-height:calc(100vh - var(--ctl-b,54px) - 24px);overflow:auto;scrollbar-width:thin}
+.mappanel{width:min(calc(760px*var(--ts)),calc(100vw - 32px))}
+.mappanel canvas{display:block;width:100%;cursor:crosshair;touch-action:manipulation}
+.map-foot{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px;min-height:30px;align-items:center;color:var(--dim);font-size:calc(10.5px*var(--ts));border-top:1px solid var(--line)}
+.map-foot .btn{padding:2px 7px;font-size:calc(10.5px*var(--ts))}
 .atlas-head,.panel-head{display:flex;align-items:center;gap:8px;padding:9px 10px 8px 12px;border-bottom:1px solid var(--line)}
 .ptitle{color:var(--flare);font-size:calc(10.5px*var(--ts));letter-spacing:.16em;text-transform:uppercase}
 .pcount{flex:1;color:var(--faint);font-size:calc(10.5px*var(--ts))}

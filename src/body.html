@@ -30,6 +30,7 @@
     <div id="suggest" class="suggest" hidden></div>
   </label>
   <button class="btn primary" id="btnAtlas" aria-expanded="false" aria-controls="atlas">atlas</button>
+  <button class="btn" id="btnMap" aria-expanded="false" aria-controls="mapPanel" title="Map of this ocean, shore to trench (O)">map</button>
   <div class="tours-pair" role="group" aria-label="Tours"><button class="btn" id="tourPrev" title="Previous stop ([)">&lsaquo;</button><button class="btn" id="btnTours" aria-expanded="false" aria-controls="tours">tours</button><button class="btn" id="tourNext" title="Next stop (])">&rsaquo;</button></div>
   <button class="btn" id="btnTime" aria-expanded="false" aria-controls="timem">time</button>
   <button class="btn" id="btnSub" aria-pressed="false" title="Show where Nautile is">sub</button>
@@ -57,6 +58,12 @@
   <div class="afoot"><span>seen <b id="seenCount"></b></span><span class="sf-bar" id="seenBar"></span></div>
 </aside>
 
+<aside id="mapPanel" class="panel mappanel" aria-label="Map of this ocean" hidden>
+  <div class="panel-head"><span class="ptitle">map · the shore to the Challenger Deep</span><button class="btn" id="mapClose">close</button></div>
+  <canvas id="mapCanvas" aria-label="Cross-section of the ocean with every place marked"></canvas>
+  <div class="map-foot" id="mapFoot"></div>
+  <div class="panel-foot">distance out to sea and depth are both stretched near the top, so the crowded shallows have room · O opens and closes</div>
+</aside>
 <aside id="tours" class="panel" aria-label="Tours" hidden>
   <div class="panel-head"><span class="ptitle">tours</span><button class="btn" id="toursClose">close</button></div>
   <div class="opt tog"><button id="btnTourPause" aria-pressed="false">pause tour</button><button id="btnFree" aria-pressed="false">free camera</button></div>
@@ -102,7 +109,7 @@
   <div class="opt"><div class="opt-l">sound <span class="opt-note">an ocean made live in your browser</span></div>
     <div class="tog sound-row"><button data-key="sound" aria-pressed="false">sound</button><input id="volume" type="range" min="0" max="1" step="0.05" aria-label="Volume"></div>
     <div class="now-playing">now: <b id="nowPlaying">silent</b></div></div>
-  <div class="panel-foot">keys: H home · ? help · V detail · Y travel · G glow · L labels · M sound · P photo · I info · B ride · Z screensaver · N night · X disturb</div>
+  <div class="panel-foot">keys: H home · ? help · V detail · Y travel · G glow · L labels · M sound · P photo · I info · B ride · Z screensaver · N night · X disturb · O map</div>
 </aside>
 
 <div id="ladder" class="ladder" aria-label="Depth ladder: drag to dive, click a name to go there">
@@ -160,6 +167,7 @@
         <dt>G L M</dt><dd>glow · labels · sound</dd>
         <dt>P I Z</dt><dd>photo · info · screensaver</dd>
         <dt>N X</dt><dd>day or night · disturb it</dd>
+        <dt>O</dt><dd>map, shore to trench</dd>
         <dt>esc</dt><dd>close, then let go</dd>
       </dl></section>
     </div>
@@ -172,6 +180,7 @@
     <div class="help-top"><h2 id="notesTitle">what's new</h2><button class="btn" id="notesClose">close</button></div>
     <div class="notes-list">
       <details open><summary><span class="nv">0.10</span><span class="nt">nets, rafts and warnings</span></summary><ul>
+        <li>A map: press O (or “map”) for a cross-section of this ocean from the shore to the Challenger Deep, every place marked. Click a dot to swim there.</li>
         <li>Bubble-net feeding: three humpbacks spiral up blowing a curtain of bubbles round a herring school, then lunge up through the middle together (about every 75 seconds; listen for the feeding call).</li>
         <li>A basking shark cruises near the surface, mouth agape. Keys: N switches day and night, X disturbs what you are locked on to.</li>
         <li>A peacock flounder lies on the reef sand, both eyes on one side.</li>
