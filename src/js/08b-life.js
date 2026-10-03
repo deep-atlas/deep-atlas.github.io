@@ -353,6 +353,39 @@ function drawBubbleNet() {
 }
 
 // ---- spinner dolphins: a pod circling near the surface, each now and then bursting out of the water and spinning on its long axis
+// ---- a thresher shark hunting: it circles a ball of sardines, closes in, brakes nose-down and whips its tail over its head into the fish
+const THRESH = { T:26, R:5.5, r:2.7, slap:0.86, ph:0.6 };   // (ph: the slap comes on the side of the ball the first view looks from)
+function thresherAt(u) {
+  // where the shark is (relative to the ball) at phase u: one lap a cycle, slowing almost to a stop and closing in for the slap
+  const c = 0.85, w = u - c * Math.sin(TAU * (u - THRESH.slap)) / TAU - c * Math.sin(TAU * THRESH.slap) / TAU;
+  const a = w * TAU + THRESH.ph, R = THRESH.R - (THRESH.R - THRESH.r) * smooth(0.62, 0.8, u) * smooth(1, 0.93, u);
+  return [Math.cos(a) * R, 0.6 * Math.sin(u * TAU * 2), Math.sin(a) * R];
+}
+function thresherPost(o, t) {
+  const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
+  const u = (((t % THRESH.T) + THRESH.T) % THRESH.T) / THRESH.T, s = (u - (THRESH.slap - 0.015)) / 0.06;   // s: 0..1 over the slap, about 2 s
+  const pos = thresherAt(u);
+  const fl = vnorm(vsub(thresherAt(u + 0.004), pos)), sd = vnorm(vcross(fl, [0, 1, 0]));
+  // the slap: head down, then the tail flung up and over (fast), and back (slower)
+  const bell = s > 0 && s < 1 ? Math.sin(s * PI) : 0, pitch = -0.55 * bell;
+  const f = vnorm(vadd(vmul(fl, Math.cos(pitch)), [0, Math.sin(pitch), 0])), up = vnorm(vcross(sd, f));
+  const whip = s <= 0 || s >= 1 ? 0 : s < 0.3 ? 2.5 * Math.sin(s / 0.3 * PI / 2) : 2.5 * (1 - smooth(0.3, 1, s));
+  const tf = vnorm(vsub(vmul(f, Math.cos(whip)), vmul(up, Math.sin(whip)))), tu = vnorm(vadd(vmul(f, Math.sin(whip)), vmul(up, Math.cos(whip))));
+  for (const p of o.parts) {
+    if (p.school) { p.off = [0, 0, 0]; continue; }
+    p.off = pos; p._f = p.tail ? tf : f; p._u = p.tail ? tu : up;
+  }
+  o.whip = whip;
+  // where the tail cracks through the water: a burst of bubbles at its tip
+  if (s > 0.22 && s < 0.6 && !o._slapped) {
+    o._slapped = true;
+    const tip = vadd(A, vmad(pos, tf, -1.5));
+    spark(tip, 0.8, 130, 1.3, [0.85, 0.95, 1.0]); setTimeout(() => spark(tip, 0.6, 80, 1.0, [0.85, 0.95, 1.0]), 250);
+    if ((VIEW.focus === o || vlen(vsub(A, CAM.pos)) < 40) && !RIDE.on) toast('The slap: the thresher whips its tail over its head into the sardines, so fast the water fizzes, and picks off the stunned fish.', 5500);
+  }
+  if (s < 0 || s > 1) o._slapped = false;
+}
+
 function spinnerPost(o, t) {
   const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
   o.parts.forEach((p, i) => {
@@ -476,6 +509,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    thresher:'up to ~3.3 m · half of it tail · several sardines stunned per slap',
     nurseshark:'up to ~3 m · breathes lying still · one of the strongest suction feeders',
     manatee:'up to ~4 m and 600 kg · eats ~10% of its weight a day',
     stargazer:'~35 cm · eyes on top of its head · some give an electric shock',

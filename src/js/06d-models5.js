@@ -584,6 +584,31 @@ function mkNurseShark() {
   for (const sz of [1, -1]) tube(mb, { n:3, m:4, path:t => [0.48 + t * 0.01, -0.03 - t * 0.025, sz * 0.025], r:0.004, col:fc(brown) });   // barbels
   return mb;
 }
+function mkThresher() {
+  // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
+  // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
+  const back = [0.6, 0.6, 0.72], belly = [0.95, 0.95, 0.92];
+  return fish({ H:0.05, W:0.042, tm:0.36, nose:0.62, ped:0.16, bodyLen:0.5, back, belly, eye:[0.09, 0.22, 0.011], tail:'none',
+    pattern:(t, sy) => mixc(belly, back, smooth(-0.3, -0.05, sy)),
+    dorsal:[{ at:0.38, len:0.075, h:0.07, sweep:0.6, col:back }, { at:0.92, len:0.015, h:0.012, col:back }], anal:[{ at:0.93, len:0.015, h:0.012, col:back }],
+    pect:{ at:0.26, len:0.14, w:0.045, down:0.6, back:0.55, y:-0.5, col:back }, pelv:{ at:0.7, len:0.04, w:0.025, y:-0.7, col:back },
+    extra:(mb, b) => gills(mb, b, 0.24, 5) });
+}
+function mkThresherTail() {
+  // the scythe: an upper tail lobe as long as the body, swept up a little, and a small lower lobe; its root is at the origin
+  const mb = new MB(), col = [0.58, 0.58, 0.7], n = 18;
+  const spine = t => [0.015 - 0.5 * t, 0.01 + 0.16 * t * (0.6 + 0.4 * t), 0], w = t => 0.04 * Math.pow(1 - t, 1.3) + 0.004;
+  const anim = p => [sAt(p[0]), 0, 0, 0];
+  let prev = null;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, a = spine(t), b = [a[0] + w(t) * 0.35, a[1] - w(t), 0];
+    const row = [mb.v(a, col, anim(a)), mb.v(b, col, anim(b))];
+    if (prev) mb.quad(prev[0], row[0], row[1], prev[1]);
+    prev = row;
+  }
+  fin(mb, [[0.015, 0.0], [-0.035, -0.05], [-0.055, -0.045], [-0.02, 0.005]], { ua:[1, 0, 0], va:[0, 1, 0], col:fc(col), anim:finA });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -743,6 +768,13 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.02, turn:0.08 },
     parts:[part(mkNurseShark, { scale:2.6, mat:M_SKIN, ...FISH_SWIM(0.015, 0.25, 0.8, 2.4) })],
     views:[{ d:[1, 0.12, 0.3], k:1.0, hold:10, drift:0.02 }, { d:[0.3, 0.35, 1], k:1.3, hold:9, drift:0.02 }] });
+  addObj({ key:'thresher', name:'pelagic thresher shark', label:'thresher shark', type:'Alopias pelagicus, hunting sardines', kind:'sharks', at:[3300, 300, 12], size:3, vsize:8, rad:7,
+    fact:'Half its length is tail. Hunting a school of sardines it swims in close, brakes, dips its head and whips the tail up and over like a trebuchet, so fast that the water fizzes with bubbles, stunning several fish at once to eat at leisure. The hunt was first filmed in 2013 off Malapascua in the Philippines, where divers see threshers at dawn on Monad Shoal being cleaned by small wrasse.',
+    motion:{ type:'still', fn:thresherPost },
+    parts:[part(mkSardine, { inst:schoolMill(260, 1.9, 1.6, 1771, 0.9), school:[0, 0.2, 1, 0], mat:M_SILVER, shy:6, ...FISH_SWIM(0.08, 4, 0.9, 1.8) }),
+      part(mkThresher, { scale:3, body:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.85, 2.2) }),
+      part(mkThresherTail, { scale:3, tail:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.85, 2.2) })],
+    views:[{ d:[0.3, 0.05, 1], k:1.9, hold:16, drift:0.01, frame:'world' }, { d:[1, 0.45, 0.4], k:1.8, hold:14, drift:0.01, frame:'world' }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
