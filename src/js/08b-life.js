@@ -350,6 +350,25 @@ function drawBubbleNet() {
   gl.drawArrays(gl.POINTS, 0, SNOW_N);
 }
 
+// ---- spinner dolphins: a pod circling near the surface, each now and then bursting out of the water and spinning on its long axis
+function spinnerPost(o, t) {
+  const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
+  o.parts.forEach((p, i) => {
+    const R = 3.8 + (i % 3) * 1.1, w = 0.45 + i * 0.02, a = t * w + i * 1.3;
+    const T = 9 + i * 1.7, u = (((t + i * 3.1) % T) + T) % T / T, s = u < 0.24 ? u / 0.24 : -1;   // the leap: a quarter of each cycle
+    const h = s >= 0 ? Math.sin(s * PI) * 2.6 : 0, dive = 1.6 + 0.4 * Math.sin(t * 0.3 + i);
+    const y = s >= 0 ? -dive * (1 - Math.sin(s * PI)) + h : -dive;
+    p.off = [Math.cos(a) * R, y - A[1], Math.sin(a) * R];
+    const tan = [-Math.sin(a), 0, Math.cos(a)], pitch = s >= 0 ? Math.cos(s * PI) * 0.9 : 0;
+    const f = vnorm(vadd(vmul(tan, Math.cos(pitch)), [0, Math.sin(pitch), 0]));
+    const roll = s >= 0 ? s * TAU * 3 : 0, sd = vnorm(vcross(f, [0, 1, 0])), up0 = vcross(sd, f);
+    p._f = f; p._u = vnorm(vadd(vmul(up0, Math.cos(roll)), vmul(sd, Math.sin(roll))));
+    if (s >= 0 && s < 0.08 && !p._splashUp) { p._splashUp = true; spark([A[0] + p.off[0], 0.3, A[2] + p.off[2]], 1.2, 120, 1.4, [0.85, 0.95, 1.0]); }
+    if (s >= 0.9 && !p._splashDown) { p._splashDown = true; spark([A[0] + p.off[0], 0.3, A[2] + p.off[2]], 1.6, 160, 1.6, [0.85, 0.95, 1.0]); }
+    if (s < 0) { p._splashUp = false; p._splashDown = false; }
+  });
+}
+
 // ---- breathing: air-breathers that live near the floor rise to the surface every so often
 function breathePost(o, t) {
   const T = o.breatheT || 110, u = (((t + o.idx * 13) % T) + T) % T / T, a = 0.78, b = 0.97;
@@ -455,6 +474,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    spinners:'up to 7 spins in a single leap · leaps up to 3 m',
     mimic:'~60 cm across · impersonates at least 3 venomous animals · only discovered in 1998',
     sleepingwhales:'naps of ~10 to 15 minutes · about 7% of the day asleep',
   };

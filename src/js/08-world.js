@@ -276,6 +276,11 @@ function buildCatalog() {
     parts:[part(mkSardine, { inst:schoolMill(500, 3.2, 2.5, 444, 1.2), school:[0, 0.25, 1, 0], herring:true, show:o => o.bnU < 0.72 || o.bnU > 0.97, mat:M_SILVER, shy:6, ...FISH_SWIM(0.08, 4, 0.9, 1.8) }),
       ...[0, 1, 2].map(i => part(mkHumpback, { scale:13 - i, whale:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...WHALE_SWIM(0.035, 0.25 + i * 0.03) }))],
     views:[{ d:[1, 0.05, 0.3], k:2.1, hold:16, drift:0.008, frame:'world' }, { d:[0.5, -0.45, 0.8], k:1.9, hold:14, drift:0.008, frame:'world', off:[0, -2, 0] }] });
+  addObj({ key:'spinners', name:'spinner dolphins', type:'Stenella longirostris', kind:'air', at:[6200, -400, 2], size:1.9, vsize:9, rad:10,
+    fact:'They leap clear of the water and spin on their long axis, up to seven times in one leap, before crashing back. Nobody is sure why: to shake off remoras, to signal to the pod in the noise of the open sea, or simply because they can. They rest by day in sheltered bays and hunt at night.',
+    motion:{ type:'still', fn:spinnerPost },
+    parts:[0, 1, 2, 3, 4].map(i => part(mkDolphin, { scale:1.9 - (i % 2) * 0.2, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...WHALE_SWIM(0.05, 1.2 + i * 0.1) })),
+    views:[{ d:[0.3, 0.1, 1], k:1.5, hold:14, drift:0.01, frame:'world', air:true, off:[0, 2.5, 0] }, { d:[0.4, -0.2, 1], k:1.4, hold:12, drift:0.01, frame:'world', off:[0, -1.5, 0] }] });
   addObj({ key:'sleepingwhales', name:'sleeping sperm whales', label:'sleeping whales', type:'a family of Physeter macrocephalus, napping upright', kind:'air', at:[11800, 600, 14], size:12, vsize:18, rad:14,
     fact:'Sperm whales sleep in short naps of a few minutes, hanging motionless and upright just below the surface, heads up, often a whole family together. They were only discovered doing this in 2008, when a research boat drifted into a sleeping group that did not wake.',
     // hanging upright, swaying very slightly; every so often the family stirs
