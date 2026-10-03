@@ -94,8 +94,8 @@ function mkYetiCrabs() {
     ellip(c, [0, 0.03, 0], [0.06, 0.028, 0.045], { n:6, m:10, col:fc(shell) });
     for (const sz of [1, -1]) {
       const arm = t => [0.05 + t * 0.11, 0.035 + Math.sin(t * PI) * 0.03, sz * (0.04 + t * 0.05)];
-      tube(c, { n:8, m:4, path:arm, r:t => 0.012 * (1 - t * 0.3), col:fc(shell), anim:t => [0, 0, t * 0.05, 0] });
-      for (let k = 0; k < 16; k++) { const t = 0.2 + k * 0.05, p = arm(t), d = vnorm([r() - 0.5, r() * 0.6 - 0.1, r() - 0.5]); tube(c, { n:1, m:3, path:u => vmad(p, d, u * 0.03), r:0.0025, col:fc(hair), anim:() => [0, 0, t * 0.06, 0] }); }
+      tube(c, { n:8, m:4, path:arm, r:t => 0.012 * (1 - t * 0.3), col:fc(shell), anim:t => [0, 0, t * t * 1.0, 0] });
+      for (let k = 0; k < 16; k++) { const t = 0.2 + k * 0.05, p = arm(t), d = vnorm([r() - 0.5, r() * 0.6 - 0.1, r() - 0.5]); tube(c, { n:1, m:3, path:u => vmad(p, d, u * 0.03), r:0.0025, col:fc(hair), anim:() => [0, 0, t * t * 1.0, 0] }); }
       for (let k = 0; k < 4; k++) tube(c, { n:4, m:3, path:t => [0.02 - k * 0.025 - t * 0.02, 0.02 - t * 0.04 + Math.sin(t * PI) * 0.02, sz * (0.04 + t * 0.07)], r:0.006, col:fc(shell) });
     }
     return c;
@@ -432,8 +432,8 @@ function addDeepFolk(VENTS) {
     parts:[part(mkSeaCucumberSwimmer, { scale:0.25, mat:[0.55, 1.2, 1, 0.6], trans:true, swim2:[0, 2, 0.06, 0.5] })],
     views:[{ d:[0.6, 0.25, 1], k:3.0, hold:10, drift:0.02 }, { d:[1, 0.1, 0.25], k:2.6, hold:9, drift:0.02 }] });
   addObj({ key:'yeticrab', name:'yeti crabs', type:'Kiwa · bristly vent crabs', kind:'floor', floor:[VENTS[0] - 3.6, VENTS[1] + 2.4, 0.03], size:0.15, vsize:0.8, rad:0.5, yaw:0.6,
-    fact:'First found at vents in the South Pacific in 2005. Yeti crabs farm bacteria on the bristles of their arms and chest, waving them through the vent’s chemical-rich water, then comb the bacteria off with their mouthparts to eat.',
-    parts:[part(mkYetiCrabs, { scale:1, mat:[1, 0.5, 1, 0.4], sway:[0.006, 1.5, 10, 0] })],
+    fact:'First found at vents in the South Pacific in 2005. Watch them wave their arms in slow rhythm: yeti crabs farm bacteria on the bristles of their arms and chest, waving them through the vent’s chemical-rich water, then comb the bacteria off with their mouthparts to eat.',
+    parts:[part(mkYetiCrabs, { scale:1, mat:[1, 0.5, 1, 0.4], sway:[0.02, 2.2, 3, 0] })],
     views:[{ d:[0.6, 0.55, 1], k:1.8, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.25, 0.3], k:1.3, hold:9, drift:0.025, frame:'world' }] });
   addObj({ key:'scalyfoot', name:'scaly-foot snails', type:'Chrysomallon squamiferum · armoured with iron', kind:'floor', floor:[VENTS[0] - 2, VENTS[1] - 5, 0.04], size:0.05, vsize:0.4, rad:0.3,
     fact:'The only animal known to build its armour from iron: its foot is covered in hundreds of scales of iron sulphide, drawn from the vent water. It does not need to hunt: bacteria living in a swollen gland in its throat make its food from the vent’s chemicals.',
