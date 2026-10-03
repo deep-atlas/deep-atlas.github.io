@@ -175,8 +175,8 @@ function buildCatalog() {
     views:[{ d:[0.2, 0.15, 1], k:3.2, hold:10, drift:0.02 }, { d:[1, 0.5, 0.4], k:3.5, hold:8, drift:0.02, frame:'world' }, { d:[-0.5, 0.2, 0.9], k:2.5, hold:8, drift:0.02 }] });
   addObj({ key:'bluetang', vsize:6, name:'blue tangs', type:'a school of surgeonfish · Paracanthurus hepatus', kind:'fish', floor:[REEF[0] - 6, REEF[1] + 9, 2.5], size:0.25, rad:4,
     fact:'Tangs are called surgeonfish for the scalpel-sharp spine on each side of the tail. They graze algae off the reef, keeping it clear for corals to grow.',
-    parts:[part(mkBlueTang, { inst:schoolMill(40, 3.2, 1.6, 21, 0.4), school:[0, 0.25, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.06, 2.6, 0.9, 1.8) })],
-    views:[{ d:[0.2, 0.2, 1], k:1.6, hold:10, drift:0.03, frame:'world' }, { d:[1, -0.2, 0.2], k:1.3, hold:8, drift:0.04, frame:'world' }] });
+    parts:[part(mkBlueTang, { inst:schoolMill(40, 2.2, 1.2, 21, 0.4), school:[0, 0.25, 1, 0], mat:M_SKIN, shy:4, ...FISH_SWIM(0.06, 2.6, 0.9, 1.8) })],
+    views:[{ d:[0.2, 0.2, 1], k:0.75, hold:10, drift:0.03, frame:'world' }, { d:[1, -0.25, 0.3], k:0.6, hold:8, drift:0.04, frame:'world' }] });
   addObj({ key:'anthias', name:'anthias', type:'a cloud of fairy basslets', kind:'fish', place:false, floor:[REEF[0] + 8, REEF[1] - 5, 2], size:0.1, rad:4,
     parts:[part(mkAnthias, { inst:schoolCloud(70, 3, 1.4, 22, 1, 0.3), school:[1, 0.1, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.07, 3, 0.9, 1.8) })] });
   addObj({ key:'seahorse', name:'seahorse', type:'a fish that swims upright · Hippocampus', kind:'fish', floor:[REEF[0] + 3.5, REEF[1] + 2, 0.12], size:0.15, rad:0.12, yaw:2.2,
