@@ -32,15 +32,15 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **122 places** across five zones, plus Nautile. By zone:
+- **124 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
-    hammerheads, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school) and
+    hammerheads, bluefin tuna, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school) and
     the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
     penguins hunting through it.
   - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
-    camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a pufferfish, a blue-ringed octopus,
+    camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a giant clam, a pufferfish, a blue-ringed octopus,
     blacktip reef sharks, snappers, a grouper at a cleaning station, flashlight fish at night, and on the sand garden eels, a
     goby sharing a burrow with a pistol shrimp, a peacock flounder and a stingray. A tornado of chevron barracuda off the
     drop-off, a manta, a green turtle; the kelp forest with a sea otter, sea lions, garibaldi and blacksmith; a shipwreck at
@@ -62,7 +62,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
   cucumber's flash, the helmet jelly's rings of light, the pyrosome's running wave of light, the pufferfish swelling into
   a spiny ball, the octopus flushing red and squirting ink, the blue-ringed octopus flashing its rings); shy animals hide
-  when you swim close (garden eels, Christmas tree worms); the cuttlefish hunts with its passing-cloud display; click open
+  when you swim close (garden eels, Christmas tree worms, the giant clam); the cuttlefish hunts with its passing-cloud display; click open
   water and the plankton flash blue, swim through the dark and leave a glowing wake.
 - **Events**: the humpback breaches every couple of minutes; humpbacks bubble-net feed on a herring school; at night the
   reef spawns, flashlight fish come out and firefly squid swarm near the surface; a sperm whale hunts near the giant squid;

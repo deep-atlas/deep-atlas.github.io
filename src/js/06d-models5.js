@@ -418,6 +418,36 @@ function mkBaskingShark() {
       tube(mb, { n:4, m:18, path:t => [mx + 0.01 - t * 0.09, -0.03, 0], r:t => 0.06 - t * 0.012, col:t => t < 0.12 ? [0.7, 0.66, 0.6] : t > 0.85 ? [0.8, 0.78, 0.72] : [0.015, 0.012, 0.012], capEnd:true });
     } });
 }
+function mkClamShell() {
+  // giant clam (Tridacna gigas), one unit long, lying hinge-down: two heavy valves with deep wavy folds, meeting along the top
+  const mb = new MB(), white = [0.42, 0.4, 0.34], grey = [0.24, 0.23, 0.2];
+  for (const sz of [1, -1]) {
+    ellip(mb, [0, 0.2, sz * 0.02], [0.5, 0.24, 0.27], { n:12, m:24,
+      shape:p => { if (p[2] * sz < 0) p = [p[0], p[1], 0]; const f = Math.sin(Math.atan2(p[1] - 0.2, p[0]) * 9); return [p[0], p[1] + f * 0.025 * Math.max(0, p[1] - 0.2) * 6, p[2] * (1 + 0.12 * f)]; },
+      col:(u, v, p) => Math.sin(Math.atan2(p[1] - 0.2, p[0]) * 9) > 0.3 ? white : grey });
+  }
+  return mb;
+}
+function mkClamMantle() {
+  // the mantle that bulges out between the valves: velvety blue, green and gold, dotted with iridescent spots (algae living in
+  // it feed the clam), and the round inhalant siphon
+  const mb = new MB();
+  ellip(mb, [0, 0.44, 0], [0.5, 0.08, 0.2], { n:8, m:24,
+    col:(u, v, p) => { const s = Math.sin(p[0] * 60) * Math.sin(p[2] * 70); return s > 0.6 ? [0.35, 0.95, 1.0, 0.6] : s < -0.6 ? [0.95, 0.8, 0.25, 0.3] : Math.sin(p[0] * 9) > 0 ? [0.15, 0.45, 0.9, 0.2] : [0.15, 0.7, 0.55, 0.2]; } });
+  tube(mb, { n:3, m:10, path:t => [0.18, 0.46 + t * 0.04, 0], r:0.04, col:t => t > 0.6 ? [0.05, 0.05, 0.08] : [0.6, 0.8, 0.7] });
+  return mb;
+}
+function mkTuna() {
+  // Atlantic bluefin tuna: a torpedo built for speed, dark steel-blue above, silver below, a row of yellow finlets to the tail
+  const back = [0.1, 0.16, 0.32], belly = [0.85, 0.87, 0.9], finC = [0.95, 0.8, 0.2];
+  return fish({ H:0.13, W:0.11, tm:0.36, nose:0.62, ped:0.06, bodyLen:0.84, back, belly, eye:[0.08, 0.15, 0.02], e:2.1,
+    pattern:(t, sy) => mixc(belly, back, smooth(-0.1, 0.2, sy + 0.05 * Math.sin(t * 30))),
+    tail:'lunate', tailH:0.2, tailL:0.12, tailCol:back,
+    dorsal:[{ at:0.3, len:0.14, h:0.07, col:back }, { at:0.52, len:0.08, h:0.08, col:[0.6, 0.55, 0.3] }], anal:[{ at:0.55, len:0.07, h:0.07, col:[0.6, 0.55, 0.3] }],
+    pect:{ at:0.27, len:0.12, w:0.04, down:0.3, back:0.6, col:back },
+    extra:(mb, b) => { for (let k = 0; k < 8; k++) for (const s of [1, -1]) { const t = 0.64 + k * 0.035, x = 0.5 - t * b.bl, h = b.H * b.prof(t);
+      fin(mb, [[0, 0], [-0.012, s * 0.02], [-0.02, 0]], { origin:[x, s * h * 0.9, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(finC), anim:finA }); } } });
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -518,6 +548,13 @@ function addShallows(REEF) {
       if (o.hide < 0.1) o._told = false; },
     parts:[part(mkXmasBoulder, { mat:[1, 0.2, 1, 0.3] }), part(mkXmasWorms, { mat:M_SKIN, sway:[0.004, 1.2, 40, 0] })],
     views:[{ d:[0.4, 0.5, 1], k:0.75, hold:10, drift:0.025, off:[0, 0.17, 0] }, { d:[1, 0.35, 0.3], k:0.7, hold:9, drift:0.025, off:[0, 0.17, 0] }] });
+  addObj({ key:'giantclam', name:'giant clam', type:'Tridacna gigas', kind:'floor', floor:[REEF[0], REEF[1] - 14, 0], size:1.1, rad:0.7, yaw:0.4,
+    fact:'The largest clam alive, over 1 m across and 200 kg, and over 100 years old. Algae living in its mantle feed it with sugar from sunlight, which is why it lies open to the sky in shallow water. Despite the legends it cannot trap a diver: it closes far too slowly.',
+    // it draws in its mantle and closes up when a shadow falls over it
+    post:o => { const close = vlen(vsub(vadd(o.pos, [0, 0.4, 0]), CAM.pos)) < 0.9 && VIEW.mode !== 'flight'; o.hide = clamp((o.hide || 0) + (close ? 0.03 : -0.004), 0, 1);
+      const p = o.parts[1]; p.scale = 1.1 * lerp(1, 0.75, o.hide); p.off = [0, -0.18 * o.hide, 0]; },
+    parts:[part(mkClamShell, { scale:1.1, mat:[1, 0.3, 1, 0.5] }), part(mkClamMantle, { scale:1.1, mat:[1, 0.6, 1.2, 0.9], sway:[0.008, 0.6, 6, 0] })],
+    views:[{ d:[0.4, 0.55, 1], k:2.6, hold:10, drift:0.02, off:[0, 0.3, 0] }, { d:[1, 0.3, 0.2], k:2.2, hold:9, drift:0.02, off:[0, 0.3, 0] }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
@@ -541,6 +578,10 @@ function addShallows(REEF) {
     motion:{ type:'circle', R:30, v:1.0, bob:0.6, bank:0.05 },
     parts:[part(mkBaskingShark, { scale:8, mat:M_SKIN, ...FISH_SWIM(0.04, 0.28, 0.8, 2.4) })],
     views:[{ d:[0.6, 0.05, 1], k:1.4, hold:11, drift:0.015 }, { d:[1, -0.05, 0.25], k:1.0, hold:9, drift:0.015 }, { d:[0.2, 0.6, 1], k:1.6, hold:9, drift:0.015 }] });
+  addObj({ key:'tuna', name:'Atlantic bluefin tuna', label:'bluefin tuna', type:'a school of Thunnus thynnus', kind:'fish', at:[7600, -900, 35], size:2.2, vsize:14, rad:14, predator:true,
+    fact:'Built like torpedoes, they swim nonstop their whole lives, keeping their muscles warmer than the sea, and cross the Atlantic in a few months. A big one is 3 m and 600 kg. Folding their fins into slots in the body, they can burst to around 70 km/h.',
+    parts:[part(mkTuna, { inst:schoolMill(40, 9, 3, 911, 2.2), school:[0, 2.2, 1, 0], mat:M_SILVER, shy:4, ...FISH_SWIM(0.035, 1.8, 0.8, 2.6) })],
+    views:[{ d:[0.3, 0.05, 1], k:0.9, hold:10, drift:0.02, frame:'world' }, { d:[0.2, -0.7, 0.5], k:0.8, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },
