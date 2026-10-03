@@ -32,6 +32,7 @@ const WHERE = {
   loosejaw:[18, -35, 'tropical and temperate oceans worldwide'],
   bigfin:[27, -91, 'deep water worldwide; filmed in the Gulf of Mexico'],
   colossal:[-62, 30, 'the Southern Ocean round Antarctica'],
+  glassoctopus:[-4, -172, 'tropical oceans worldwide; filmed off the Phoenix Islands, Kiribati'],
   glasssquid:[0, -150, 'open oceans worldwide'],
   chimaera:[37, -124, 'deep slopes worldwide; here off California'],
   cuttlefish:[-9, 125, 'Indo-Pacific reefs'],

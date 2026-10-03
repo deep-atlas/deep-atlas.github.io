@@ -466,6 +466,7 @@ function addLife() {
     greatwhite:'up to 6 m · senses a billionth of a volt · bursts to ~40 km/h',
     whaleshark:'up to ~18 m · filters ~6,000 litres of water an hour',
     colossal:'eyes ~27 cm across · ~495 kg · swivelling hooks on its arms',
+    glassoctopus:'up to ~45 cm · its eyes long and narrow to cast less shadow',
     giantsquid:'up to ~12 m · eyes up to 27 cm · first filmed alive in 2012',
     mantisshrimp:'strike ~23 m/s · 12 to 16 kinds of colour receptor (we have 3)',
     coelacanth:'lineage ~400 million years · lives ~100 years · pregnancy ~5 years',

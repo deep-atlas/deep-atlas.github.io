@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **151 places** across five zones, plus Nautile. By zone:
+- **152 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
     sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
@@ -52,7 +52,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     seadragon, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, belugas, a walrus, a swimming polar bear, a lion's mane
     jellyfish, sea angels and the sea butterflies they hunt.
   - **Twilight and midnight zones**: lanternfish, hatchetfish, a 40 m siphonophore, barreleye, giant, colossal, bigfin, glass,
-    cock-eyed and Humboldt squid (flashing red and white), firefly squid at night, Atolla, the helmet jellyfish, a giant phantom jelly, a pyrosome, vampire squid, sperm whale,
+    cock-eyed and Humboldt squid (flashing red and white), a see-through glass octopus, firefly squid at night, Atolla, the helmet jellyfish, a giant phantom jelly, a pyrosome, vampire squid, sperm whale,
     anglerfish, viperfish, black dragonfish, stoplight loosejaw, gulper eel, fangtooth, oarfish (upright, as they hang),
     coelacanth, goblin, frilled, cookiecutter and Greenland sharks, a ghost shark, blobfish, a beaked whale, Japanese spider crab and a
     seamount's deep coral garden with orange roughy.

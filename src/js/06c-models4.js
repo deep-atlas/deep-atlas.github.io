@@ -183,6 +183,17 @@ function mkGlassSquid() {
   for (const sz of [1, -1]) ellip(mb, [-0.13, -0.05, sz * 0.09], [0.02, 0.008, 0.012], { n:3, m:6, col:fc([...BIO, 3]) });
   return mb;
 }
+function mkGlassOctopus() {
+  // Vitreledonella: a clear, gelatinous octopus. All you can see are what it cannot make transparent: the eyes (long and narrow, which
+  // makes their silhouette smaller from below), the optic nerves and a spindle of a digestive gland, held upright for the same reason
+  const clear = [0.8, 0.88, 0.97], mb = mkOctopus({ skin:clear, mott:[0.72, 0.82, 0.94], pat:() => clear });
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.07, 0.1, sz * 0.085], [0.022, 0.05, 0.018], { n:5, m:8, col:fc([0.06, 0.06, 0.08]) });
+    tube(mb, { n:4, m:4, path:t => [0.07 - t * 0.08, 0.1 + t * 0.03, sz * (0.08 - t * 0.06)], r:0.007, col:fc([0.9, 0.85, 0.75, 0.3]) });   // the optic nerves
+  }
+  ellip(mb, [-0.1, 0.2, 0], [0.025, 0.1, 0.025], { n:8, m:8, col:fc([0.95, 0.7, 0.4, 0.3]) });
+  return mb;
+}
 function mkChimaera() {
   // a ghost shark (Hydrolagus): a big blunt head, huge green-glinting eyes, wing-like pectoral fins, a venomous spine before the first dorsal
   // fin, and a body that tapers into a long thin whip of a tail
@@ -466,6 +477,11 @@ function addDeepFolk(VENTS) {
     fact:'Almost invisible: its body is a clear bag filled with ammonium-rich fluid that is lighter than seawater, so it floats without effort. Light organs under its eyes erase the shadows of the only parts it cannot make transparent.',
     motion:{ type:'hover', amp:0.06, turn:0.4, pitch:0.5 },
     parts:[part(mkGlassSquid, { scale:0.3, mat:[0.3, 1.3, 1, 0.8], trans:true, pulse:[0.6, 0.3, 0, 0], sway:[0.02, 0.5, 4, 0] })], views:SIDE });
+  addObj({ key:'glassoctopus', name:'glass octopus', type:'Vitreledonella richardi · nearly transparent', kind:'cephs', at:[13600, -400, 450], size:0.45, rad:0.35,
+    fact:'Clear as glass except for its eyes, optic nerves and digestive gland. Its eyes are long and narrow rather than round, and it holds its gland upright, both of which shrink the shadow it casts for hunters looking up from below. It is so rarely seen that most of what was known came from pieces in the stomachs of predators, until a research ship filmed it alive in 2021.',
+    motion:{ type:'hover', amp:0.12, turn:0.3 },
+    parts:[part(mkGlassOctopus, { scale:0.45, mat:[0.3, 1.3, 1, 0.8], trans:true, pulse:[0.5, 0.25, 0, 0], sway:[0.03, 0.5, 3, 0] })],
+    views:[{ d:[0.4, 0.3, 1], k:2.4, hold:10, drift:0.025 }, { d:[0.3, -0.8, 0.5], k:2.4, hold:9, drift:0.025 }] });
   addObj({ key:'chimaera', name:'ghost shark', type:'a chimaera · Hydrolagus', kind:'sharks', floor:[15000, 700, 2.5], size:1.0, rad:0.7,
     fact:'Chimaeras split from the sharks about 400 million years ago. They "fly" with their wing-like pectoral fins, grind shellfish with plates instead of teeth, and the males carry a club-like clasper on the forehead used in mating.',
     motion:{ type:'circle', R:4, v:0.3, bob:0.5, bank:0.1 },
