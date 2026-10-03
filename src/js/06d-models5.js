@@ -448,6 +448,17 @@ function mkTuna() {
     extra:(mb, b) => { for (let k = 0; k < 8; k++) for (const s of [1, -1]) { const t = 0.64 + k * 0.035, x = 0.5 - t * b.bl, h = b.H * b.prof(t);
       fin(mb, [[0, 0], [-0.012, s * 0.02], [-0.02, 0]], { origin:[x, s * h * 0.9, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(finC), anim:finA }); } } });
 }
+function mkSeaKrait() {
+  // banded sea krait (Laticauda colubrina), one unit long, head at +x: a slim snake ringed black and silvery blue, a yellow snout,
+  // the tail flattened into a paddle
+  const mb = new MB(), blue = [0.55, 0.7, 0.95], black = [0.04, 0.04, 0.06], yellow = [0.95, 0.85, 0.35];
+  tube(mb, { n:60, m:7, path:t => [0.48 - t * 0.96, 0, 0], r:t => (t < 0.04 ? 0.012 + t * 0.2 : 0.02) * (t > 0.85 ? lerp(1, 0.5, (t - 0.85) / 0.15) : 1),
+    col:t => t < 0.035 ? yellow : fract(t * 36) < 0.38 ? black : blue, anim:t => [t, 0, 0, 0] });
+  // the paddle tail, flattened top to bottom
+  fin(mb, [[0, 0.025], [-0.06, 0.035], [-0.07, -0.035], [0, -0.025]], { origin:[-0.47, 0, 0], ua:[1, 0, 0], va:[0, 1, 0], col:(a) => fract(a * 30) < 0.4 ? black : blue, anim:() => [1, 0, 0, 0] });
+  for (const sz of [1, -1]) ellip(mb, [0.465, 0.008, sz * 0.012], [0.004, 0.004, 0.003], { n:3, m:5, col:fc(black) });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -555,6 +566,11 @@ function addShallows(REEF) {
       const p = o.parts[1]; p.scale = 1.1 * lerp(1, 0.75, o.hide); p.off = [0, -0.18 * o.hide, 0]; },
     parts:[part(mkClamShell, { scale:1.1, mat:[1, 0.3, 1, 0.5] }), part(mkClamMantle, { scale:1.1, mat:[1, 0.6, 1.2, 0.9], sway:[0.008, 0.6, 6, 0] })],
     views:[{ d:[0.4, 0.55, 1], k:2.6, hold:10, drift:0.02, off:[0, 0.3, 0] }, { d:[1, 0.3, 0.2], k:2.2, hold:9, drift:0.02, off:[0, 0.3, 0] }] });
+  addObj({ key:'seakrait', name:'banded sea krait', type:'Laticauda colubrina · a sea snake', kind:'fish', floor:[REEF[0] + 5, REEF[1] - 9, 1.6], size:1.2, rad:0.8,
+    fact:'A sea snake that hunts eels in reef crevices by day and comes ashore to digest, rest and lay its eggs. Its venom is many times stronger than a cobra’s, but it is shy and very rarely bites. It holds its breath for an hour or more, steering with its paddle tail.',
+    motion:{ type:'eight', R:2.5, v:0.45, bob:0.3, bank:0.1 },
+    parts:[part(mkSeaKrait, { scale:1.2, mat:M_SKIN, swim:[0.07, 0.9, 1.6, 0], swim2:[0, 1.1, 0, 0] })],
+    views:[{ d:[0.3, -0.35, 1], k:1.3, hold:10, drift:0.02 }, { d:[1, -0.15, 0.35], k:1.2, hold:9, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
