@@ -325,8 +325,8 @@ function buildCatalog() {
     views:[{ d:[0.4, 0.4, 1], k:1.2, hold:10, drift:0.03 }, { d:[1, -0.2, 0.3], k:0.9, hold:8, drift:0.04 }] });
   addObj({ key:'krill', vsize:5, name:'krill swarm', label:'krill', type:'Antarctic krill · Euphausia superba', kind:'micro', at:[10000, 200, 30], size:0.05, rad:3,
     fact:'Krill gather in swarms so dense they tint the sea, the largest weighing millions of tonnes. Together the world’s Antarctic krill may weigh as much as all the people on Earth.',
-    parts:[part(mkKrill, { inst:schoolCloud(500, 2.5, 1.5, 41, 1, 0.08), school:[1, 0.05, 1.5, 0], mat:[0.85, 0.9, 1.6, 0.7], sway:[0.01, 4, 30, 0] })],
-    views:[{ d:[0.2, 0.2, 1], k:1.6, hold:10, drift:0.03, frame:'world' }, { d:[0.5, 0.1, 0.3], k:0.14, hold:9, drift:0.03, frame:'world' }] });
+    parts:[part(mkKrill, { inst:schoolCloud(900, 1.6, 1.0, 41, 1, 0.08), school:[1, 0.05, 1.5, 0], mat:[0.85, 0.9, 1.6, 0.7], shy:3, sway:[0.01, 4, 30, 0] })],
+    views:[{ d:[0.2, 0.2, 1], k:0.75, hold:10, drift:0.03, frame:'world' }, { d:[0.5, 0.1, 0.3], k:0.09, hold:9, drift:0.03, frame:'world' }] });
 
   // ---------------- the twilight zone
   addObj({ key:'lanternfish', vsize:10, name:'lanternfish', type:'myctophids · the nightly migrators', kind:'fish', at:[14500, 0, 450], size:0.07, rad:5,
