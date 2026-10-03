@@ -473,8 +473,8 @@ function buildCatalog() {
     views:[{ d:[0.4, 0.04, 1], k:1.6, hold:10, drift:0.02 }, { d:[1, 0.06, 0.3], k:1.5, hold:9, drift:0.02 }] });
   addObj({ key:'amphipods', vsize:1.2, name:'hadal amphipods', label:'amphipods', type:'Hirondellea gigas', kind:'floor', floor:[DEEP[0] + 2, DEEP[1] - 1.5, 0.25], size:0.04, rad:0.6,
     fact:'Hirondellea gigas lives on the floor of the Challenger Deep. It digests sunken wood with enzymes unknown in other animals, and armours its shell with a gel of aluminium against the pressure.',
-    parts:[part(mkAmphipod, { inst:schoolCloud(60, 0.5, 0.15, 91, 1, 0.05), school:[1, 0.035, 1.2, 0], mat:[0.85, 0.7, 1, 0.6], sway:[0.006, 4, 40, 0] })],
-    views:[{ d:[0.6, 0.4, 1], k:1.7, hold:10, drift:0.03, frame:'world' }, { d:[1, 0.15, 0.2], k:0.2, hold:9, drift:0.03, frame:'world' }] });
+    parts:[part(mkAmphipod, { inst:schoolCloud(220, 0.4, 0.12, 91, 1, 0.05), school:[1, 0.035, 1.2, 0], mat:[1, 0.9, 1, 0.9], shy:2, sway:[0.006, 4, 40, 0] })],
+    views:[{ d:[0.6, 0.35, 1], k:0.7, hold:10, drift:0.03, frame:'world' }, { d:[1, 0.15, 0.2], k:0.22, hold:9, drift:0.03, frame:'world' }] });
   addMoreFish(REEF);
   addDeepFolk(VENTS);
   addPlaces2();
