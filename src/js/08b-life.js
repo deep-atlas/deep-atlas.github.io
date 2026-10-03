@@ -440,6 +440,17 @@ function addLife() {
     fireflysquid:'~7 cm · ~1,000 light organs · gathers in millions to spawn',
     grouper:'giant grouper up to ~2.7 m and 400 kg · swallows prey whole',
     bubblenet:'nets up to ~30 m across · lunge mouthfuls of ~15 tonnes of water',
+    giantclam:'over 1 m and 200 kg · lives 100 years or more',
+    tuna:'up to ~3 m and 600 kg · bursts to ~70 km/h · warm-bodied',
+    polarbear:'swims for days · one swam 687 km nonstop',
+    seakrait:'holds its breath ~1 hour · venom ~10 times a cobra’s',
+    lostcity:'towers up to 60 m · water ~40 to 90 °C · active 100,000+ years',
+    coconutoctopus:'~15 cm · carries its shelter · walks on two arms',
+    cookiecutter:'~45 cm · bites round plugs from whales, tuna and submarines',
+    hagfish:'one fish makes ~20 litres of slime in a fraction of a second',
+    torpedo:'up to 220 volts · up to ~1.8 m and 90 kg',
+    humboldt:'up to ~1.5 m and 50 kg · hunts in packs of hundreds',
+    batfish:'~20 cm · walks rather than swims · found only around the Galapagos',
   };
   for (const [k, v] of Object.entries(STAT)) if (v && BYKEY[k] && !BYKEY[k].readout) BYKEY[k].readout = () => v;
   set('reef', { readout:() => night() > 0.5 ? 'night: the corals are spawning, bundles of eggs and sperm rising to the surface\n(on real reefs this happens a few nights a year, just after a full moon)' : 'day: the coral polyps are pulled in; at night they open to feed' });
