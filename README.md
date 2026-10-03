@@ -98,7 +98,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 | right-drag, W A S D R F | let go and swim freely (shift: faster); keep rising with R to come out above the waves |
 | click | swim there and lock on; click it again to disturb it; click open water and the plankton flash |
 | depth ladder | drag to dive, or click a name |
-| / | search (names, kinds, or a depth like `4000 m`) |
+| / | search (names, kinds, where in the world like `Japan`, or a depth like `4000 m`) |
 | space | pause / play |
 | [ ] | previous / next tour stop |
 | ← → | previous / next place by depth |
