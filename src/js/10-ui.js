@@ -61,7 +61,8 @@ const TOURS = [
 const TOUR = { id:null, i:0, playing:false, last:null, views:0, list:[] };
 function tourStops(t) {
   if (!t.random) return t.stops.map(k => BYKEY[k]).filter(Boolean);
-  const all = PLACES().filter(o => o.kind !== 'subs'), un = all.filter(o => !SEEN.has(o.key)), sn = all.filter(o => SEEN.has(o.key));
+  // (night-only animals are left out by day: the swim would arrive at empty water)
+  const all = PLACES().filter(o => o.kind !== 'subs' && !(NIGHT_ONLY.includes(o.key) && night() < 0.45)), un = all.filter(o => !SEEN.has(o.key)), sn = all.filter(o => SEEN.has(o.key));
   const sh = a => { const r = rng(Date.now() & 0xffff); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   return [...sh(un), ...sh(sn)].slice(0, 14);
 }
