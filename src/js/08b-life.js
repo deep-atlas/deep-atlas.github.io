@@ -80,7 +80,10 @@ function schoolPredators(o, p) {
   PRED.fill(0);
   const L = p.school[1];
   // the camera: fish give a diver some room (more the shyer they are), but never more than a few metres
-  PRED.set([0, 0, 0, Math.min(L * (p.shy ?? 10), 4) * (VIEW.mode === 'flight' ? 0 : 1)], 0);
+  // (and never so much, when you are looking at the school itself, that it is pushed out of its own picture)
+  let Rc = Math.min(L * (p.shy ?? 10), 4) * (VIEW.mode === 'flight' ? 0 : 1);
+  if (VIEW.focus === o && VIEW.mode === 'orbit') Rc = Math.min(Rc, VIEW.dist * 0.4);
+  PRED.set([0, 0, 0, Rc], 0);
   const cand = [];
   for (const q of OBJS) {
     if (!q.predator || q === o || q.hidden) continue;
