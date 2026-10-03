@@ -440,7 +440,7 @@ function buildCatalog() {
     fact:'Dumbo octopuses live deeper than any other octopus, down to about 7,000 m, hovering over the floor by flapping their ear-like fins. They swallow their prey whole.',
     motion:{ type:'hover', amp:0.15, turn:0.5 },
     parts:[part(mkDumbo, { scale:0.25, mat:[0.9, 0.7, 1, 0.5], sway:[0.03, 0.5, 4, 0], pulse:[0.25, 0.3, 0, 0], swim2:[0, 2, 0.05, 0.6] })],
-    views:[{ d:[0.6, 0.3, 1], k:2.6, hold:10, drift:0.025 }, { d:[1, 0.1, 0.2], k:2.3, hold:8, drift:0.025 }] });
+    views:[{ d:[0.15, 0.25, 1], k:2.6, hold:10, drift:0.025 }, { d:[0.6, 0.3, 1], k:2.6, hold:8, drift:0.025 }] });
 
   // ---------------- the abyss
   const ABYSS = [45000, 0];

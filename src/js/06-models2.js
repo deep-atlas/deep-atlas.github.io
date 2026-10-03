@@ -110,8 +110,8 @@ function mkDumbo() {
   for (const sz of [1, -1]) {
     ellip(mb, [0.07, 0.06, sz * 0.165], [0.045, 0.05, 0.03], { n:5, m:9, col:(u, v, p) => Math.hypot(p[0] - 0.08, p[1] - 0.06) < 0.025 ? [0.05, 0.03, 0.04] : deep });
     // the ears: rounded paddles that flap to swim
-    fin(mb, [[0, -0.08], [0.1, -0.06], [0.16, 0.02], [0.11, 0.1], [0.0, 0.1], [-0.05, 0.02]], { origin:[0, 0.25, sz * 0.15], ua:vnorm([0, 0.15, sz]), va:[1, 0, 0], rings:3,
-      col:fc(skin), anim:(a, b, r) => [0, r * 0.9, 0, 0] });
+    fin(mb, [[0, -0.1], [0.14, -0.09], [0.24, 0.0], [0.17, 0.13], [0.0, 0.13], [-0.06, 0.02]], { origin:[0, 0.26, sz * 0.16], ua:vnorm([0, 0.35, sz]), va:[1, 0, 0], rings:3,
+      col:(a, b, r) => r > 0.75 ? deep : skin, anim:(a, b, r) => [0, r * 1.1, 0, 0] });
   }
   // the web: rings flaring down and out, cut back between the arms so its edge is scalloped
   const nA = 8, N = 12, M = 64, armA = k => k / nA * TAU + PI / 8;
