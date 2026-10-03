@@ -178,6 +178,8 @@ function updateInfoLive(dt) {
   const d = o ? depthOf(o) : CAM.depth;
   const z = zoneOf(d);
   $('objDist').textContent = `${fmtDepth(d)} · ${z.name}` + (o && o.size ? ` · ${o.kind === 'places' ? 'about ' : ''}${fmtLen(o.size)}${o.kind === 'places' ? ' across' : ' long'}` : '');
+  const wl = o && !RIDE.on && WHERE[o.key] ? `in the wild: ${WHERE[o.key][2]}` : '';
+  if ($('objWild').textContent !== wl) { $('objWild').textContent = wl; $('objWild').hidden = !wl; }
   const dd = Math.max(0, d);
   let ro = CAM.depth < 0 && !o ? `in the air · ${fmtInt(-CAM.depth)} m above the waves` : `${fmtInt(dd / 10 + 1)} atm · ${tempAt(dd).toFixed(1)} °C · ${fmtFrac(sunFrac(dd))}`;
   if (RIDE.on) ro = `Nautile is ${RIDE.status}\n` + ro;
@@ -598,6 +600,7 @@ function share(o) {
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('link copied'), () => toast(url, 5000));
 }
 $('btnShare').onclick = () => share();
+$('objWild').onclick = () => { openPanel('mapPanel', true); setMapMode('world'); };
 function fromHash() {
   const m = /^#([a-z0-9]+)(?:\/(\d+))?(?:@(\d\d)(\d\d))?/.exec(location.hash || '');
   if (m && m[3]) { TOD.min = (+m[3] * 60 + +m[4]) % 1440; TOD.live = false; }
