@@ -194,7 +194,7 @@ function buildCatalog() {
       ink.inkOn = age < 6; ink.scale = 0.2 + Math.sqrt(Math.min(age, 6)) * 0.45; ink.mat[0] = 0.85 * smooth(6, 1.5, age); ink.off = [-0.45 - age * 0.18, 0.35 + age * 0.08, 0];
       const e = smooth(0, 1, o.reactEnv || 0); o.parts[0].tint = vlerp([0.95, 1.05, 0.95], [1.25, 0.55, 0.5], e).map((c, i) => lerp(c, [0.85, 1.25, 1.2][i], (1 - e) * 0.55)); },
     parts:[part(() => mkOctopus(), { scale:0.9, mat:M_SKIN, sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0] }),
-      part(mkInk, { scale:0.5, mat:[0.8, 0, 0, 0], trans:true, show:o => o.parts[1].inkOn })],
+      part(() => mkInk(), { scale:0.5, mat:[0.8, 0, 0, 0], trans:true, show:o => o.parts[1].inkOn })],
     views:[{ d:[0.6, 0.6, 1], k:2.2, hold:10, drift:0.025 }, { d:[1, 0.25, -0.2], k:2.0, hold:8, drift:0.02 }] });
   addObj({ key:'turtle', name:'green sea turtle', type:'Chelonia mydas', kind:'air', floor:[REEF[0] + 60, REEF[1] - 40, 3], size:1.1, rad:0.8,
     fact:'Green turtles can rest underwater for hours on one breath. They graze seagrass and algae, and the females swim back across whole oceans to the beach where they hatched to lay their eggs.',
@@ -384,6 +384,15 @@ function buildCatalog() {
     parts:[part(() => buildWhaleFall(BYKEY.whalefall.anchor, 17), { mat:[1, 0.2, 1, 0.3], sway:[0.02, 0.6, 5, 0] }),
       part(mkHagfish, { inst:schoolCloud(14, 5, 0.6, 71, 1, 0.8), school:[1, 0.5, 0.6, 0], off:[0, 0.6, 0], mat:M_SKIN, ...FISH_SWIM(0.08, 1.2, 1.5, 1.2) })],
     views:[{ d:[0.4, 0.32, 1], k:1.0, hold:12, drift:0.02, frame:'world' }, { d:[1, 0.3, 0.2], k:0.55, hold:9, drift:0.02, frame:'world', off:[5, 0, 0] }] });
+  addObj({ key:'hagfish', name:'hagfish', type:'Eptatretus · the slime eels', kind:'fish', floor:[25500 + 2.5, 500 - 1.5, 0.35], size:0.5, rad:0.6,
+    fact:'Jawless, nearly blind scavengers that burrow into carcasses and feed from the inside, absorbing food through their skin. Grabbed by a shark, a hagfish floods the shark’s mouth and gills with slime in a fraction of a second: a single fish can turn a bucket of water to jelly.',
+    motion:{ type:'hover', amp:0.15, turn:0.6 },
+    // the slime: a pale cloud thrown out all round, swelling and slowly settling
+    post:o => { const sl = o.parts[o.parts.length - 1], age = o.reactT > 0 ? o.reactAge : 99;
+      sl.slimeOn = age < 9; sl.scale = 0.1 + Math.sqrt(Math.min(age, 9)) * 0.17; sl.mat[0] = 0.28 * smooth(9, 3, age); sl.off = [0, 0.05 - age * 0.02, 0]; },
+    parts:[[0, 0, 0, 0], [-0.2, 0.08, 0.18, 1.3], [0.15, -0.05, -0.2, 2.6]].map(([x, y, z, ph]) => part(mkHagfish, { scale:0.5, off:[x, y, z], mat:M_SKIN, swim:[0.12, 0.9, 1.6, ph], swim2:[0, 1.1, 0, 0] })).concat(
+      [part(() => mkInk([0.55, 0.6, 0.55]), { scale:0.3, mat:[0.28, 0.6, 0, 0], trans:true, show:o => o.parts[o.parts.length - 1].slimeOn })]),
+    views:[{ d:[0.3, 0.4, 1], k:2.0, hold:10, drift:0.02 }, { d:[1, 0.2, 0.3], k:1.8, hold:9, drift:0.02 }] });
   addObj({ key:'titanic', name:'the Titanic', label:'Titanic', type:'RMS Titanic · the bow section', kind:'places', floor:[28100, -400, 0], size:140, rad:75, yaw:-0.35, frame:'obj',
     fact:'The RMS Titanic sank on 15 April 1912. Her bow stands upright 3,800 m down, slowly eaten by iron-eating bacteria that hang from it in rusticles.',
     parts:[part(() => buildTitanic(BYKEY.titanic.anchor), { mat:[1, 0.15, 1, 0.25] })],

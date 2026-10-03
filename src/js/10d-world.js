@@ -121,6 +121,7 @@ const WHERE = {
   vents:[9.8, -104.3, 'mid-ocean ridges; the East Pacific Rise'],
   tubeworms:[0.8, -86.2, 'Pacific vents; the Galapagos Rift'],
   whalefall:[36.6, -122.4, 'deep floors worldwide; studied in Monterey Canyon'],
+  hagfish:[36.6, -122.5, 'cold seas worldwide; on whale falls off California'],
   titanic:[41.73, -49.95, 'south of Newfoundland, North Atlantic'],
   dumbo:[40, -130, 'the deep sea worldwide'],
   abyss:[15, -135, 'every ocean; the Clarion-Clipperton Zone, Pacific'],

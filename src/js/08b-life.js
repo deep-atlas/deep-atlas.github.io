@@ -64,7 +64,7 @@ function tickReactions(dt) {
     const env = smooth(0, 0.7, o.reactAge) * smooth(0, 1.5, o.reactT);
     o.reactEnv = env;
     const r = o.react;
-    o.fxDyn = (r.type === 'puff' || r.type === 'colour') ? null : [0, r.type === 'evert' ? 0 : env, r.type === 'evert' ? env : 0, r.wheel ? 1 : r.type === 'wave' ? 3 : 2];
+    o.fxDyn = (r.type === 'puff' || r.type === 'colour' || r.type === 'slime') ? null : [0, r.type === 'evert' ? 0 : env, r.type === 'evert' ? env : 0, r.wheel ? 1 : r.type === 'wave' ? 3 : 2];
   }
 }
 
@@ -383,6 +383,7 @@ function addLife() {
   set('blueringed', { react:{ type:'colour', dur:8, text:'Alarmed, the blue-ringed octopus flashes its rings electric blue: a warning that it carries enough venom to kill.' } });
   set('fireflysquid', { lights:[{ at:[0, 0, 0], col:[0.25, 0.6, 1.0], power:0.6, reach:1.8, flick:1.2 }] });
   set('cookiecutter', { lights:[{ at:[0, -0.05, 0], col:[0.3, 0.95, 0.75], power:0.25, reach:0.6 }] });
+  set('hagfish', { react:{ type:'slime', dur:10, text:'The hagfish floods the water with slime: threads from its skin glands swell up with seawater in a fraction of a second, enough to clog any attacker’s gills.' } });
   set('combjelly', { react:{ type:'flash', dur:4, text:'Some comb jellies glow when touched: the rainbows are reflected sunlight, but this blue flash is their own.' } });
   // Nautile's floodlights light whatever it passes, once it is deep enough to need them
   set('nautile', { lights:[{ at:[6.5, 0, 0], col:[0.9, 0.95, 1.0], power:o => 0.9 * deep(o), reach:7, metres:true }] });
