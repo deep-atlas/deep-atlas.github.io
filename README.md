@@ -34,10 +34,10 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **147 places** across five zones, plus Nautile. By zone:
+- **148 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
-    a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
-    sailfish, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
+    a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
+    sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
     hammerheads, bluefin tuna, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school), a
     family of sperm whales asleep upright, and the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
     penguins hunting through it.
@@ -69,7 +69,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   flooding the water with slime, the electric ray's discharge, the mimic octopus's impersonations); shy animals hide
   when you swim close (garden eels, Christmas tree worms, the giant clam); the cuttlefish hunts with its passing-cloud display; click open
   water and the plankton flash blue, swim through the dark and leave a glowing wake.
-- **Events**: the humpback breaches every couple of minutes; humpbacks bubble-net feed on a herring school; at night the
+- **Events**: the humpback breaches every couple of minutes; a Bryde's whale lunges through the bait ball; humpbacks bubble-net feed on a herring school; at night the
   reef spawns, flashlight fish come out, firefly squid swarm near the surface and the parrotfish sleeps in a
   mucus cocoon; a sperm whale hunts near the giant squid;
   at dusk you can watch the lanternfish rise (time of day > watch the night migration).

@@ -232,6 +232,18 @@ function mkHumpback() {
       pts:[[0, 0.03], [0, -0.025], [0.1, -0.05], [0.22, -0.08], [0.33, -0.1], [0.31, -0.07], [0.2, -0.03], [0.1, 0.0]] },
     tailPat:() => back });
 }
+function mkBrydes() {
+  // Bryde's whale lunging: a slim dark-grey rorqual, its throat pleats ballooned with water and fish, the lower jaw dropped wide open
+  const back = [0.28, 0.3, 0.34], belly = [0.75, 0.74, 0.72], pleat = [0.55, 0.5, 0.52];
+  const mb = cetacean({ back, belly, H:0.065, W:0.07, nose:0.55, bodyLen:0.86, eye:[0.16, -0.05, 0.005], tailH:0.11, tailL:0.09, ped:0.1, tm:0.35,
+    skin:(t, sy) => sy < -0.2 && t < 0.4 && Math.abs(Math.sin(sy * 40)) < 0.3 ? pleat : mixc(belly, back, smooth(-0.3, 0.1, sy)),
+    hShape:t => t < 0.42 ? 1 + 0.55 * Math.sin(Math.min(1, t / 0.42) * PI) : 1,          // (the swollen throat pouch)
+    pect:{ at:0.24, len:0.08, w:0.025, down:0.6, back:0.4, y:-0.5 }, dorsal:[{ at:0.66, len:0.05, h:0.03, col:back }] });
+  // the gaping mouth: a dark wedge between the jaws, baleen plates along the top
+  fin(mb, [[0, 0], [0.16, 0.04], [0.16, -0.06]], { origin:[0.34, -0.005, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc([0.05, 0.04, 0.04]) });
+  for (let k = 0; k < 10; k++) tube(mb, { n:1, m:3, path:t => [0.36 + k * 0.012, 0.03 - t * 0.02, 0], r:0.003, col:fc([0.35, 0.3, 0.25]) });
+  return mb;
+}
 function mkBlueWhale() {
   const back = [0.38, 0.45, 0.55], belly = [0.62, 0.66, 0.7];
   return cetacean({ back, belly, H:0.06, W:0.065, nose:0.5, bodyLen:0.88, eye:[0.17, -0.1, 0.005], tailH:0.11, tailL:0.09, ped:0.1, tm:0.35,

@@ -243,6 +243,25 @@ function buildCatalog() {
     fact:'Under attack, sardines pack into a tight spinning ball, each fish trying to reach the middle. Dolphins, sharks, sailfish and seabirds feed on it from every side.',
     parts:[part(mkSardine, { inst:schoolMill(1800, 3.6, 3, 11, 1.4), school:[0, 0.2, 1, 0], mat:M_SILVER, ...FISH_SWIM(0.08, 4, 0.9, 1.8) })],
     views:[{ d:[0.2, 0.15, 1], k:1.6, hold:10, drift:0.03, frame:'world' }, { d:[0.3, -0.8, 0.4], k:1.4, hold:8, drift:0.04, frame:'world' }, { d:[1, 0.1, 0], k:0.6, hold:8, drift:0.05, frame:'world' }] });
+  addObj({ key:'brydes', name:'Bryde’s whale', type:'Balaenoptera edeni · lunging through the bait ball', kind:'air', at:[6500, 300, 25], size:13, vsize:14, rad:9, predator:true,
+    fact:'A rorqual of warm seas, up to about 15 m. When the dolphins and sharks have herded the sardines into a ball, it can charge up from below and take half the ball in one gulp, its pleated throat ballooning with tonnes of water and fish. About every 90 seconds here.',
+    // a lunge up through the middle of the ball, then away below
+    motion:{ type:'still', fn:(o, t) => {
+      const A = o.anchor, T = 90, u = ((t % T) + T) % T / T, s = clamp((u - 0.75) / 0.13, 0, 1);
+      o.lunging = u > 0.75 && u < 0.88;
+      // between lunges it cruises slowly round below the ball; then it dives, turns and charges straight up
+      const back = u > 0.88 ? smooth(0.88, 1, u) : 0, ang = t * 0.05;
+      const cruise = [A[0] + Math.cos(ang) * 14, A[1] - 22, A[2] + Math.sin(ang) * 14];
+      const lunge = [A[0] - 6 + s * 8, A[1] - 40 + s * 50, A[2]];
+      const w = u < 0.7 ? 0 : u < 0.75 ? smooth(0.7, 0.75, u) : 1 - back;
+      const p = vlerp(cruise, lunge, w); p[1] = Math.min(p[1], -2); o.pos = p;
+      o.fwd = vnorm(vlerp([-Math.sin(ang), 0.02, Math.cos(ang)], [0.35, 1, 0], w)); const sd = vnorm(vcross(o.fwd, [0, 1, 0]));
+      o.up = isFinite(sd[0]) && w < 0.9 ? vnorm(vcross(sd, o.fwd)) : [-1, 0.35, 0]; o.side = vnorm(vcross(o.fwd, o.up));
+      if (o.lunging && s > 0.45 && !o._told) { o._told = true; if ((VIEW.focus === o || VIEW.focus === BYKEY.baitball) && !RIDE.on) toast('A Bryde’s whale lunges through the bait ball, its throat ballooning with water and sardines.', 5500); }
+      if (!o.lunging) o._told = false; } },
+    readout:() => BYKEY.brydes.lunging ? 'lunging: the throat pleats stretch to hold its own weight in water' : 'circling below the bait ball, waiting',
+    parts:[part(mkBrydes, { scale:13, mat:M_SKIN, ...WHALE_SWIM(0.02, 0.4) })],
+    views:[{ d:[1, -0.15, 0.4], k:1.6, hold:14, drift:0.01, frame:'world' }, { d:[0.3, -0.7, 0.6], k:1.3, hold:12, drift:0.01, frame:'world' }] });
   addObj({ key:'sailfish', name:'sailfish', type:'Istiophorus platypterus', kind:'fish', at:[6500, 300, 22], size:3, rad:1.8,
     fact:'Sailfish raise their great dorsal fin to herd sardines, then slash through the ball with their bill. They can flash their skin from silver to striped blue in an instant.',
     motion:{ type:'circle', R:11, v:2.2, bob:2, bank:0.2, dir:-1, ph:1.2 },

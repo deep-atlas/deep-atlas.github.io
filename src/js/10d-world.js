@@ -103,6 +103,7 @@ const WHERE = {
   moonjelly:[35, 140, 'coastal seas worldwide'],
   combjelly:[41, -71, 'the western Atlantic (and, invading, the Black Sea)'],
   baitball:[-32.5, 29, 'the sardine run, off South Africa'],
+  brydes:[-32.6, 29.1, 'warm seas worldwide; feeding in the sardine run off South Africa'],
   sailfish:[21.6, -86.6, 'warm seas; off Isla Mujeres, Mexico'],
   spinners:[19.4, -155.9, 'warm oceans worldwide; resting by day in Hawaiian bays'],
   dolphin:[-32.2, 29.3, 'every ocean; here the sardine run'],
