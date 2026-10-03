@@ -4,6 +4,8 @@ An explorable atlas of the real ocean, drawn entirely in ASCII characters.
 
 **Live at https://deep-atlas.github.io/**
 
+[![An anglerfish drawn in ASCII characters, its lure glowing in the dark](src/preview.png)](https://deep-atlas.github.io/)
+
 Swim from the sunlit surface to the floor of the Challenger Deep, 10,935 m down, and zoom from a 25 m blue whale to a
 single 0.6 µm cell. Creatures swim, jellies pulse, kelp sways, marine snow drifts, and the light changes with depth and the time of day.
 
