@@ -67,7 +67,7 @@ function drawOceanMap() {
   if (N) { c.fillStyle = '#ffd84a'; c.textAlign = 'center'; c.fillText('N', mapX(N.pos[0], W, pl, pr), mapY(depthOf(N), H, pt, pb)); }
   const yx = mapX(CAM.pos[0], W, pl, pr), yy = mapY(Math.max(0, CAM.depth), H, pt, pb);
   c.fillStyle = sub; c.textAlign = 'center'; c.fillText('+', yx, yy);
-  c.textAlign = 'left'; c.fillText('you', Math.min(yx + 6 * dpr, W - pr - cw * 3), yy - ch * 0.8);
+  c.textAlign = 'left'; c.fillText('you', Math.min(yx + 6 * dpr, W - pr - cw * 3), yy + (yy < pt + ch * 2.5 ? ch * 1.1 : -ch * 0.8));
 }
 function soft() { return mapCss('--soft'); }
 // ---- the other tab: where in the world each place really is, on a world map in characters
