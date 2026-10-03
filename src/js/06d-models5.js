@@ -505,6 +505,32 @@ function mkBatfish() {
   }
   return mb;
 }
+function mkMimicStriped() {
+  // the mimic octopus's own look: brown and white bands round the arms
+  return mkOctopus({ skin:[0.85, 0.78, 0.68], mott:[0.35, 0.22, 0.14], pat:p => Math.sin(Math.hypot(p[0], p[2]) * 70) > 0.1 ? [0.32, 0.2, 0.12] : [0.9, 0.85, 0.75] });
+}
+function mkMimicFlat() {
+  // impersonating a flatfish (a sole, many of which are poisonous): arms pulled back into a flat leaf, gliding over the sand
+  const mb = new MB(), c1 = [0.32, 0.2, 0.12], c2 = [0.9, 0.85, 0.75];
+  ellip(mb, [0, 0.02, 0], [0.4, 0.03, 0.18], { n:6, m:20, col:(u, v, p) => Math.sin(p[0] * 40) > 0.2 ? c1 : c2 });
+  for (const sz of [1, -1]) ellip(mb, [0.32, 0.06, sz * 0.03], [0.02, 0.02, 0.015], { n:3, m:6, col:fc([0.05, 0.05, 0.05]) });
+  return mb;
+}
+function mkMimicSnake() {
+  // impersonating a banded sea snake: body and six arms hidden in a hole, two arms stretched out in opposite directions
+  const mb = new MB(), c1 = [0.12, 0.08, 0.06], c2 = [0.95, 0.9, 0.82];
+  for (const dir of [1, -1]) tube(mb, { n:30, m:5, path:t => [dir * (0.02 + t * 0.55), 0.015, 0.06 * Math.sin(t * 7 + dir)], r:t => 0.022 * (1 - t * 0.6), col:t => fract(t * 9) < 0.45 ? c1 : c2, anim:t => [0, 0, t * 0.4, 0] });
+  ellip(mb, [0, 0, 0], [0.04, 0.01, 0.04], { n:3, m:8, col:fc([0.05, 0.04, 0.03]) });
+  return mb;
+}
+function mkMimicLion() {
+  // impersonating a lionfish: arms spread out round it like venomous spines, banded and trailing
+  const mb = new MB(), c1 = [0.32, 0.2, 0.12], c2 = [0.95, 0.9, 0.82];
+  ellip(mb, [0, 0.08, 0], [0.09, 0.07, 0.07], { n:6, m:10, col:fc(c1) });
+  for (let k = 0; k < 8; k++) { const a = k / 8 * TAU, up = 0.2 + 0.25 * (k % 2);
+    tube(mb, { n:12, m:4, path:t => [Math.cos(a) * t * 0.4, 0.08 + t * up * 0.4, Math.sin(a) * t * 0.4], r:t => 0.016 * (1 - t * 0.7), col:t => fract(t * 6) < 0.5 ? c1 : c2, anim:t => [0, 0, t * 0.3, 0] }); }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -627,6 +653,16 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.01, turn:0.05 },
     parts:[part(mkTorpedoRay, { scale:1.2, mat:M_SKIN, swim2:[0, 2, 0.008, 0.3] })],
     views:[{ d:[0.4, 0.7, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, 0.25, 0.4], k:1.6, hold:9, drift:0.02 }] });
+  addObj({ key:'mimic', name:'mimic octopus', type:'Thaumoctopus mimicus', kind:'cephs', floor:[REEF[0] + 37, REEF[1] - 2, 0.02], size:0.6, rad:0.4, yaw:0.3,
+    fact:'Out on open sand with nowhere to hide, it impersonates animals its attackers fear: it flattens into a poisonous sole, spreads its arms like a lionfish’s venomous spines, or hides in a hole and waves two banded arms like a sea snake. It seems to choose the disguise for the threat.',
+    // disturbed, it cycles through its impersonations
+    post:o => { const age = o.reactT > 0 ? o.reactAge : -1, k = age < 0 ? 0 : 1 + Math.floor(age / 3) % 3;
+      o.parts.forEach((p, i) => { p.mimicOn = i === k; }); },
+    parts:[part(mkMimicStriped, { scale:0.6, mat:M_SKIN, sway:[0.1, 0.8, 3, 0], pulse:[0.6, 0.25, 0, 0], show:o => o.parts[0].mimicOn !== false }),
+      part(mkMimicFlat, { scale:0.6, mat:M_SKIN, swim:[0.03, 1.2, 0.8, 0], swim2:[1, 2, 0, 0], show:o => o.parts[1].mimicOn }),
+      part(mkMimicLion, { scale:0.6, mat:M_SKIN, sway:[0.04, 0.8, 4, 0], show:o => o.parts[2].mimicOn }),
+      part(mkMimicSnake, { scale:0.6, mat:M_SKIN, sway:[0.03, 0.9, 4, 0], show:o => o.parts[3].mimicOn })],
+    views:[{ d:[0.4, 0.55, 1], k:2.0, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.8, hold:9, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],

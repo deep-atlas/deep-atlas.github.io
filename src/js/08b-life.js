@@ -66,7 +66,7 @@ function tickReactions(dt) {
     const env = smooth(0, 0.7, o.reactAge) * smooth(0, 1.5, o.reactT);
     o.reactEnv = env;
     const r = o.react;
-    o.fxDyn = (r.type === 'puff' || r.type === 'colour' || r.type === 'slime' || r.type === 'zap') ? null : [0, r.type === 'evert' ? 0 : env, r.type === 'evert' ? env : 0, r.wheel ? 1 : r.type === 'wave' ? 3 : 2];
+    o.fxDyn = (r.type === 'puff' || r.type === 'colour' || r.type === 'slime' || r.type === 'zap' || r.type === 'mimic') ? null : [0, r.type === 'evert' ? 0 : env, r.type === 'evert' ? env : 0, r.wheel ? 1 : r.type === 'wave' ? 3 : 2];
   }
 }
 
@@ -390,6 +390,7 @@ function addLife() {
   set('cookiecutter', { lights:[{ at:[0, -0.05, 0], col:[0.3, 0.95, 0.75], power:0.25, reach:0.6 }] });
   set('hagfish', { react:{ type:'slime', dur:10, text:'The hagfish floods the water with slime: threads from its skin glands swell up with seawater in a fraction of a second, enough to clog any attacker’s gills.' } });
   set('torpedo', { react:{ type:'zap', dur:3, text:'Zap: the torpedo ray fires its electric organs, over 200 volts, enough to stun a fish or knock a diver over.' } });
+  set('mimic', { react:{ type:'mimic', dur:9, text:'Watch: the mimic octopus turns into a poisonous flatfish, then a lionfish with venomous spines, then a banded sea snake.' } });
   set('combjelly', { react:{ type:'flash', dur:4, text:'Some comb jellies glow when touched: the rainbows are reflected sunlight, but this blue flash is their own.' } });
   // Nautile's floodlights light whatever it passes, once it is deep enough to need them
   set('nautile', { lights:[{ at:[6.5, 0, 0], col:[0.9, 0.95, 1.0], power:o => 0.9 * deep(o), reach:7, metres:true }] });
