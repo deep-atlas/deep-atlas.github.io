@@ -80,8 +80,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   or where it was famously filmed), with you marked. Coastlines from Natural Earth (public domain).
 - **Where you are**: swimming freely, the info panel names the place you have reached (the coral reef, the kelp forest...) with a
   button to lock on to it.
-- **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, hidden worlds, weird and
-  wonderful, life without the sun, a night dive, the size journey, and an endless random swim. Screensaver mode (Z).
+- **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, hidden worlds, around the
+  world, weird and wonderful, life without the sun, a night dive, the size journey, and an endless random swim. Screensaver mode (Z).
 - **Time of day**: sunlight, dusk and night, and the nightly vertical migration (lanternfish rise from 450 m to 60 m).
 - **Interface** modelled on gcdatlas: info panel (name, type, depth, fact, live readout of pressure, temperature and
   sunlight, ruler, angle bar), search, atlas (sort, filter, seen), tours, settings, help, a depth ladder you can drag

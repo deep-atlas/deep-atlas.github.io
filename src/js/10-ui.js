@@ -49,6 +49,8 @@ const TOURS = [
     stops:['reef', 'flashlight', 'fireflysquid', 'octopus', 'cuttlefish', 'manowar', 'noctiluca', 'lanternfish', 'combjelly', 'turtle', 'kelp', 'seaotter'] },
   { id:'hidden', name:'hidden worlds', blurb:'Places most people never hear of: forests in the sea, lakes on the seafloor, gardens on drowned volcanoes.',
     stops:['wreck', 'sargassum', 'sargassumfish', 'mangroves', 'boxjelly', 'seagrass', 'dugong', 'seadragon', 'seaice', 'narwhal', 'beluga', 'lionsmane', 'kelp', 'seep', 'flowerbasket', 'vents', 'yeticrab', 'seamount', 'roughy', 'whalefall', 'abyss', 'challenger'] },
+  { id:'world', name:'around the world', blurb:'A loop round the planet: from California across the Pacific to Japan and the Mariana Trench, through Indonesia to Australia, across the Indian Ocean to Africa and Antarctica, and home over the Atlantic. (Open the map’s world tab to follow along.)',
+    stops:['kelp', 'seaotter', 'greatwhite', 'bubblenet', 'humpback', 'abyss', 'challenger', 'giantsquid', 'spidercrab', 'nautilus', 'barracuda', 'nudibranch', 'reef', 'boxjelly', 'seadragon', 'whaleshark', 'mangroves', 'manta', 'scalyfoot', 'coelacanth', 'wreck', 'baitball', 'penguin', 'krill', 'titanic', 'sargassum', 'stingray'] },
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
     stops:['seadragon', 'spidercrab', 'coelacanth', 'nautilus', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
