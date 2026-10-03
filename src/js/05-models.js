@@ -156,6 +156,14 @@ function mkRemora() {
     tail:'truncate', tailH:0.08, tailCol:grey, dorsal:[{ at:0.5, len:0.32, h:0.04, col:grey }], anal:[{ at:0.5, len:0.32, h:0.04, col:grey }], pect:{ at:0.24, len:0.07, w:0.03, col:grey },
     extra:mb => ellip(mb, [0.25, 0.07, 0], [0.13, 0.012, 0.04], { n:3, m:10, col:(u, v, p) => fract(p[0] * 60) < 0.4 ? [0.2, 0.2, 0.2] : [0.6, 0.6, 0.6] }) });
 }
+function mkNomeus() {
+  // man-of-war fish (Nomeus gronovii), a few centimetres: silvery blue with dark blue blotches, big fan-like pelvic fins
+  const blue = [0.25, 0.4, 0.75], silver = [0.85, 0.88, 0.92];
+  return fish({ H:0.13, W:0.05, tm:0.3, nose:0.6, ped:0.14, bodyLen:0.82, back:blue, belly:silver, eye:[0.09, 0.25, 0.04], n:12, m:8,
+    pattern:(t, sy, sz, p) => Math.sin(t * 22 + sy * 3) > 0.4 && sy > -0.2 ? [0.1, 0.18, 0.45] : null,
+    tail:'fork', tailH:0.12, tailCol:blue, dorsal:[{ at:0.3, len:0.4, h:0.07, col:blue }], anal:[{ at:0.55, len:0.25, h:0.06, col:blue }],
+    pect:{ at:0.22, len:0.12, w:0.08, down:0.6, col:[0.15, 0.2, 0.4] } });
+}
 function mkWhaleShark() {
   const back = [0.22, 0.28, 0.36], belly = [0.88, 0.88, 0.85], spot = [0.92, 0.92, 0.88];
   return fish({ H:0.085, W:0.12, tm:0.3, nose:0.35, ped:0.12, bodyLen:0.8, back, belly, eye:[0.05, 0.05, 0.01], e:t => lerp(3.2, 2, smooth(0, 0.4, t)),
