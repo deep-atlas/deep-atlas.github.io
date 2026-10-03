@@ -277,6 +277,14 @@ function mkWalrus() {
   return mb;
 }
 
+function mkSeaButterfly() {
+  // a sea butterfly (Limacina helicina), about 1 cm: a tiny glassy coiled shell, and two wing-like flaps it flies through the water with
+  const mb = new MB(), shell = [0.75, 0.6, 0.45, 0.2], wing = [0.85, 0.9, 1.0, 0.3];
+  for (let k = 0; k < 3; k++) { const rr = 0.18 * Math.pow(0.65, k); ellip(mb, [0.0, -0.05 - k * 0.07, 0.02 * k], [rr, rr * 0.85, rr], { n:5, m:8, col:fc(k ? [0.55, 0.42, 0.3, 0.1] : shell) }); }
+  for (const sz of [1, -1]) fin(mb, [[0, 0], [0.12, 0.08], [0.32, 0.12], [0.4, 0.02], [0.22, -0.06], [0.05, -0.04]], { origin:[0.05, 0.12, sz * 0.05], ua:[0, 0.3, sz], va:[1, 0, 0], col:fc(wing), anim:(a) => [0, a * 4, 0, 0] });
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -381,6 +389,10 @@ function addPlaces2() {
     motion:{ type:'circle', R:10, v:0.8, bob:1, bank:0.08 },
     parts:[part(mkWalrus, { scale:3.2, mat:M_SKIN, swim:[0.02, 0.5, 0.6, 0], swim2:[1, 2, 0.06, 0.6] })],
     views:[{ d:[0.3, 0.1, 1], k:1.7, hold:10, drift:0.02 }, { d:[1, -0.2, 0.3], k:1.5, hold:9, drift:0.02 }] });
+  addObj({ key:'seabutterfly', name:'sea butterflies', type:'Limacina helicina · a swimming snail', kind:'micro', at:[ICE[0] + 2, ICE[1] - 8, 7], size:0.01, vsize:0.15, rad:0.4,
+    fact:'Tiny snails that flap through the water on two wing-like flaps, food for fish, whales and the sea angels that hunt nothing else. Their thin shells are made of calcium carbonate, which dissolves as seawater absorbs more carbon dioxide: they are one of the first animals to show the harm of ocean acidification.',
+    parts:[part(mkSeaButterfly, { inst:schoolCloud(70, 0.25, 0.18, 1212, 1, 0.02), school:[1, 0.012, 1.5, 0], mat:[0.5, 1.3, 1, 0.6], trans:true, shy:2, swim2:[0, 2, 0.002, 3.5] })],
+    views:[{ d:[0.3, 0.1, 1], k:1.0, hold:10, drift:0.02, frame:'world' }, { d:[1, 0.3, 0.3], k:0.45, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'lionsmane', name:'lion’s mane jellyfish', label:'lion’s mane', type:'Cyanea capillata', kind:'jellies', at:[ICE[0] - 14, ICE[1] + 8, 9], size:1.6, vsize:4, rad:3,
     fact:'The largest known jellyfish. Its bell can reach 2 m across and its hundreds of sticky tentacles trail over 30 m: one found in 1870 was longer than a blue whale. It thrives in cold Arctic and North Atlantic water.',
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
