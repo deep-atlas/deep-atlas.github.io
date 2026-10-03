@@ -69,7 +69,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   when you swim close (garden eels, Christmas tree worms, the giant clam); the cuttlefish hunts with its passing-cloud display; click open
   water and the plankton flash blue, swim through the dark and leave a glowing wake.
 - **Events**: the humpback breaches every couple of minutes; humpbacks bubble-net feed on a herring school; at night the
-  reef spawns, flashlight fish come out and firefly squid swarm near the surface; a sperm whale hunts near the giant squid;
+  reef spawns, flashlight fish come out, firefly squid swarm near the surface and the parrotfish sleeps in a
+  mucus cocoon; a sperm whale hunts near the giant squid;
   at dusk you can watch the lanternfish rise (time of day > watch the night migration).
 - **Night**: stars, the moon and its glade above the water; a night dive tour.
 - **From a whale to a microbe**: one long zoom through size, every animal at its true size beside the last, from a 25 m blue

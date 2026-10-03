@@ -215,8 +215,16 @@ function addMoreFish(REEF) {
     views:[{ d:[0.35, -0.3, 1], k:2.3, hold:10, drift:0.02 }, { d:[1, -0.15, 0.4], k:2.1, hold:9, drift:0.02 }] });
   addObj({ key:'parrotfish', name:'parrotfish', type:'Scarus · a reef parrotfish', kind:'fish', floor:[REEF[0] - 8, REEF[1] + 3, 1.8], size:0.6, rad:0.4,
     fact:'It bites algae off coral with a beak of fused teeth and grinds the stony coral into fine sand: a single big parrotfish can make hundreds of kilograms of sand a year. Many sleep at night inside a cocoon of their own mucus.',
-    motion:{ type:'circle', R:3, v:0.35, bob:0.3, bank:0.1 },
-    parts:[part(mkParrotfish, { scale:0.6, mat:M_SKIN, ...FISH_SWIM(0.05, 1.4, 0.9, 1.8) })], views:SIDE });
+    // by day it swims its circuit; at night it settles by a coral head and blows a bubble of mucus round itself to sleep in
+    motion:{ type:'still', fn:(o, t) => {
+      const A = o.anchor, n = night(), a = t * 0.35 / 3, R = 3 * (1 - n);
+      o.pos = [A[0] + R * Math.cos(a), A[1] + 0.3 * Math.sin(t * 0.11) * (1 - n) - n * 1.2, A[2] + R * Math.sin(a)];
+      const f = vnorm(vlerp([-Math.sin(a), 0, Math.cos(a)], [1, 0, 0], n)); o.fwd = f; o.up = [0, 1, 0]; o.side = vnorm(vcross(f, o.up));
+      o.parts[0].swim[0] = 0.05 * (1 - n * 0.9); o.cocoon = n > 0.5; } },
+    readout:() => BYKEY.parrotfish.cocoon ? 'asleep in its mucus cocoon: it takes about an hour to blow, and may hide its scent from moray eels' : 'by day it grazes; at night it sleeps in a cocoon of mucus',
+    parts:[part(mkParrotfish, { scale:0.6, mat:M_SKIN, ...FISH_SWIM(0.05, 1.4, 0.9, 1.8) }),
+      part(() => { const mb = new MB(); ellip(mb, [0, 0, 0], [0.62, 0.32, 0.3], { n:12, m:18, shape:p => [p[0] * (1 + 0.04 * Math.sin(p[1] * 30)), p[1], p[2]], col:fc([0.35, 0.42, 0.45, 0]) }); return mb; },
+        { scale:0.6, mat:[0.07, 0.9, 0, 0.6], trans:true, sway:[0.01, 0.4, 4, 0], show:o => o.cocoon })], views:SIDE });
   addObj({ key:'moray', name:'moray eel', type:'giant moray · Gymnothorax javanicus', kind:'fish', floor:[REEF[0] - 2.4, REEF[1] - 1.4, 0.2], size:1.6, rad:0.9, yaw:-0.6,
     fact:'Morays have a second set of jaws in the throat that shoot forward to grab prey and drag it down. Giant morays sometimes hunt with groupers, which signal them with head-shakes.',
     motion:{ type:'hover', amp:0.05, turn:0.25 },
