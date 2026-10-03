@@ -456,6 +456,11 @@ function buildCatalog() {
     fact:'The deepest known point of the ocean, about 10,935 m down in the Mariana Trench, at over 1,000 times the pressure at the surface. Jacques Piccard and Don Walsh first reached it in 1960 in the bathyscaphe Trieste.',
     parts:[part(() => buildHadal(BYKEY.challenger.anchor, 29), { mat:[0.95, 0.5, 1, 0.4], sway:[0.02, 0.4, 3, 0] })],
     views:[{ d:[0.5, 0.3, 1], k:1.0, hold:12, drift:0.02, frame:'world' }, { d:[1, 0.1, 0.4], k:0.35, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'alicella', name:'supergiant amphipod', type:'Alicella gigantea', kind:'floor', floor:[71000, -40, 0.4], size:0.3, rad:0.3, yaw:1.1,
+    fact:'Most amphipods are a few millimetres long, sand hoppers of the beach. This one, found at 4,000 to 7,000 m, reaches 34 cm: deep-sea gigantism, perhaps helped by cold water, slow lives and the need to travel far between rare meals. Baited traps in the trenches can fill with them.',
+    motion:{ type:'hover', amp:0.1, turn:0.5 },
+    parts:[part(mkAmphipod, { scale:0.3, mat:[0.85, 0.7, 1, 0.6], sway:[0.006, 3, 20, 0] })],
+    views:[{ d:[0.4, 0.04, 1], k:1.6, hold:10, drift:0.02 }, { d:[1, 0.06, 0.3], k:1.5, hold:9, drift:0.02 }] });
   addObj({ key:'amphipods', vsize:1.2, name:'hadal amphipods', label:'amphipods', type:'Hirondellea gigas', kind:'floor', floor:[DEEP[0] + 2, DEEP[1] - 1.5, 0.25], size:0.04, rad:0.6,
     fact:'Hirondellea gigas lives on the floor of the Challenger Deep. It digests sunken wood with enzymes unknown in other animals, and armours its shell with a gel of aluminium against the pressure.',
     parts:[part(mkAmphipod, { inst:schoolCloud(60, 0.5, 0.15, 91, 1, 0.05), school:[1, 0.035, 1.2, 0], mat:[0.85, 0.7, 1, 0.6], sway:[0.006, 4, 40, 0] })],

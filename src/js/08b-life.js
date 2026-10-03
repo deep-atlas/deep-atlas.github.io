@@ -452,6 +452,8 @@ function addLife() {
     torpedo:'up to 220 volts · up to ~1.8 m and 90 kg',
     humboldt:'up to ~1.5 m and 50 kg · hunts in packs of hundreds',
     batfish:'~20 cm · walks rather than swims · found only around the Galapagos',
+    alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
+    casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
     mimic:'~60 cm across · impersonates at least 3 venomous animals · only discovered in 1998',
     sleepingwhales:'naps of ~10 to 15 minutes · about 7% of the day asleep',
   };

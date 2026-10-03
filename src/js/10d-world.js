@@ -138,5 +138,6 @@ const WHERE = {
   trench:[11.5, 142.2, 'the western Pacific, east of the Mariana Islands'],
   snailfish:[11.6, 142.7, 'the Mariana Trench'],
   challenger:[11.37, 142.59, 'the southern end of the Mariana Trench'],
+  alicella:[-31, -177, 'the deep Pacific; caught in the Kermadec Trench'],
   amphipods:[11.4, 142.4, 'the deepest trenches']
 };

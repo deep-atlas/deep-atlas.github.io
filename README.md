@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **136 places** across five zones, plus Nautile. By zone:
+- **137 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
@@ -59,7 +59,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     Lost City's white limestone towers; a cold seep
     whose brine pool is a lake on the seafloor, with a Venus' flower basket; a whale fall with hagfish and a sixgill shark; the Titanic's
     bow; giant isopod; dumbo octopus; the abyssal plain with the ghost octopus "Casper", sea pigs, xenophyophores, tripod fish, grenadiers and the
-    swimming sea cucumber; the Mariana Trench, snailfish, hadal amphipods and the Challenger Deep.
+    swimming sea cucumber; the Mariana Trench with a supergiant amphipod, snailfish, hadal amphipods and the Challenger Deep.
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
