@@ -334,7 +334,7 @@ function mkManta() {
 
 // ---- deep-sea fish
 function mkLanternfish() {
-  const back = [0.1, 0.1, 0.14], side = [0.55, 0.6, 0.7];
+  const back = [0.22, 0.24, 0.3], side = [0.7, 0.75, 0.85];
   return fish({ H:0.11, W:0.06, tm:0.3, nose:0.4, bodyLen:0.8, back, belly:side, eye:[0.08, 0.2, 0.05], n:16, m:10, eyeCol:[0.05, 0.08, 0.1],
     tail:'fork', tailH:0.1, dorsal:[{ at:0.38, len:0.14, h:0.07 }], pect:{ at:0.2, len:0.08, w:0.03 },
     extra:(mb, b) => photophores(mb, b, [[0.12, 0.75, -0.55, 9], [0.2, 0.6, -0.15, 5]], BIO, 0.012) });

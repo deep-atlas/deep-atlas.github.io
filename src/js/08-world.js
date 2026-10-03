@@ -332,8 +332,8 @@ function buildCatalog() {
   addObj({ key:'lanternfish', vsize:10, name:'lanternfish', type:'myctophids · the nightly migrators', kind:'fish', at:[14500, 0, 450], size:0.07, rad:5,
     fact:'Lanternfish may be the most common vertebrates on Earth. Each night they rise hundreds of metres to feed near the surface and sink before dawn: the largest migration on the planet, every day.',
     motion:{ type:'migrate', day:450, night:60 },
-    parts:[part(mkLanternfish, { inst:schoolCloud(800, 4, 2.4, 51, 1, 0.3), school:[1, 0.07, 1, 0], mat:M_SKIN, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
-    views:[{ d:[0.2, 0.1, 1], k:0.75, hold:10, drift:0.03, frame:'world' }, { d:[0.6, 0.1, 0.4], k:0.25, hold:9, drift:0.03, frame:'world' }],
+    parts:[part(mkLanternfish, { inst:schoolCloud(1200, 2.2, 1.3, 51, 1, 0.3), school:[1, 0.07, 1, 0], mat:M_SILVER, shy:3, ...FISH_SWIM(0.06, 3, 0.9, 1.8) })],
+    views:[{ d:[0.2, 0.1, 1], k:0.45, hold:10, drift:0.03, frame:'world' }, { d:[0.6, 0.1, 0.4], k:0.12, hold:9, drift:0.03, frame:'world' }],
     readout:() => night() > 0.5 ? 'night: risen to feed near the surface' : 'day: hiding in the twilight' });
   addObj({ key:'hatchetfish', vsize:2.4, name:'hatchetfish', type:'Argyropelecus · silver hatchetfish', kind:'fish', at:[15000, -200, 600], size:0.06, rad:2,
     fact:'Lights along its belly match the faint glow from above, erasing its silhouette for hunters looking up: counter-illumination. Its tubular eyes look straight up.',
@@ -436,7 +436,7 @@ function buildCatalog() {
     motion:{ type:'crawl', R:5, v:0.012, h:0 },
     parts:[part(mkSeaPigHerd, { mat:[1, 0.5, 1, 0.4], sway:[0.012, 1.4, 25, 0] })],
     fact:'Sea pigs are sea cucumbers that walk on inflated tube feet, grazing the ooze in herds. They tend to face into the current, perhaps to smell fresh food falling from above.',
-    views:[{ d:[1, 0.3, 0.6], k:2.0, hold:10, drift:0.02, frame:'world' }, { d:[0.9, 0.12, 0.1], k:0.9, hold:8, drift:0.02, frame:'world' }] });
+    views:[{ d:[1, 0.3, 0.6], k:0.9, hold:10, drift:0.02, frame:'world' }, { d:[0.9, 0.12, 0.1], k:0.45, hold:8, drift:0.02, frame:'world' }] });
   addObj({ key:'xeno', name:'xenophyophore', type:'a single cell the size of a fist', kind:'floor', floor:[ABYSS[0] - 1, ABYSS[1] + 8, 0.06], size:0.12, rad:0.1, place:true,
     parts:[part(() => mkXenophyophore(99), { scale:0.14, mat:[1, 0.3, 1, 0.2] })],
     fact:'A single cell up to about 20 cm across, among the largest cells known. It glues sediment grains into a fragile shell and lives from the abyss down into the trenches.',
