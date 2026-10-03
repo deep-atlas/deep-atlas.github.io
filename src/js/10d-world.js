@@ -25,6 +25,7 @@ const WHERE = {
   scalyfoot:[-25.3, 70, 'vents on the Central Indian Ridge'],
   spidercrab:[34.6, 138.7, 'deep bays round Japan'],
   cookiecutter:[-5, -170, 'warm oceans worldwide, rising near the surface at night'],
+  humboldt:[27.5, -111.5, 'the eastern Pacific; the Gulf of California and off Peru'],
   dragonfish:[25, -45, 'tropical and temperate oceans worldwide'],
   loosejaw:[18, -35, 'tropical and temperate oceans worldwide'],
   bigfin:[27, -91, 'deep water worldwide; filmed in the Gulf of Mexico'],

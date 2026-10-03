@@ -38,7 +38,7 @@ const TOURS = [
   { id:'dive', name:'the grand dive', blurb:'From the surface to the floor of the Challenger Deep, zone by zone.',
     stops:['surface', 'flyingfish', 'manowar', 'reef', 'clownfish', 'lionfish', 'turtle', 'manta', 'kelp', 'baitball', 'whaleshark', 'bluewhale', 'seep', 'krill', 'coelacanth', 'oarfish', 'lanternfish', 'siphonophore', 'barreleye', 'giantsquid', 'vampsquid', 'dragonfish', 'blobfish', 'spermwhale', 'anglerfish', 'gulper', 'vents', 'whalefall', 'titanic', 'dumbo', 'abyss', 'tripodfish', 'snailfish', 'amphipods', 'challenger'] },
   { id:'giants', name:'giants', blurb:'The biggest animals there are, and one that is a colony.',
-    stops:['bluewhale', 'humpback', 'bubblenet', 'whaleshark', 'baskingshark', 'tuna', 'orca', 'spermwhale', 'colossal', 'giantsquid', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'leatherback', 'sunfish', 'greatwhite'] },
+    stops:['bluewhale', 'humpback', 'bubblenet', 'whaleshark', 'baskingshark', 'tuna', 'orca', 'spermwhale', 'colossal', 'giantsquid', 'humboldt', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'leatherback', 'sunfish', 'greatwhite'] },
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
     stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'atolla', 'pyrosome', 'cookiecutter', 'cockeyed', 'helmetjelly', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',

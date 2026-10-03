@@ -343,6 +343,11 @@ function mkCookiecutter() {
     tail:'lunate', tailH:0.1, tailL:0.12, tailCol:brown, dorsal:[{ at:0.6, len:0.06, h:0.035, col:brown }, { at:0.7, len:0.06, h:0.035, col:brown }],
     pect:{ at:0.24, len:0.07, w:0.03, down:0.4, col:brown }, extra:(mb, b) => gills(mb, b, 0.14, 5) });
 }
+function mkHumboldt() {
+  // Humboldt squid (Dosidicus gigas), up to about 1.5 m: a big muscular mantle with a broad arrow-shaped fin, skin packed with
+  // chromatophores it flashes from deep red to white
+  return mkSquid({ mantle:0.5, mw:0.075, arms:0.25, tent:0.3, fin:0.11, finLen:0.2, eye:0.03, skin:[0.85, 0.25, 0.2], dark:[0.6, 0.12, 0.1] });
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -375,6 +380,12 @@ function addDeepFolk(VENTS) {
     motion:{ type:'circle', R:2.5, v:0.4, bob:0.4, bank:0.1 },
     parts:[part(mkCookiecutter, { scale:0.45, mat:M_SKIN, ...FISH_SWIM(0.06, 1.2, 0.9, 2.2) })],
     views:[{ d:[0.3, -0.45, 1], k:2.2, hold:10, drift:0.02 }, { d:[0.15, 0.1, 1], k:2.0, hold:9, drift:0.02 }] });
+  addObj({ key:'humboldt', name:'Humboldt squid', type:'Dosidicus gigas · the red devils', kind:'cephs', at:[15200, -700, 550], size:1.2, vsize:7, rad:6, predator:true,
+    fact:'Hunting in packs of hundreds, they rise from the twilight zone at night to feed. Their skin flickers between deep red and white in fractions of a second, perhaps signalling to each other as they hunt; fishermen call them red devils. They can swim at over 20 km/h.',
+    // the whole pack flickering red and white, out of step across the body of the school
+    post:(o, t) => { const f = 0.5 + 0.5 * Math.sin(t * 7.3) * Math.sin(t * 3.1 + 1); o.parts[0].tint = [lerp(1, 1.05, f), lerp(1, 3.0, f), lerp(1, 3.4, f)].map(c => c * lerp(1.3, 1, f)); },
+    parts:[part(mkHumboldt, { inst:schoolMill(40, 2.0, 1.2, 3131, 1.4), school:[0, 1.2, 1, 0], mat:M_SKIN, shy:0.6, pulse:[0.5, 1.6, 0, 0], sway:[0.02, 1.5, 6, 0] })],
+    views:[{ d:[0.3, 0.1, 1], k:0.55, hold:10, drift:0.02, frame:'world' }, { d:[0.2, -0.7, 0.5], k:0.45, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },
