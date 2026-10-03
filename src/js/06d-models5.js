@@ -488,6 +488,23 @@ function mkTorpedoRay() {
   for (const sz of [1, -1]) ellip(mb, [0.2, 0.07, sz * 0.04], [0.012, 0.008, 0.01], { n:3, m:6, col:fc([0.05, 0.05, 0.05]) });
   return mb;
 }
+function mkBatfish() {
+  // red-lipped batfish (Ogcocephalus darwini), one unit long, head at +x: a flattened, roughly triangular body seen from above,
+  // a pointed snout-horn, bright red lips, and pectoral and pelvic fins turned into legs it walks on across the sand
+  const mb = new MB(), back = [0.22, 0.17, 0.14], belly = [0.6, 0.5, 0.42], red = [1.0, 0.1, 0.12, 0.6];
+  loft(mb, { n:22, m:18, sec:t => { const f = t < 0.45 ? 0.45 + 0.55 * Math.sin(t / 0.45 * PI / 2) : 1 - 0.85 * smooth(0.45, 1, t); return { x:0.38 - t * 0.85, y:0.03 * (1 - t), w:0.3 * f * (t < 0.6 ? 1 : 0.5) + 0.02, h:0.1 * f + 0.01, e:2 }; },
+    col:(t, u, p, sy) => sy < -0.2 ? belly : (Math.sin(p[0] * 70) * Math.sin(p[2] * 60) > 0.6 ? [0.45, 0.36, 0.28] : back), anim:t => [t > 0.6 ? (t - 0.6) * 2 : 0, 0, 0, 0] });
+  tube(mb, { n:3, m:5, path:t => [0.38 + t * 0.12, 0.08 + t * 0.03, 0], r:t => 0.02 * (1 - t * 0.7), col:fc(back) });     // the snout horn
+  ellip(mb, [0.4, 0.0, 0], [0.025, 0.02, 0.06], { n:4, m:10, col:fc(red) });                                              // the red lips
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.3, 0.1, sz * 0.07], [0.02, 0.02, 0.016], { n:3, m:6, col:fc([0.08, 0.08, 0.06]) });
+    // the front 'legs' (pectoral fins) bent out to the side and down to the sand, and the smaller hind pair under the body
+    tube(mb, { n:5, m:5, path:t => [0.1 - t * 0.05, -0.02 - t * 0.09, sz * (0.18 + t * 0.12)], r:t => 0.03 - t * 0.012, col:fc(back), anim:t => [0, t * 0.3, 0, 0] });
+    fin(mb, [[0, 0.03], [0.05, 0.02], [0.05, -0.03], [0, -0.03]], { origin:[0.05, -0.11, sz * 0.3], ua:[1, 0, 0], va:[0, 0, 1], col:fc(back) });
+    tube(mb, { n:4, m:5, path:t => [0.18 - t * 0.04, -0.06 - t * 0.06, sz * (0.08 + t * 0.03)], r:t => 0.02 - t * 0.008, col:fc(back) });
+  }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -637,6 +654,11 @@ function addShallows(REEF) {
     fact:'Built like torpedoes, they swim nonstop their whole lives, keeping their muscles warmer than the sea, and cross the Atlantic in a few months. A big one is 3 m and 600 kg. Folding their fins into slots in the body, they can burst to around 70 km/h.',
     parts:[part(mkTuna, { inst:schoolMill(40, 9, 3, 911, 2.2), school:[0, 2.2, 1, 0], mat:M_SILVER, shy:4, ...FISH_SWIM(0.035, 1.8, 0.8, 2.6) })],
     views:[{ d:[0.3, 0.05, 1], k:0.9, hold:10, drift:0.02, frame:'world' }, { d:[0.2, -0.7, 0.5], k:0.8, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'batfish', name:'red-lipped batfish', type:'Ogcocephalus darwini', kind:'fish', floor:[3150, -520, 0.06], size:0.25, rad:0.2, yaw:0.8,
+    fact:'A poor swimmer that walks across the sand on fins shaped like legs. A little horn on its snout carries a lure it flicks out to attract small fish and shrimp. Nobody knows for sure what the bright red lips are for: perhaps for recognising each other when spawning.',
+    motion:{ type:'crawl', R:0.4, v:0.03 },
+    parts:[part(mkBatfish, { scale:0.25, mat:M_SKIN })],
+    views:[{ d:[1, 0.12, 0.45], k:1.3, hold:10, drift:0.025, off:[0.05, 0.02, 0] }, { d:[0.5, 0.5, 1], k:1.5, hold:9, drift:0.025, off:[0.05, 0, 0] }] });
   addObj({ key:'orca', name:'orcas', type:'killer whales · Orcinus orca', kind:'air', at:[7800, 900, 15], size:7, vsize:9, rad:10, predator:true,
     fact:'The largest dolphin, and a top predator in every ocean. Each pod has its own calls and hunting methods passed down through generations: some wash seals off ice floes with waves, others hunt great white sharks for their livers.',
     motion:{ type:'circle', R:40, v:3, bob:2, bank:0.12 },
