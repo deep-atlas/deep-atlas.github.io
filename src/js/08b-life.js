@@ -121,7 +121,9 @@ function tickSparks(dt) {
   const moving = VIEW.mode === 'free' && ['w', 'a', 's', 'd', 'r', 'f'].some(k => KEYS.has(k));
   if (moving && CAM.depth > 1 && (CAM.depth > 220 || LIGHT.night > 0.5)) {
     wakeT -= dt;
-    if (wakeT <= 0) { wakeT = 0.18; const s = Math.max(CAM.scale, 0.3); spark(vmad(vadd(CAM.pos, [(Math.random() - 0.5) * s, (Math.random() - 0.5) * s * 0.6, (Math.random() - 0.5) * s]), CAM.fwd, s * 0.8), Math.max(s * 0.3, 0.3), 120, 0.9); }
+    // in a bloom of sea sparkle (Noctiluca) the water blazes: every stroke throws a cloud of blue light
+    const nb = BYKEY.noctiluca, bloom = nb && LIGHT.night > 0.5 ? smooth(60, 15, vlen(vsub(nb.pos, CAM.pos))) : 0;
+    if (wakeT <= 0) { wakeT = lerp(0.18, 0.07, bloom); const s = Math.max(CAM.scale, 0.3); spark(vmad(vadd(CAM.pos, [(Math.random() - 0.5) * s, (Math.random() - 0.5) * s * 0.6, (Math.random() - 0.5) * s]), CAM.fwd, s * 0.8), Math.max(s * 0.3, 0.3) * (1 + bloom), 120 + 250 * bloom, 0.9 + 1.4 * bloom); }
   }
 }
 const VS_SPARK = GLSL_SCENE + `
