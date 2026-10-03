@@ -26,9 +26,19 @@ const meta = `<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="An explorable ocean drawn entirely in ASCII: real creatures at their true depths, from the sunlit reef to the floor of the Challenger Deep.">
 <meta name="theme-color" content="#02060c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="deepatlas: the ocean in ASCII">
+<meta property="og:description" content="An explorable ocean drawn entirely in characters: 124 real places and creatures at their true depths, from the sunlit reef to the floor of the Challenger Deep.">
+<meta property="og:url" content="https://deep-atlas.github.io/">
+<meta property="og:image" content="https://deep-atlas.github.io/preview.png">
+<meta property="og:image:width" content="960">
+<meta property="og:image:height" content="504">
+<meta property="og:image:alt" content="An anglerfish drawn in ASCII characters, its lure glowing in the dark">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,${icon}">
 `;
 fs.mkdirSync(DIST, { recursive: true });
 const html = `<!doctype html>\n<html lang="en">\n<head>\n${meta}${head}\n</head>\n<body>\n${body}\n<script>\n/* deepatlas ${new Date().toISOString().slice(0, 10)} */\n${js}\n</script>\n</body>\n</html>\n`;
 fs.writeFileSync(path.join(DIST, 'index.html'), html);
+fs.copyFileSync(path.join(SRC, 'preview.png'), path.join(DIST, 'preview.png'));   // (the picture shown when a link to the site is shared)
 console.log(`dist/index.html  ${(html.length / 1024).toFixed(0)} KB  (${list.length} scripts)`);
