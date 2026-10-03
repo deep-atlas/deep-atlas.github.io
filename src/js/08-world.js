@@ -126,7 +126,7 @@ function drawWorld(trans) {
       o.camDist = d + o.rad;
       if (d > Math.max(R, CAM.scale * 4)) { o.vis = 0; continue; }
       // things far too small to see are skipped
-      if (o.rad / Math.max(d, 1e-9) < 0.0015) { o.vis = 0; continue; }
+      if (o.rad / Math.max(d, 1e-9) < 0.004) { o.vis = 0; continue; }   // (under a few pixels: smaller than one character cell)
       o.vis = 1; DRAWN.push(o);
     }
     for (const o of DRAWN) for (const p of o.parts) if (!p.trans) drawPart(o, p);
