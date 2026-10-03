@@ -49,6 +49,7 @@ const WHERE = {
   xmastree:[-18.3, 147.8, 'coral reefs worldwide; here the Great Barrier Reef'],
   giantclam:[-14.7, 145.5, 'the Great Barrier Reef and Indo-Pacific'],
   seakrait:[-8.5, 120, 'reefs of the eastern Indian Ocean and western Pacific'],
+  coconutoctopus:[1.45, 125.2, 'sandy bays of the western Pacific; famous in the Lembeh Strait, Indonesia'],
   stingray:[19.4, -81.3, 'the Caribbean; Stingray City, Grand Cayman'],
   barracuda:[4.1, 118.6, 'Indo-Pacific; famous at Sipadan, Malaysia'],
   nautilus:[7.3, 134.5, 'deep reef slopes of the western Pacific; Palau'],

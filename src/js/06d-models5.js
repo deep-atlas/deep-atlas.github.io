@@ -459,6 +459,22 @@ function mkSeaKrait() {
   for (const sz of [1, -1]) ellip(mb, [0.465, 0.008, sz * 0.012], [0.004, 0.004, 0.003], { n:3, m:5, col:fc(black) });
   return mb;
 }
+function mkCoconutOctopus() {
+  // veined octopus (Amphioctopus marginatus), in metres, about 15 cm across: hunched over two half coconut shells, carrying one
+  // under its body as it 'stilt-walks' across the sand; when threatened it climbs in and pulls the other half over itself
+  const mb = new MB(), skin = [0.3, 0.2, 0.15], vein = [0.12, 0.07, 0.06], shell = [0.16, 0.1, 0.06], husk = [0.28, 0.2, 0.12], white = [0.55, 0.5, 0.42];
+  const body = mkOctopus({ skin, mott:vein });
+  const mk = mb.mark();
+  // merge the octopus, scaled down and lifted onto the shell
+  for (let k = 0; k < body.count; k++) mb.v([body.P[k * 3] * 0.13, body.P[k * 3 + 1] * 0.13 + 0.07, body.P[k * 3 + 2] * 0.13], [body.C[k * 4], body.C[k * 4 + 1], body.C[k * 4 + 2], body.C[k * 4 + 3]], [body.A[k * 4], body.A[k * 4 + 1], body.A[k * 4 + 2], body.A[k * 4 + 3]]);
+  for (let k = 0; k < body.I.length; k++) mb.I.push(body.I[k] + mk.v);
+  // the two shell halves: one held cupped under it, one beside it on the sand
+  const half = (c, up) => ellip(mb, c, [0.07, 0.05, 0.065], { n:8, m:14, shape:q => [q[0], up ? Math.min(q[1], c[1] + 0.004) : Math.max(q[1], c[1] - 0.004), q[2]],
+    col:(u, v, q) => Math.abs(q[1] - c[1]) < 0.006 ? white : Math.sin(q[0] * 260) * Math.sin(q[2] * 240) > 0.5 ? husk : shell });
+  half([0, 0.055, 0], true);
+  half([0.13, 0.0, 0.06], false);
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -571,6 +587,11 @@ function addShallows(REEF) {
     motion:{ type:'eight', R:2.5, v:0.45, bob:0.3, bank:0.1 },
     parts:[part(mkSeaKrait, { scale:1.2, mat:M_SKIN, swim:[0.07, 0.9, 1.6, 0], swim2:[0, 1.1, 0, 0] })],
     views:[{ d:[0.3, -0.35, 1], k:1.3, hold:10, drift:0.02 }, { d:[1, -0.15, 0.35], k:1.2, hold:9, drift:0.02 }] });
+  addObj({ key:'coconutoctopus', name:'coconut octopus', type:'veined octopus · Amphioctopus marginatus', kind:'cephs', floor:[REEF[0] + 32, REEF[1] - 8, 0], size:0.15, vsize:0.3, rad:0.15, yaw:1.2,
+    fact:'It collects discarded coconut shells and carries them under its body across open sand, walking on two arms, then assembles them into a shelter to hide in. Carrying something for later use was one of the first records of tool use by an invertebrate.',
+    motion:{ type:'crawl', R:0.25, v:0.03 },
+    parts:[part(mkCoconutOctopus, { mat:M_SKIN, sway:[0.004, 0.8, 30, 0] })],
+    views:[{ d:[0.4, 0.12, 1], k:1.1, hold:10, drift:0.025, off:[0.04, 0.06, 0] }, { d:[1, 0.08, 0.3], k:1.0, hold:9, drift:0.025, off:[0.04, 0.06, 0] }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],

@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **127 places** across five zones, plus Nautile. By zone:
+- **128 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
