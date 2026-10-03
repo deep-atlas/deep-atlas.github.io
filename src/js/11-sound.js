@@ -183,6 +183,17 @@ function tickSound(dt) {
     blip({ type:'sawtooth', f0:420, curve:[480, 560, 600, 610], dur:3.5, amp:0.05 * loud, att:0.4, vib:[5, 8], pan:bn.pan, bp:900, q:1.2, dry:false });
     what = 'a humpback’s feeding call: the net is closing';
   }
+  // male walruses sing underwater: runs of knocks, then a ringing bell-like tone
+  const wr = near('walrus', 120);
+  if (wr && due('walrusBell')) {
+    SND.next.walrusBell = 4 + Math.random() * 5;
+    const loud = clamp(1 - wr.d / 120, 0.2, 1), n = 4 + Math.floor(Math.random() * 6);
+    for (let i = 0; i < n; i++) noiseBurst({ f:500 + Math.random() * 200, q:6, amp:0.05 * loud, att:0.002, dur:0.05, delay:i * 0.22, dry:true });
+    const f = 300 + Math.random() * 80;
+    blip({ f0:f, f1:f * 0.97, dur:2.2, amp:0.045 * loud, att:0.01, delay:n * 0.22 + 0.2, pan:wr.pan, bp:f, q:6, dry:false });
+    blip({ f0:f * 2.7, f1:f * 2.6, dur:1.4, amp:0.015 * loud, att:0.01, delay:n * 0.22 + 0.2, pan:wr.pan, dry:false });
+    what = 'a walrus singing: knocks and a ringing bell';
+  }
   const bl = near('beluga', 150);
   if (bl && due('canary')) {
     // the sea canary: chirps, trills and squeals

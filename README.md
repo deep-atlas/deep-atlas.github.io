@@ -93,7 +93,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   sunlight, ruler, angle bar), search, atlas (sort, filter, seen), tours, settings, help, a depth ladder you can drag
   to dive, labels, today's discovery, photo mode (save a PNG or copy the view as ASCII text), share links, compare size,
   and a generative underwater soundscape that follows what is near you (a reef's snapping shrimp, a black smoker's roar,
-  a sperm whale's clicks, humpback and blue whale song, dolphin whistles, beluga chirps, orca calls, barking sea lions).
+  a sperm whale's clicks, humpback and blue whale song, dolphin whistles, beluga chirps, a walrus's bell song, orca calls, barking sea lions).
 
 ## Controls
 
