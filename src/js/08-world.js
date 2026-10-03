@@ -204,7 +204,7 @@ function buildCatalog() {
     fact:'Hatching at night, they dig out of the sand together and race for the sea, then swim nonstop for a day or more in a “frenzy” that carries them out to open water. Perhaps one in a thousand lives to grow up. The survivors return decades later to the beach where they hatched.',
     // a stream of them swimming offshore, wrapping round so the line never ends
     parts:[part(mkTurtle, { inst:schoolStream(40, 14, 1.2, 2026), school:[2, 0.06, 0.6, 14], mat:M_SKIN, shy:2, swim2:[0, 2, 0.22, 2.2] })],
-    views:[{ d:[0.2, 0.3, 1], k:1.0, hold:10, drift:0.02, frame:'world' }, { d:[0.15, 0.05, 1], k:0.35, hold:9, drift:0.02, frame:'world', off:[2, 0, 0] }] });
+    views:[{ d:[0.2, 0.3, 1], k:1.0, hold:10, drift:0.02, frame:'world' }, { d:[0.6, 0.15, 1], k:0.7, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'manta', name:'manta ray', type:'reef manta · Mobula alfredi', kind:'sharks', at:[2900, -150, 13], size:4.5, rad:2.6,
     fact:'Mantas have one of the largest brains for their size of any fish, and come to cleaning stations on the reef to have small fish pick them clean. A reef manta’s wings span up to 5 m.',
     motion:{ type:'circle', R:22, v:1.0, bob:1.5, bank:0.25 },
