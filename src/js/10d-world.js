@@ -27,6 +27,7 @@ const WHERE = {
   cookiecutter:[-5, -170, 'warm oceans worldwide, rising near the surface at night'],
   humboldt:[27.5, -111.5, 'the eastern Pacific; the Gulf of California and off Peru'],
   phantomjelly:[-64.5, -62.5, 'every ocean but the Arctic; filmed off Antarctica and in the Gulf of California'],
+  seatoad:[21, -157, 'deep slopes of the Pacific; filmed off Hawaii and the Galapagos'],
   dragonfish:[25, -45, 'tropical and temperate oceans worldwide'],
   loosejaw:[18, -35, 'tropical and temperate oceans worldwide'],
   bigfin:[27, -91, 'deep water worldwide; filmed in the Gulf of Mexico'],

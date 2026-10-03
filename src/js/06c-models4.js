@@ -361,6 +361,16 @@ function mkPhantomJelly() {
   }
   return mb;
 }
+function mkSeaToad() {
+  // sea toad (Chaunacops coloratus), about 20 cm: a round, puffy, pink-red anglerfish covered in tiny spines, a short lure tucked
+  // in a groove on its snout, and fins it walks on across the floor
+  const pink = [0.95, 0.42, 0.42], pale = [1.0, 0.7, 0.65];
+  return fish({ H:0.3, W:0.24, tm:0.42, nose:0.25, ped:0.3, bodyLen:0.78, back:pink, belly:pale, eye:[0.12, 0.4, 0.04], eyeCol:[0.1, 0.3, 0.35], n:16, m:12,
+    pattern:(t, sy, sz, p) => Math.sin(p[0] * 90) * Math.sin(p[1] * 80 + p[2] * 70) > 0.75 ? [1.0, 0.85, 0.8] : null,
+    tail:'round', tailH:0.14, tailCol:pink, dorsal:[{ at:0.6, len:0.18, h:0.07, col:pink }], anal:[{ at:0.62, len:0.12, h:0.06, col:pink }],
+    pect:{ at:0.35, len:0.12, w:0.08, down:0.85, col:pink },
+    extra:mb => { tube(mb, { n:3, m:4, path:t => [0.38 + t * 0.05, 0.18 + t * 0.04, 0], r:0.008, col:fc(pink) }); ellip(mb, [0.43, 0.23, 0], [0.018, 0.014, 0.014], { n:3, m:6, col:fc([1.0, 0.95, 0.85, 0.8]) }); } });
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -404,6 +414,13 @@ function addDeepFolk(VENTS) {
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
     parts:[part(mkPhantomJelly, { scale:1, mat:[0.75, 0.7, 1, 0.4], trans:true, pulse:[0.08, 0.2, 0, 0], sway:[0.15, 0.25, 1.5, 0] })],
     views:[{ d:[0.3, 0.12, 1], k:2.3, hold:11, drift:0.015, frame:'world', off:[0, -2.2, 0] }, { d:[0.5, 0.5, 0.8], k:0.9, hold:9, drift:0.015, frame:'world', off:[0, -0.3, 0] }] });
+  addObj({ key:'seatoad', name:'sea toad', type:'Chaunacops coloratus · a deep-sea anglerfish', kind:'fish', floor:[33000, 300, 0.07], size:0.2, rad:0.18, yaw:1.4,
+    fact:'A round, pink anglerfish that walks slowly over the deep floor on its fins, dangling a short lure. It can hold its breath for minutes at a time, puffing its gill chamber full of water: perhaps to save energy in water poor in food, or to look bigger to a hunter.',
+    motion:{ type:'crawl', R:0.4, v:0.02 },
+    // it fills its gill chamber with water and holds it, swelling slowly, then lets it go
+    post:(o, t) => { const u = ((t * 0.04) % 1), s = smooth(0, 0.15, u) * smooth(0.9, 0.7, u); o.parts[0].scale = 0.2 * (1 + 0.18 * s); },
+    parts:[part(mkSeaToad, { scale:0.2, mat:M_SKIN, ...FISH_SWIM(0.02, 0.4, 0.9, 2) })],
+    views:[{ d:[0.4, 0.15, 1], k:2.2, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:2.0, hold:9, drift:0.02 }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },
