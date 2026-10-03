@@ -603,6 +603,20 @@ function fromHash() {
   return null;
 }
 
+// ---- if the graphics card resets (a driver update, too many tabs, a laptop waking up), the page would stay blank: instead it
+// reloads itself where it was. (Never more than twice a minute, so a card that keeps failing cannot trap it in a loop.)
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); toast('the graphics card reset: bringing the view back...', 8000); setTimeout(glReload, 4000); });
+canvas.addEventListener('webglcontextrestored', () => glReload());
+function glReload() {
+  if (glReload.done) return; glReload.done = true;
+  let n = []; try { n = JSON.parse(sessionStorage.getItem('glReloads') || '[]').filter(t => Date.now() - t < 60000); } catch (e) {}
+  if (n.length >= 2) { $('nogl').textContent = 'The graphics card keeps resetting. Reload the page to try again.'; $('nogl').hidden = false; return; }
+  try { sessionStorage.setItem('glReloads', JSON.stringify([...n, Date.now()])); } catch (e) {}
+  const o = VIEW.focus, tod = `@${String(Math.floor(TOD.min / 60)).padStart(2, '0')}${String(Math.floor(TOD.min % 60)).padStart(2, '0')}`;
+  location.replace(location.pathname + location.search + (o ? `#${o.key}${VIEW.vi ? '/' + VIEW.vi : ''}${tod}` : ''));
+  setTimeout(() => location.reload(), 50);   // (a hash-only change would not reload by itself)
+}
+
 // ---- photo mode
 const PHOTO = { on:false, labels:false, frozen:false, keepTime:'1', want:null };
 function photo(on) {
