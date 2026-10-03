@@ -370,7 +370,7 @@ function buildCatalog() {
 
   // ---------------- the midnight zone
   addObj({ key:'anglerfish', name:'anglerfish', type:'humpback anglerfish · Melanocetus johnsonii', kind:'fish', at:[19000, 0, 1600], size:0.18, rad:0.18,
-    fact:'In the dark, the female fishes with a lure that glows with bacteria. In some anglerfish the tiny male bites onto a female and fuses to her for life.',
+    fact:'In the dark, the female fishes with a lure that glows with bacteria. The male is a tenth of her size: he finds her by smell and bites on (look under her belly). In this species he lets go again, but in others he fuses to her for life, sharing her blood.',
     motion:{ type:'hover', amp:0.02, turn:0.3 },
     parts:[part(mkAnglerfish, { scale:0.18, mat:M_SKIN, sway:[0.04, 0.6, 3, 0], swim:[0.02, 0.8, 0.5, 0], swim2:[0, 2, 0, 0] })],
     views:[{ d:[0.8, 0.15, 0.7], k:2.6, hold:10, drift:0.02 }, { d:[1, 0.3, 0.1], k:2.2, hold:8, drift:0.02 }, { d:[-0.3, 0.3, 1], k:2.8, hold:8, drift:0.02 }] });

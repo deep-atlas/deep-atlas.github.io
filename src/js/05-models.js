@@ -365,6 +365,9 @@ function mkAnglerfish() {
       tube(mb, { n:2, m:4, path:t => [base[0] + t * 0.02, base[1] + dir * t * len, base[2]], r:t => 0.008 * (1 - t), col:fc(tooth), anim:() => [0, 0, 0, 0] });
     }
   }
+  // a tiny male clamped onto her belly by his jaws (in Melanocetus he lets go again; in other anglerfish he fuses for life)
+  ellip(mb, [-0.12, -0.3, 0.06], [0.045, 0.018, 0.02], { n:4, m:8, col:fc([0.35, 0.3, 0.28]), anim:() => [0.4, 0, 0.05, 0] });
+  fin(mb, [[0, 0.012], [-0.03, 0.022], [-0.03, -0.022], [0, -0.012]], { origin:[-0.165, -0.3, 0.06], ua:[1, 0, 0], va:[0, 1, 0], col:fc([0.3, 0.26, 0.24]), anim:() => [0.4, 0, 0.1, 0] });
   // the fishing rod and its glowing lure (the esca, lit by bacteria)
   tube(mb, { n:12, m:4, path:t => [0.15 + t * 0.35, 0.28 + Math.sin(t * PI) * 0.18, 0], r:0.008, col:fc(skin), anim:t => [0, 0, t * 0.4, 0] });
   ellip(mb, [0.5, 0.28, 0], [0.04, 0.045, 0.04], { n:6, m:8, col:fc([0.6, 1.0, 0.95, 4.0]), anim:() => [0, 0, 0.4, 0] });
