@@ -602,6 +602,12 @@ function share(o) {
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('link copied'), () => toast(url, 5000));
 }
 $('btnShare').onclick = () => share();
+$('btnFull').onclick = () => {
+  try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => toast('full screen is not available here')); }
+  catch (e) { toast('full screen is not available here'); }
+};
+document.addEventListener('fullscreenchange', () => { $('btnFull').innerHTML = document.fullscreenElement ? '&#9974; leave full screen' : '&#9974; full screen'; });
+if (!document.documentElement.requestFullscreen) $('btnFull').parentElement.hidden = true;   // (iPhones cannot)
 $('objWild').onclick = () => { openPanel('mapPanel', true); setMapMode('world'); };
 function fromHash() {
   const m = /^#([a-z0-9]+)(?:\/(\d+))?(?:@(\d\d)(\d\d))?/.exec(location.hash || '');
