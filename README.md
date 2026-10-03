@@ -2,6 +2,8 @@
 
 An explorable atlas of the real ocean, drawn entirely in ASCII characters.
 
+**Live at https://deep-atlas.github.io/**
+
 Swim from the sunlit surface to the floor of the Challenger Deep, 10,935 m down, and zoom from a 25 m blue whale to a
 single 0.6 µm cell. Creatures swim, jellies pulse, kelp sways, marine snow drifts, and the light changes with depth and the time of day.
 
@@ -26,6 +28,7 @@ Google Fonts link, and works opened straight from disk too.
 `dist/index.html` is the whole site in one file (fonts come from Google Fonts), so any static host works.
 With GitHub Pages: push this repository to GitHub, then in **Settings > Pages** set the source to **GitHub Actions**.
 The workflow in `.github/workflows/pages.yml` builds and publishes the page on every push to `main`.
+This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
