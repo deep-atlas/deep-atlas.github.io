@@ -531,6 +531,23 @@ function mkMimicLion() {
     tube(mb, { n:12, m:4, path:t => [Math.cos(a) * t * 0.4, 0.08 + t * up * 0.4, Math.sin(a) * t * 0.4], r:t => 0.016 * (1 - t * 0.7), col:t => fract(t * 6) < 0.5 ? c1 : c2, anim:t => [0, 0, t * 0.3, 0] }); }
   return mb;
 }
+function mkFrogfish() {
+  // giant frogfish (Antennarius commerson), one unit long: a lumpy, round, sponge-like body in bright yellow, a huge upturned mouth,
+  // a lure (the esca) on a rod above its eyes, and leg-like pectoral fins it props itself up on
+  const yel = [1.0, 0.82, 0.15], spot = [0.85, 0.55, 0.1];
+  const mb = fish({ H:0.36, W:0.26, tm:0.45, nose:0.22, ped:0.3, bodyLen:0.75, back:yel, belly:[1.0, 0.9, 0.45], eye:[0.14, 0.42, 0.035], n:18, m:14,
+    pattern:(t, sy, sz, p) => { const n = Math.sin(p[0] * 45 + p[1] * 20) * Math.sin(p[2] * 40 + p[1] * 35); return n > 0.55 ? spot : null; },
+    tail:'round', tailH:0.2, tailCol:yel, dorsal:[{ at:0.45, len:0.35, h:0.14, col:yel }], anal:[{ at:0.6, len:0.15, h:0.1, col:yel }],
+    pect:{ at:0.38, len:0.16, w:0.09, down:0.9, col:yel } });
+  // the mouth, opening upwards, and the lure on its rod
+  ellip(mb, [0.38, 0.08, 0], [0.06, 0.03, 0.14], { n:4, m:10, col:fc([0.3, 0.15, 0.08]) });
+  tube(mb, { n:5, m:4, path:t => [0.33 + t * 0.12, 0.3 + t * 0.12, 0], r:0.009, col:fc(yel), anim:t => [0, 0, t * 0.6, 0] });
+  ellip(mb, [0.46, 0.43, 0], [0.025, 0.02, 0.02], { n:3, m:6, col:fc([1.0, 0.95, 0.85]), anim:() => [0, 0, 0.6, 0] });
+  // warty lumps all over, like a sponge
+  const r = rng(3141); for (let k = 0; k < 40; k++) { const t = r(), a = r() * TAU, x = 0.42 - t * 0.6, rr = 0.25 * Math.sin(Math.min(1, t * 2) * PI / 2);
+    ellip(mb, [x, Math.cos(a) * rr * 0.35 + 0.02, Math.sin(a) * rr * 0.25], [0.018, 0.018, 0.018], { n:3, m:5, col:fc(r() < 0.5 ? spot : yel) }); }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -663,6 +680,13 @@ function addShallows(REEF) {
       part(mkMimicLion, { scale:0.6, mat:M_SKIN, sway:[0.04, 0.8, 4, 0], show:o => o.parts[2].mimicOn }),
       part(mkMimicSnake, { scale:0.6, mat:M_SKIN, sway:[0.03, 0.9, 4, 0], show:o => o.parts[3].mimicOn })],
     views:[{ d:[0.4, 0.55, 1], k:2.0, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.8, hold:9, drift:0.02 }] });
+  addObj({ key:'frogfish', name:'giant frogfish', type:'Antennarius commerson', kind:'fish', floor:[REEF[0] - 6, REEF[1] - 5, 0], size:0.35, rad:0.3, yaw:2.6,
+    fact:'It sits still for days, coloured and textured like the sponge it rests on, twitching a lure above its mouth. When a fish comes close it opens its mouth to twelve times its size and swallows it in about six thousandths of a second, among the fastest strikes of any animal.',
+    motion:{ type:'hover', amp:0.003, turn:0.02 },
+    // every so often it waves its lure to tempt prey
+    post:(o, t) => { o.parts[0].sway[0] = 0.02 + 0.06 * Math.max(0, Math.sin(t * 0.4)); },
+    parts:[part(mkFrogfish, { scale:0.35, mat:M_SKIN, sway:[0.03, 4, 3, 0] })],
+    views:[{ d:[0.6, 0.2, 1], k:2.0, hold:10, drift:0.02, off:[0, 0.08, 0] }, { d:[1, 0.15, 0.3], k:1.8, hold:9, drift:0.02, off:[0, 0.08, 0] }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
