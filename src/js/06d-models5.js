@@ -475,6 +475,19 @@ function mkCoconutOctopus() {
   half([0.13, 0.0, 0.06], false);
   return mb;
 }
+function mkTorpedoRay() {
+  // Atlantic torpedo ray, one unit long, head at +x: an almost round, thick, soft disc (the two kidney-shaped electric organs fill
+  // its sides), a short stout tail with two dorsal fins and a broad paddle of a tail fin; dark brown-grey above, cream below
+  const mb = new MB(), back = [0.22, 0.2, 0.2], belly = [0.9, 0.87, 0.8];
+  loft(mb, { n:20, m:24, sec:t => { const f = Math.sin(clamp(t / 0.62, 0, 1) * PI); return { x:0.36 - t * 0.6, y:0, w:0.33 * Math.pow(f, 0.6) + 0.01, h:0.07 * Math.pow(f, 0.6) + 0.004, e:1.8 }; },
+    col:(t, u, p, sy) => sy < 0 ? belly : (Math.sin(p[0] * 40) * Math.sin(p[2] * 36) > 0.8 ? [0.14, 0.12, 0.12] : back), anim:(t, u, p) => [0, Math.pow(Math.abs(p[2]) * 3, 2) * 0.05, 0, 0] });
+  tube(mb, { n:8, m:8, path:t => [-0.0 - t * 0.38, 0.01, 0], r:t => 0.06 * (1 - t * 0.55), col:fc(back), anim:t => [t, 0, 0, 0] });
+  fin(mb, [[0, 0], [-0.04, 0.06], [-0.08, 0.05], [-0.09, 0]], { origin:[-0.12, 0.05, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(back), anim:() => [0.3, 0, 0, 0] });
+  fin(mb, [[0, 0], [-0.03, 0.045], [-0.06, 0.04], [-0.07, 0]], { origin:[-0.24, 0.04, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(back), anim:() => [0.6, 0, 0, 0] });
+  fin(mb, [[0, 0.02], [-0.04, 0.09], [-0.1, 0.07], [-0.1, -0.07], [-0.04, -0.09], [0, -0.02]], { origin:[-0.37, 0.01, 0], ua:[1, 0, 0], va:[0, 1, 0], col:fc(back), anim:() => [1, 0, 0, 0] });
+  for (const sz of [1, -1]) ellip(mb, [0.2, 0.07, sz * 0.04], [0.012, 0.008, 0.01], { n:3, m:6, col:fc([0.05, 0.05, 0.05]) });
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -592,6 +605,11 @@ function addShallows(REEF) {
     motion:{ type:'crawl', R:0.25, v:0.03 },
     parts:[part(mkCoconutOctopus, { mat:M_SKIN, sway:[0.004, 0.8, 30, 0] })],
     views:[{ d:[0.4, 0.12, 1], k:1.1, hold:10, drift:0.025, off:[0.04, 0.06, 0] }, { d:[1, 0.08, 0.3], k:1.0, hold:9, drift:0.025, off:[0.04, 0.06, 0] }] });
+  addObj({ key:'torpedo', name:'Atlantic torpedo ray', label:'electric ray', type:'Tetronarce nobiliana', kind:'sharks', floor:[REEF[0] + 35, REEF[1] - 12, 0.04], size:1.2, rad:0.7, yaw:1.4,
+    fact:'Two organs in its disc, built from modified muscle and stacked like batteries, can deliver over 200 volts: enough to knock a diver down. It lies buried in sand and stuns passing fish, then swallows them whole. The ancient Greeks used electric rays to numb pain.',
+    motion:{ type:'hover', amp:0.01, turn:0.05 },
+    parts:[part(mkTorpedoRay, { scale:1.2, mat:M_SKIN, swim2:[0, 2, 0.008, 0.3] })],
+    views:[{ d:[0.4, 0.7, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, 0.25, 0.4], k:1.6, hold:9, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],

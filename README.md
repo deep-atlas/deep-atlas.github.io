@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **130 places** across five zones, plus Nautile. By zone:
+- **131 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
@@ -44,7 +44,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
     camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a giant clam, a sea krait, a pufferfish, a blue-ringed octopus,
     blacktip reef sharks, snappers, a grouper at a cleaning station, flashlight fish at night, and on the sand garden eels, a
-    goby sharing a burrow with a pistol shrimp, a coconut octopus, a peacock flounder and a stingray. A tornado of chevron barracuda off the
+    goby sharing a burrow with a pistol shrimp, a coconut octopus, a peacock flounder, an electric ray and a stingray. A tornado of chevron barracuda off the
     drop-off, a manta, a green turtle; the kelp forest with a sea otter, sea lions, garibaldi and blacksmith; a shipwreck at
     30 m turned into a reef; a chambered nautilus on the deep reef slope.
   - **Coasts and poles**: mangroves with a box jellyfish in the channel, a seagrass meadow with a dugong and a leafy
@@ -65,7 +65,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   can set off with "disturb it" or a click (Atolla's spinning alarm, the vampire squid's inside-out cloak, the swimming sea
   cucumber's flash, the helmet jelly's rings of light, the pyrosome's running wave of light, the pufferfish swelling into
   a spiny ball, the octopus flushing red and squirting ink, the blue-ringed octopus flashing its rings, hagfish
-  flooding the water with slime); shy animals hide
+  flooding the water with slime, the electric ray's discharge); shy animals hide
   when you swim close (garden eels, Christmas tree worms, the giant clam); the cuttlefish hunts with its passing-cloud display; click open
   water and the plankton flash blue, swim through the dark and leave a glowing wake.
 - **Events**: the humpback breaches every couple of minutes; humpbacks bubble-net feed on a herring school; at night the
