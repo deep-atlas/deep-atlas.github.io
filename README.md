@@ -34,12 +34,12 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **133 places** across five zones, plus Nautile. By zone:
+- **134 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
-    hammerheads, bluefin tuna, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school) and
-    the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
+    hammerheads, bluefin tuna, sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school), a
+    family of sperm whales asleep upright, and the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
     penguins hunting through it.
   - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
     camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a giant clam, a sea krait, a pufferfish, a blue-ringed octopus,

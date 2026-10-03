@@ -115,6 +115,7 @@ const WHERE = {
   giantsquid:[27.1, 142.2, 'every ocean; filmed off the Ogasawara Islands, Japan'],
   atolla:[36.4, -122.6, 'the deep sea worldwide'],
   vampsquid:[36.5, -122.4, 'deep tropical and temperate oceans'],
+  sleepingwhales:[36.5, 14.5, 'every ocean; first seen asleep in the Mediterranean, in 2008'],
   spermwhale:[15.3, -61.5, 'every ocean; Dominica, Caribbean'],
   anglerfish:[36.8, -122.3, 'every ocean; filmed in Monterey Canyon'],
   viperfish:[10, -25, 'tropical and temperate oceans'],

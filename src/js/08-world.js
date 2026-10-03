@@ -276,6 +276,14 @@ function buildCatalog() {
     parts:[part(mkSardine, { inst:schoolMill(500, 3.2, 2.5, 444, 1.2), school:[0, 0.25, 1, 0], herring:true, show:o => o.bnU < 0.72 || o.bnU > 0.97, mat:M_SILVER, shy:6, ...FISH_SWIM(0.08, 4, 0.9, 1.8) }),
       ...[0, 1, 2].map(i => part(mkHumpback, { scale:13 - i, whale:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...WHALE_SWIM(0.035, 0.25 + i * 0.03) }))],
     views:[{ d:[1, 0.05, 0.3], k:2.1, hold:16, drift:0.008, frame:'world' }, { d:[0.5, -0.45, 0.8], k:1.9, hold:14, drift:0.008, frame:'world', off:[0, -2, 0] }] });
+  addObj({ key:'sleepingwhales', name:'sleeping sperm whales', label:'sleeping whales', type:'a family of Physeter macrocephalus, napping upright', kind:'air', at:[11800, 600, 14], size:12, vsize:18, rad:14,
+    fact:'Sperm whales sleep in short naps of a few minutes, hanging motionless and upright just below the surface, heads up, often a whole family together. They were only discovered doing this in 2008, when a research boat drifted into a sleeping group that did not wake.',
+    // hanging upright, swaying very slightly; every so often the family stirs
+    motion:{ type:'still', fn:(o, t) => { const A = o.anchor; o.pos = [A[0], A[1] + 0.3 * Math.sin(t * 0.07), A[2]]; o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1]; } },
+    parts:[[0, 0, 0, 12], [4.5, -1.5, 3, 11], [-4, -0.8, 4.2, 10.5], [2, -3, -4.5, 9.5], [-3.5, 1, -3.5, 6]].map(([x, y, z, sc], i) =>
+      part(mkSpermWhale, { scale:sc, off:[x, y, z], fwd:() => vnorm([0.06 * Math.sin(i * 2), 1, 0.05 * Math.cos(i * 3)]), up:() => vnorm([Math.cos(i * 1.7), 0, Math.sin(i * 1.7)]),
+        mat:M_SKIN, swim:[0.004, 0.05, 0.7, i], swim2:[1, 2.5, 0, 0] })),
+    views:[{ d:[0.4, -0.2, 1], k:1.6, hold:14, drift:0.01, frame:'world' }, { d:[1, -0.05, 0.3], k:1.2, hold:12, drift:0.01, frame:'world', off:[0, -2, 0] }, { d:[0.2, -0.95, 0.3], k:1.5, hold:10, drift:0.01, frame:'world' }] });
   addObj({ key:'bluewhale', name:'blue whale', type:'the largest animal ever known · Balaenoptera musculus', kind:'air', at:[10500, -400, 60], size:25, rad:15,
     fact:'The largest animal ever known: up to about 30 m long and 190 tonnes. Its heart weighs about 180 kg, and its calls, too low for us to hear, carry for hundreds of kilometres.',
     motion:{ type:'circle', R:150, v:2.2, bob:5, bank:0.06 },
