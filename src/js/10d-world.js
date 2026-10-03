@@ -130,6 +130,7 @@ const WHERE = {
   titanic:[41.73, -49.95, 'south of Newfoundland, North Atlantic'],
   dumbo:[40, -130, 'the deep sea worldwide'],
   abyss:[15, -135, 'every ocean; the Clarion-Clipperton Zone, Pacific'],
+  casper:[23.7, -164.7, 'the deep floor near Necker Island, north-west of Hawaii'],
   seapig:[14, -128, 'abyssal plains worldwide'],
   xeno:[12, -125, 'abyssal plains worldwide'],
   tripodfish:[20, -45, 'abyssal plains worldwide'],

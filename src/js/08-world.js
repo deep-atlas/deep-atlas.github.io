@@ -417,6 +417,11 @@ function buildCatalog() {
     fact:'Abyssal plains are the flattest places on Earth, covered in fine ooze that settles a few millimetres every thousand years. The dark manganese nodules scattered on it grow a few millimetres every million years.',
     parts:[part(() => buildAbyss(BYKEY.abyss.anchor, 23), { mat:[0.95, 0.5, 1, 0.4], sway:[0.02, 0.4, 3, 0] })],
     views:[{ d:[0.5, 0.35, 1], k:0.9, hold:12, drift:0.02, frame:'world' }, { d:[1, 0.15, 0.3], k:0.35, hold:9, drift:0.02, frame:'world', off:[3, 0, 0] }] });
+  addObj({ key:'casper', name:'ghost octopus', label:'“Casper”', type:'an undescribed incirrate octopus', kind:'cephs', floor:[ABYSS[0] - 4, ABYSS[1] + 3, 0.05], size:0.1, vsize:0.3, rad:0.1, yaw:0.8,
+    fact:'Seen for the first time in 2016, sitting on a rock 4,290 m down off Hawaii: a small, ghostly white octopus with almost no pigment and no fins, nicknamed Casper. Females guard their eggs for years, laid on the stalks of dead sponges that grow only on metal-rich nodules.',
+    motion:{ type:'hover', amp:0.005, turn:0.1 },
+    parts:[part(() => mkOctopus({ skin:[0.95, 0.93, 0.92, 0.15], mott:[0.85, 0.82, 0.84, 0.1], pat:p => [0.95, 0.93, 0.92, 0.12] }), { scale:0.1, mat:[0.65, 1.1, 1, 0.4], trans:true, sway:[0.08, 0.5, 3, 0], pulse:[0.4, 0.2, 0, 0] })],
+    views:[{ d:[0.5, 0.35, 1], k:2.0, hold:10, drift:0.02 }, { d:[1, 0.15, 0.3], k:1.8, hold:9, drift:0.02 }] });
   addObj({ key:'seapig', vsize:2.5, name:'sea pigs', type:'Scotoplanes · a sea cucumber', kind:'floor', floor:[ABYSS[0] + 3, ABYSS[1], 0.05], size:0.15, rad:1.6,
     motion:{ type:'crawl', R:5, v:0.012, h:0 },
     parts:[part(mkSeaPigHerd, { mat:[1, 0.5, 1, 0.4], sway:[0.012, 1.4, 25, 0] })],
