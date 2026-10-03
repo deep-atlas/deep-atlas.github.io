@@ -127,6 +127,18 @@ function mkParrotfish() {
     pect:{ at:0.26, len:0.12, w:0.06, col:teal }, pelv:{ at:0.33, len:0.06, w:0.03, y:-0.8, col:pink },
     extra:(mb) => ellip(mb, [0.49, -0.015, 0], [0.025, 0.035, 0.03], { n:5, m:8, col:fc(beak), anim:p => swimA(p) }) });
 }
+function mkCleanerShrimp() {
+  // Pacific cleaner shrimp (Lysmata amboinensis), one unit long: a red stripe down a white-backed, golden body, long white antennae
+  const mb = new MB(), gold = [1.0, 0.75, 0.25], red = [0.95, 0.15, 0.12], white = [1.0, 0.98, 0.95];
+  loft(mb, { n:16, m:8, sec:t => { const w = 0.08 * Math.sin(Math.min(1, t * 2 + 0.2) * PI / 2) * (1 - t * 0.5); return { x:0.4 - t * 0.85, y:-0.04 * t * t, w, h:w, e:2 }; },
+    col:(t, u, p, sy, sz) => Math.abs(sz) < 0.15 && sy > 0 ? white : (Math.abs(sz) < 0.4 && sy > 0 ? red : gold) });
+  for (const sz of [1, -1]) {
+    tube(mb, { n:10, m:3, path:t => [0.4 + t * 0.7, 0.04 + t * 0.15, sz * (0.02 + t * 0.15)], r:0.004, col:fc(white), anim:t => [0, 0, t * 0.5, 0] });
+    for (let k = 0; k < 4; k++) tube(mb, { n:3, m:3, path:t => [0.2 - k * 0.1, -0.03 - t * 0.08, sz * (0.04 + t * 0.06)], r:0.006, col:fc(gold), anim:t => [0, 0, t * 0.3, 0] });
+  }
+  fin(mb, [[0, 0.04], [-0.1, 0.09], [-0.12, -0.09], [0, -0.04]], { origin:[-0.44, -0.04, 0], ua:[1, 0, 0], va:[0, 0, 1], col:(a, b) => Math.abs(b) < 0.03 ? red : gold });
+  return mb;
+}
 function mkMoray() {
   // a long muscular eel, mottled, mouth open as it breathes (and to show the teeth); a second set of jaws waits in its throat
   const skin = [0.45, 0.42, 0.2], spot = [0.12, 0.1, 0.06], tooth = [0.95, 0.95, 0.9];
@@ -226,9 +238,13 @@ function addMoreFish(REEF) {
       part(() => { const mb = new MB(); ellip(mb, [0, 0, 0], [0.62, 0.32, 0.3], { n:12, m:18, shape:p => [p[0] * (1 + 0.04 * Math.sin(p[1] * 30)), p[1], p[2]], col:fc([0.35, 0.42, 0.45, 0]) }); return mb; },
         { scale:0.6, mat:[0.07, 0.9, 0, 0.6], trans:true, sway:[0.01, 0.4, 4, 0], show:o => o.cocoon })], views:SIDE });
   addObj({ key:'moray', name:'moray eel', type:'giant moray · Gymnothorax javanicus', kind:'fish', floor:[REEF[0] - 2.4, REEF[1] - 1.4, 0.2], size:1.6, rad:0.9, yaw:-0.6,
-    fact:'Morays have a second set of jaws in the throat that shoot forward to grab prey and drag it down. Giant morays sometimes hunt with groupers, which signal them with head-shakes.',
+    fact:'Morays have a second set of jaws in the throat that shoot forward to grab prey and drag it down. Giant morays sometimes hunt with groupers, which signal them with head-shakes. This one has cleaner shrimp picking parasites from its open mouth, safe from those jaws.',
     motion:{ type:'hover', amp:0.05, turn:0.25 },
-    parts:[part(mkMoray, { scale:1.6, mat:M_SKIN, ...FISH_SWIM(0.05, 0.3, 1.4, 1.2) })],
+    // cleaner shrimp picking over its head and in and out of its open mouth
+    post:(o, t) => { for (let i = 1; i < o.parts.length; i++) { const p = o.parts[i], u = t * (0.2 + i * 0.05) + i * 2.3, side = i % 2 ? 1 : -1;
+      p.off = [0.72 + 0.06 * Math.sin(u), 0.035 + 0.02 * Math.sin(u * 1.7), side * (0.03 + 0.02 * Math.sin(u * 1.3))]; } },
+    parts:[part(mkMoray, { scale:1.6, mat:M_SKIN, ...FISH_SWIM(0.05, 0.3, 1.4, 1.2) }),
+      ...[0, 1, 2].map(i => part(mkCleanerShrimp, { scale:0.05, off:[0.72, 0.04, 0], mat:M_SKIN, sway:[0.002, 2, 40, 0] }))],
     views:[{ d:[0.9, 0.25, 0.6], k:1.4, hold:10, drift:0.02 }, { d:[1, 0.1, 0.1], k:0.6, hold:9, drift:0.02, off:[0.5, 0, 0] }] });
   addObj({ key:'flyingfish', name:'flying fish', type:'Exocoetidae · gliding over the waves', kind:'fish', at:[3990, 30, 0.3], size:0.3, rad:0.4,
     fact:'Chased from below, it bursts out of the water and glides on wing-like fins, sometimes for 400 m in a run of glides, beating its tail on the surface to take off again.',
