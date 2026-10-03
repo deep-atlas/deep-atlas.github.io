@@ -356,7 +356,7 @@ function buildCatalog() {
     readout:() => night() > 0.5 ? 'night: risen to feed near the surface' : 'day: hiding in the twilight' });
   addObj({ key:'hatchetfish', vsize:2.4, name:'hatchetfish', type:'Argyropelecus · silver hatchetfish', kind:'fish', at:[15000, -200, 600], size:0.06, rad:2,
     fact:'Lights along its belly match the faint glow from above, erasing its silhouette for hunters looking up: counter-illumination. Its tubular eyes look straight up.',
-    parts:[part(mkHatchetfish, { inst:schoolCloud(40, 1.1, 0.8, 61, 1, 0.1), school:[1, 0.06, 1, 0], shy:4, mat:M_SILVER, ...FISH_SWIM(0.05, 2.5, 0.9, 2) })],
+    parts:[part(mkHatchetfish, { inst:schoolCloud(120, 0.7, 0.5, 61, 1, 0.1), school:[1, 0.06, 1, 0], shy:2, mat:M_SILVER, ...FISH_SWIM(0.05, 2.5, 0.9, 2) })],
     views:[{ d:[0.2, 0.1, 1], k:0.8, hold:10, drift:0.03, frame:'world' }, { d:[0.4, -0.3, 0.6], k:0.3, hold:9, drift:0.03, frame:'world' }] });
   addObj({ key:'siphonophore', vsize:9, name:'giant siphonophore', label:'siphonophore', type:'a colony longer than a blue whale · Apolemia', kind:'jellies', at:[16000, 300, 700], size:40, rad:22,
     fact:'One colony of thousands of linked bodies, each specialised to swim, sting, feed or breed. Some grow longer than a blue whale: a coiled one about 45 m long was found in 2020.',
