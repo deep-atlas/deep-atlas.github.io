@@ -235,6 +235,29 @@ function mkPolarBear() {
   return mb;
 }
 
+// ---- the Lost City: white carbonate towers on an undersea mountain in the mid-Atlantic, some as tall as a 20-storey building,
+// built by warm alkaline water seeping from the rock below (no black smoke: the fluid is clear and only about 40 to 90 degrees C)
+function buildLostCity(A, seed) {
+  const mb = new MB(), r = rng(seed), cream = [0.95, 0.93, 0.86], grey = [0.72, 0.7, 0.64], tip = [1.0, 1.0, 0.97];
+  const towers = [[0, 0, 42, 3.2], [9, -5, 22, 2.2], [-8, 6, 26, 2.4], [5, 11, 14, 1.6], [-12, -7, 16, 1.8], [14, 6, 10, 1.3], [-4, -13, 12, 1.5], [18, -10, 7, 1.0], [-17, 2, 9, 1.2], [3, -20, 6, 0.9], [-2, 18, 8, 1.1], [11, 18, 5, 0.8]];
+  for (const [cx, cz, H, R] of towers) {
+    const y0 = groundAt(A, cx, cz) - 0.5, w = r() * TAU;
+    const path = t => [cx + Math.sin(t * 2.2 + w) * R * 0.5 * t, y0 + t * H, cz + Math.cos(t * 1.7 + w) * R * 0.5 * t];
+    tube(mb, { n:Math.ceil(H * 1.2), m:12, path, r:t => R * (1.25 - t * 0.75) * (0.85 + 0.25 * Math.sin(t * H * 0.9 + w)),
+      col:(t, u, p) => t > 0.92 ? tip : Math.sin(p[1] * 1.3 + u * 9) > 0.55 ? grey : cream, capEnd:true });
+    // the flanges: ledges that grow out sideways where fluid seeps from the tower's flanks, warm water pooling under them
+    const nf = Math.floor(H / 6);
+    for (let k = 0; k < nf; k++) {
+      const t = 0.3 + r() * 0.6, p = path(t), a = r() * TAU, rr = R * (1.25 - t * 0.75) + 0.6 + r() * 1.2, c = [p[0] + Math.cos(a) * rr * 0.5, p[1], p[2] + Math.sin(a) * rr * 0.5];
+      ellip(mb, c, [rr, 0.25, rr * 0.8], { n:4, m:12, shape:q => [q[0], q[1] < 0 ? q[1] * 0.3 : q[1], q[2]], col:(u, v, q) => q[1] < c[1] ? grey : cream });
+    }
+  }
+  // rubble and smaller chimneys round the base
+  for (let k = 0; k < 40; k++) { const a = r() * TAU, d = 4 + r() * 22, x = Math.cos(a) * d, z = Math.sin(a) * d, h = 0.5 + r() * 2.5;
+    tube(mb, { n:3, m:6, path:t => [x, groundAt(A, x, z) - 0.2 + t * h, z], r:t => (0.4 + r() * 0.1) * (1 - t * 0.6), col:fc(r() < 0.5 ? cream : grey), capEnd:true }); }
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -339,6 +362,10 @@ function addPlaces2() {
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
     parts:[part(mkLionsMane, { scale:1.6, mat:[0.8, 0.7, 1, 0.4], trans:true, pulse:[0.1, 0.3, 0, 0], sway:[0.12, 0.3, 2, 0] })],
     views:[{ d:[0.3, 0.1, 1], k:1.6, hold:11, drift:0.02, frame:'world', off:[0, -1.5, 0] }, { d:[0.2, 0.9, 0.3], k:1.0, hold:9, drift:0.02, frame:'world' }, { d:[0.5, -0.5, 0.8], k:1.2, hold:9, drift:0.02, frame:'world', off:[0, -3, 0] }] });
+  addObj({ key:'lostcity', name:'the Lost City', label:'Lost City', type:'white carbonate towers on the Mid-Atlantic Ridge', kind:'places', floor:[12900, 1100, 0], size:45, rad:28,
+    fact:'Discovered in 2000 on an undersea mountain in the mid-Atlantic: towers of white limestone up to 60 m tall, built over 100,000 years or more by warm, alkaline water rising through the rock. Unlike black smokers it runs on reactions between seawater and mantle rock, and some scientists think life on Earth may have begun in a place like it.',
+    parts:[part(() => buildLostCity(BYKEY.lostcity.anchor, 2000), { mat:[1, 0.3, 1, 0.3] })],
+    views:[{ d:[0.6, 0.15, 1], k:1.55, hold:12, drift:0.015, frame:'world', off:[0, 20, 0] }, { d:[0.2, 0.05, 1], k:0.55, hold:10, drift:0.015, frame:'world', off:[0, 28, 0] }, { d:[-0.8, 0.6, 0.5], k:0.9, hold:9, drift:0.015, frame:'world', off:[0, 10, 0] }] });
   const WRECK = [3200, -600];
   addObj({ key:'wreck', name:'a wreck turned reef', label:'shipwreck', type:'a 60 m freighter on the sand at 30 m', kind:'places', floor:[WRECK[0], WRECK[1], 0], size:60, rad:32, yaw:0.5, frame:'obj',
     fact:'A sunken ship is a ready-made reef. Within months its steel is coated with algae and sponges; within years soft corals, sea fans and anemones cover it, and fish shelter in its holds. Some navies and harbours now sink old ships on purpose to make new reefs.',

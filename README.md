@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **126 places** across five zones, plus Nautile. By zone:
+- **127 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
@@ -55,7 +55,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     anglerfish, viperfish, black dragonfish, stoplight loosejaw, gulper eel, fangtooth, oarfish (upright, as they hang),
     coelacanth, goblin, frilled and Greenland sharks, a ghost shark, blobfish, a beaked whale, Japanese spider crab and a
     seamount's deep coral garden with orange roughy.
-  - **The deep floor**: black-smoker vents with giant tube worms, yeti crabs and iron-armoured scaly-foot snails; a cold seep
+  - **The deep floor**: black-smoker vents with giant tube worms, yeti crabs and iron-armoured scaly-foot snails; the
+    Lost City's white limestone towers; a cold seep
     whose brine pool is a lake on the seafloor, with a Venus' flower basket; a whale fall with a sixgill shark; the Titanic's
     bow; giant isopod; dumbo octopus; the abyssal plain with sea pigs, xenophyophores, tripod fish, grenadiers and the
     swimming sea cucumber; the Mariana Trench, snailfish, hadal amphipods and the Challenger Deep.
