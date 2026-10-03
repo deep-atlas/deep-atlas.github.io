@@ -59,10 +59,10 @@
 </aside>
 
 <aside id="mapPanel" class="panel mappanel" aria-label="Map of this ocean" hidden>
-  <div class="panel-head"><span class="ptitle">map · the shore to the Challenger Deep</span><button class="btn" id="mapClose">close</button></div>
+  <div class="panel-head"><span class="ptitle">map</span><span class="map-tabs" id="mapTabs" role="group" aria-label="Map"><button class="btn" data-v="ocean" aria-pressed="true">this ocean</button><button class="btn" data-v="world" aria-pressed="false">the world</button></span><button class="btn" id="mapClose">close</button></div>
   <canvas id="mapCanvas" aria-label="Cross-section of the ocean with every place marked"></canvas>
   <div class="map-foot" id="mapFoot"></div>
-  <div class="panel-foot">distance out to sea and depth are both stretched near the top, so the crowded shallows have room · O opens and closes</div>
+  <div class="panel-foot" id="mapNote">distance out to sea and depth are both stretched near the top, so the crowded shallows have room · O opens and closes</div>
 </aside>
 <aside id="tours" class="panel" aria-label="Tours" hidden>
   <div class="panel-head"><span class="ptitle">tours</span><button class="btn" id="toursClose">close</button></div>
@@ -180,7 +180,7 @@
     <div class="help-top"><h2 id="notesTitle">what's new</h2><button class="btn" id="notesClose">close</button></div>
     <div class="notes-list">
       <details open><summary><span class="nv">0.10</span><span class="nt">nets, rafts and warnings</span></summary><ul>
-        <li>A map: press O (or “map”) for a cross-section of this ocean from the shore to the Challenger Deep, every place marked. Click a dot to swim there.</li>
+        <li>A map: press O (or “map”) for a cross-section of this ocean from the shore to the Challenger Deep, every place marked. Click a dot to swim there. Its other tab, “the world”, shows where each one really lives on Earth.</li>
         <li>A giant clam on the reef (it closes if you come too close) and a school of bluefin tuna in open water.</li>
         <li>Bubble-net feeding: three humpbacks spiral up blowing a curtain of bubbles round a herring school, then lunge up through the middle together (about every 75 seconds; listen for the feeding call).</li>
         <li>A basking shark cruises near the surface, mouth agape. Keys: N switches day and night, X disturbs what you are locked on to.</li>

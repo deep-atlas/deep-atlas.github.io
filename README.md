@@ -76,6 +76,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   with the reef glowing through it. The grand dive starts up there.
 - **Map** (O): a cross-section of this ocean from the shore to the Challenger Deep, drawn in characters, with every place,
   Nautile and you marked. Click a dot to swim there; where places crowd together (the reef) it lists them to choose from.
+  Its second tab is a world map, also in characters, showing where each animal and place really lives (a typical spot,
+  or where it was famously filmed), with you marked. Coastlines from Natural Earth (public domain).
 - **Where you are**: swimming freely, the info panel names the place you have reached (the coral reef, the kelp forest...) with a
   button to lock on to it.
 - **Tours**: the grand dive (surface to the Challenger Deep), giants, living light, tiny life, the reef, hidden worlds, weird and
@@ -156,7 +158,8 @@ yellow hull is given a faint glow (its own work lights) so it reads as yellow at
 | `08b-life.js` | living lights, reactions, schools parting round predators, plankton flashes |
 | `09-camera.js` | orbit, angle loop, flights, free swimming, picking |
 | `10-ui.js` | the interface, tours, atlas, search, ladder, labels, photo, compare, ride, screensaver |
-| `10c-map.js` | the cross-section map |
+| `10c-map.js` | the map: cross-section and world tabs |
+| `10d-world.js` | the world map grid and each place's real location |
 | `10b-journey.js` | the size journey, from a whale to a microbe |
 | `11-sound.js` | the generative soundscape |
 | `99-main.js` | the frame loop and test hooks (`window.__deep`; `__deep.save(name)` posts a PNG of the canvas to the dev server, which writes it to `.shots/`) |
