@@ -334,6 +334,15 @@ function mkFlowerBasket() {
   for (const [y, z] of [[0.11, 0.006], [0.15, -0.008]]) ellip(mb, [0.01, y, z], [0.012, 0.004, 0.004], { n:3, m:6, col:fc([1.0, 0.75, 0.6, 0.4]) });
   return mb;
 }
+function mkCookiecutter() {
+  // cookiecutter shark (Isistius brasiliensis), about 45 cm: a cigar-shaped body, brown above, its belly covered in light organs
+  // that glow green-blue, all but a dark collar round the throat, which from below looks like a small fish to bigger hunters
+  const brown = [0.3, 0.24, 0.2], belly = [0.35, 0.3, 0.26], glow = [0.3, 0.95, 0.75, 2.2];
+  return fish({ H:0.09, W:0.085, tm:0.3, nose:0.45, ped:0.15, bodyLen:0.85, back:brown, belly, eye:[0.08, 0.2, 0.025], eyeCol:[0.15, 0.4, 0.35],
+    glowAt:(t, sy) => sy < -0.15 && !(t > 0.13 && t < 0.22) ? glow : null,
+    tail:'lunate', tailH:0.1, tailL:0.12, tailCol:brown, dorsal:[{ at:0.6, len:0.06, h:0.035, col:brown }, { at:0.7, len:0.06, h:0.035, col:brown }],
+    pect:{ at:0.24, len:0.07, w:0.03, down:0.4, col:brown }, extra:(mb, b) => gills(mb, b, 0.14, 5) });
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -361,6 +370,11 @@ function addDeepFolk(VENTS) {
     fact:'A sponge whose skeleton is a lattice of glass fibres, stronger for its weight than most things engineers build. A male and female shrimp often enter it young and grow too big to leave, living out their lives inside; in Japan the dried baskets were once given as wedding gifts.',
     parts:[part(mkFlowerBasket, { mat:[0.3, 1.3, 1, 0.8], trans:true, sway:[0.004, 0.3, 4, 0] })],
     views:[{ d:[0.3, 0.15, 1], k:2.1, hold:10, drift:0.025, off:[0, 0.12, 0] }, { d:[0.5, 0.9, 0.4], k:1.3, hold:9, drift:0.025, off:[0, 0.12, 0] }] });
+  addObj({ key:'cookiecutter', name:'cookiecutter shark', type:'Isistius brasiliensis', kind:'sharks', at:[16700, 900, 850], size:0.45, rad:0.35,
+    fact:'A small shark whose belly glows, all but a dark collar round the throat. Seen from below the collar looks like a little fish, luring tuna, dolphins and even great whites close; then it latches on with sucking lips and twists, carving out a round plug of flesh. It has even bitten submarines.',
+    motion:{ type:'circle', R:2.5, v:0.4, bob:0.4, bank:0.1 },
+    parts:[part(mkCookiecutter, { scale:0.45, mat:M_SKIN, ...FISH_SWIM(0.06, 1.2, 0.9, 2.2) })],
+    views:[{ d:[0.3, -0.45, 1], k:2.2, hold:10, drift:0.02 }, { d:[0.15, 0.1, 1], k:2.0, hold:9, drift:0.02 }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },
