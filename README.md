@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **141 places** across five zones, plus Nautile. By zone:
+- **142 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
@@ -45,7 +45,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a giant clam, a sea krait, a pufferfish, a blue-ringed octopus,
     blacktip reef sharks, snappers, a grouper at a cleaning station, flashlight fish at night, and on the sand garden eels, a
     goby sharing a burrow with a pistol shrimp, a coconut octopus, a mimic octopus, a peacock flounder, an electric ray and a stingray. A tornado of chevron barracuda off the
-    drop-off, a manta, a green turtle; the kelp forest with a sea otter, sea lions, garibaldi and blacksmith; a shipwreck at
+    drop-off, a manta, a green turtle and a stream of
+    turtle hatchlings heading out to sea; the kelp forest with a sea otter, sea lions, garibaldi and blacksmith; a shipwreck at
     30 m turned into a reef; a red-lipped batfish walking on the sand; a chambered nautilus on the deep reef slope.
   - **Coasts and poles**: mangroves with a box jellyfish in the channel, a seagrass meadow with a dugong and a leafy
     seadragon, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, belugas, a walrus, a swimming polar bear, a lion's mane

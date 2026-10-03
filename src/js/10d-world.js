@@ -90,6 +90,7 @@ const WHERE = {
   seahorse:[-8, 114, 'shallow coasts worldwide'],
   octopus:[40, 15, 'the Mediterranean and Atlantic coasts'],
   turtle:[-23.4, 151.9, 'warm seas; Heron Island, Great Barrier Reef'],
+  hatchlings:[-23.4, 151.92, 'nesting beaches worldwide; Heron Island, Great Barrier Reef'],
   manta:[4.2, 73.5, 'Indo-Pacific reefs; the Maldives'],
   kelp:[36.6, -122, 'cool coasts; here Monterey, California'],
   manowar:[26, -68, 'the warm Atlantic and Indian Oceans'],
