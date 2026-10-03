@@ -36,9 +36,9 @@ function markSeen(o) { if (!o.place || SEEN.has(o.key)) return; SEEN.add(o.key);
 // ---- tours
 const TOURS = [
   { id:'dive', name:'the grand dive', blurb:'From the surface to the floor of the Challenger Deep, zone by zone.',
-    stops:['surface', 'flyingfish', 'spinners', 'manowar', 'reef', 'clownfish', 'lionfish', 'turtle', 'manta', 'kelp', 'baitball', 'whaleshark', 'bluewhale', 'seep', 'krill', 'coelacanth', 'oarfish', 'lanternfish', 'siphonophore', 'barreleye', 'giantsquid', 'vampsquid', 'dragonfish', 'blobfish', 'spermwhale', 'anglerfish', 'gulper', 'vents', 'whalefall', 'titanic', 'dumbo', 'abyss', 'tripodfish', 'snailfish', 'amphipods', 'challenger'] },
+    stops:['surface', 'flyingfish', 'spinners', 'manowar', 'moonjelly', 'reef', 'clownfish', 'lionfish', 'turtle', 'manta', 'kelp', 'baitball', 'sailfish', 'dolphin', 'whaleshark', 'bluewhale', 'seep', 'krill', 'coelacanth', 'oarfish', 'lanternfish', 'siphonophore', 'barreleye', 'giantsquid', 'vampsquid', 'dragonfish', 'blobfish', 'spermwhale', 'anglerfish', 'gulper', 'vents', 'whalefall', 'titanic', 'dumbo', 'abyss', 'tripodfish', 'snailfish', 'amphipods', 'challenger'] },
   { id:'giants', name:'giants', blurb:'The biggest animals there are, and one that is a colony.',
-    stops:['bluewhale', 'humpback', 'bubblenet', 'giantoctopus', 'whaleshark', 'baskingshark', 'tuna', 'orca', 'spermwhale', 'sleepingwhales', 'colossal', 'giantsquid', 'phantomjelly', 'humboldt', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'leatherback', 'sunfish', 'greatwhite'] },
+    stops:['bluewhale', 'humpback', 'bubblenet', 'giantoctopus', 'whaleshark', 'baskingshark', 'tuna', 'orca', 'spermwhale', 'sleepingwhales', 'colossal', 'giantsquid', 'phantomjelly', 'humboldt', 'bigfin', 'siphonophore', 'oarfish', 'spidercrab', 'manta', 'leatherback', 'sunfish', 'greatwhite', 'hammerheads', 'beakedwhale'] },
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
     stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'atolla', 'pyrosome', 'cookiecutter', 'cockeyed', 'helmetjelly', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
@@ -54,7 +54,7 @@ const TOURS = [
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
     stops:['seadragon', 'batfish', 'spidercrab', 'coelacanth', 'nautilus', 'oarfish', 'glasssquid', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'vampsquid', 'loosejaw', 'seatoad', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
-    stops:['isopod', 'lostcity', 'vents', 'tubeworms', 'yeticrab', 'scalyfoot', 'whalefall', 'hagfish', 'sixgill', 'abyss', 'casper', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'alicella', 'snailfish', 'amphipods', 'challenger'] },
+    stops:['isopod', 'lostcity', 'vents', 'tubeworms', 'yeticrab', 'scalyfoot', 'whalefall', 'hagfish', 'sixgill', 'abyss', 'casper', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'trench', 'alicella', 'snailfish', 'amphipods', 'challenger'] },
   { id:'sizes', name:'from a whale to a microbe', blurb:'One long zoom through size: every animal at its true size beside the last, from a 25 m blue whale to a single cell under a thousandth of a millimetre.', journey:true },
   { id:'random', name:'a random swim', blurb:'Anywhere in the atlas, places you have not seen first.', random:true },
 ];
