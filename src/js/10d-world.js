@@ -58,6 +58,7 @@ const WHERE = {
   batfish:[-0.6, -90.5, 'the Galapagos Islands only, on sand at 30 to 75 m'],
   mimic:[1.4, 125.2, 'sandy river mouths in Indonesia, such as the Lembeh Strait'],
   frogfish:[-8.4, 115.7, 'Indo-Pacific reefs; famous at Tulamben, Bali'],
+  featherstar:[-5.5, 150.5, 'Indo-Pacific reefs; Papua New Guinea and Indonesia'],
   stingray:[19.4, -81.3, 'the Caribbean; Stingray City, Grand Cayman'],
   barracuda:[4.1, 118.6, 'Indo-Pacific; famous at Sipadan, Malaysia'],
   nautilus:[7.3, 134.5, 'deep reef slopes of the western Pacific; Palau'],

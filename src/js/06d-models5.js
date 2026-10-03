@@ -548,6 +548,20 @@ function mkFrogfish() {
     ellip(mb, [x, Math.cos(a) * rr * 0.35 + 0.02, Math.sin(a) * rr * 0.25], [0.018, 0.018, 0.018], { n:3, m:5, col:fc(r() < 0.5 ? spot : yel) }); }
   return mb;
 }
+function mkFeatherStar() {
+  // a feather star (comatulid crinoid), in metres, about 30 cm across: a small central cup and a crown of ten long feathery arms,
+  // here swimming: the arms beat up and down in alternating sets of five
+  const mb = new MB(), cols = [[1.0, 0.75, 0.15], [0.95, 0.35, 0.15]], r = rng(888);
+  ellip(mb, [0, 0, 0], [0.025, 0.02, 0.025], { n:4, m:8, col:fc([0.6, 0.35, 0.15]) });
+  for (let k = 0; k < 10; k++) {
+    const a = k / 10 * TAU, col = cols[k % 2], L = 0.15 + r() * 0.03, up = k % 2 ? 1 : -1;
+    const path = t => [Math.cos(a) * (0.02 + t * L), Math.sin(t * PI * 0.7) * 0.04 - t * t * 0.02, Math.sin(a) * (0.02 + t * L)];
+    tube(mb, { n:10, m:3, path, r:t => 0.004 * (1 - t * 0.5), col:fc(col), anim:t => [0, t * up * 1.2, 0, 0] });
+    for (let j = 1; j < 14; j++) { const t = j / 14, p = path(t), sd = vnorm([-Math.sin(a), 0, Math.cos(a)]);
+      for (const s of [1, -1]) tube(mb, { n:1, m:3, path:u => vadd(p, vmul(vadd(vmul(sd, s), [0, 0.3, 0]), u * 0.018 * (1 - t * 0.5))), r:0.0015, col:fc(col), anim:() => [0, t * up * 1.2, 0, 0] }); }
+  }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -687,6 +701,11 @@ function addShallows(REEF) {
     post:(o, t) => { o.parts[0].sway[0] = 0.02 + 0.06 * Math.max(0, Math.sin(t * 0.4)); },
     parts:[part(mkFrogfish, { scale:0.35, mat:M_SKIN, sway:[0.03, 4, 3, 0] })],
     views:[{ d:[0.6, 0.2, 1], k:2.0, hold:10, drift:0.02, off:[0, 0.08, 0] }, { d:[1, 0.15, 0.3], k:1.8, hold:9, drift:0.02, off:[0, 0.08, 0] }] });
+  addObj({ key:'featherstar', name:'feather star', type:'a swimming crinoid · Comanthina', kind:'floor', floor:[REEF[0] + 1, REEF[1] + 8, 1.4], size:0.3, rad:0.25,
+    fact:'A relative of starfish and sea urchins, with ten or more feathery arms that catch drifting food. Most of the time it clings to coral with hooked feet, but it can also swim, beating its arms up and down in two alternating sets of five, a rare sight on a night dive.',
+    motion:{ type:'drift', amp:0.25, tilt:0.2 },
+    parts:[part(mkFeatherStar, { mat:M_SKIN, swim2:[0, 2, 0.05, 0.7] })],
+    views:[{ d:[0.4, 0.3, 1], k:1.6, hold:10, drift:0.025 }, { d:[0.3, 0.9, 0.4], k:1.6, hold:9, drift:0.025 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],

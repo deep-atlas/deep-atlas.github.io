@@ -474,6 +474,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    featherstar:'10 to 200 arms · a group over 400 million years old',
     frogfish:'swallows prey in ~6 ms · mouth opens to 12 times its size',
     hatchlings:'~5 cm and 25 g · swim nonstop for a day or more · perhaps 1 in 1,000 survive',
     seatoad:'~20 cm · holds its breath up to 4 minutes · walks on its fins',
