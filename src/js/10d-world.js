@@ -84,6 +84,7 @@ const WHERE = {
   sargassumfish:[28, -63, 'floating weed in the Atlantic'],
   mangroves:[21.9, 89.3, 'tropical coasts; the Sundarbans, Bangladesh and India'],
   boxjelly:[-16.9, 145.8, 'northern Australia, such as off Cairns'],
+  manatee:[28.9, -82.6, 'warm coasts and rivers of the Caribbean; Crystal River, Florida'],
   seagrass:[-25.9, 113.6, 'warm and temperate coasts; Shark Bay, Australia'],
   dugong:[-25.7, 113.7, 'the Indo-Pacific; Shark Bay, Australia'],
   seadragon:[-35.8, 137.5, 'southern Australia only'],

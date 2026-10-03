@@ -334,6 +334,21 @@ function mkDugong() {
     pect:{ at:0.2, len:0.1, w:0.05, down:0.7, back:0.4, y:-0.5, col:skin },
     extra:(mb) => ellip(mb, [0.47, -0.06, 0], [0.04, 0.035, 0.05], { n:5, m:8, col:fc([0.62, 0.52, 0.45]), anim:p => swimA(p) }) });
 }
+function mkManatee() {
+  // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
+  // and a broad round paddle of a tail (a dugong's is a fluke)
+  const skin = [0.5, 0.5, 0.46], belly = [0.58, 0.57, 0.52];
+  const mb = cetacean({ back:skin, belly, H:0.13, W:0.13, nose:0.3, bodyLen:0.8, eye:[0.06, 0.25, 0.008], tail:'none', tm:0.38, ped:0.4,
+    skin:(t, sy, sz, p) => Math.sin(p[0] * 40 + p[2] * 20) * Math.sin(p[1] * 35) > 0.55 ? [0.42, 0.5, 0.36] : mixc(belly, skin, smooth(-0.3, 0.2, sy)),
+    camber:t => t < 0.1 ? -0.25 * (1 - t / 0.1) : 0,
+    pect:{ at:0.2, len:0.09, w:0.05, down:0.7, back:0.4, y:-0.5, col:skin },
+    extra:(mb) => {
+      ellip(mb, [0.47, -0.04, 0], [0.045, 0.045, 0.06], { n:5, m:8, col:(u, v, p) => Math.sin(p[2] * 300) > 0.6 ? [0.8, 0.78, 0.7] : [0.55, 0.53, 0.48], anim:p => swimA(p) });
+      const pts = []; for (let k = 0; k <= 20; k++) { const a = -PI / 2 + k / 20 * PI; pts.push([-Math.cos(a) * 0.14, Math.sin(a) * 0.12]); }
+      fin(mb, pts, { origin:[-0.37, 0, 0], ua:[1, 0, 0], va:[0, 0, 1], col:fc(skin), anim:() => [1, 0, 0, 0], center:[-0.05, 0] });
+    } });
+  return mb;
+}
 // a dugong grazes slowly along the floor, nose down, surfacing now and then to breathe
 function grazeMotion(o, t) {
   const A = o.anchor, cyc = 70, u = ((t % cyc) + cyc) % cyc / cyc, a = t * 0.02;
@@ -429,6 +444,11 @@ function addPlaces2() {
     motion:{ type:'drift', amp:0.25, tilt:0.35 },
     parts:[part(mkBoxJelly, { scale:0.25, mat:[0.4, 0.8, 0.2, 0.4], trans:true, pulse:[0.16, 0.9, 0, 0], sway:[0.05, 0.7, 4, 0] })],
     views:[{ d:[0.3, 0.05, 1], k:2.6, hold:10, drift:0.02, frame:'world', off:[0, -0.15, 0] }, { d:[0.5, -0.3, 0.8], k:2.4, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'manatee', name:'West Indian manatee', label:'manatee', type:'Trichechus manatus · a sea cow', kind:'air', floor:[MANG[0] + 275, MANG[1] + 5, 1.1], size:3, rad:2,
+    fact:'A slow, gentle grazer of warm coasts and rivers, eating about a tenth of its weight in plants a day. It has no blubber to speak of and needs water above about 20 °C, so in winter Florida’s manatees crowd into warm springs. Boat propellers scar the backs of most adults.',
+    motion:{ type:'circle', R:5, v:0.25, bob:0.15, bank:0.04 },
+    parts:[part(mkManatee, { scale:3, mat:M_SKIN, ...WHALE_SWIM(0.02, 0.2) })],
+    views:[{ d:[0.3, 0.05, 1], k:2.0, hold:10, drift:0.02 }, { d:[0.6, 0.6, 0.6], k:1.6, hold:9, drift:0.02 }] });
   addObj({ key:'seagrass', name:'seagrass meadow', label:'seagrass', type:'turtle grass · a flowering plant of the sea', kind:'places', floor:[GRASS[0], GRASS[1], 0], size:50, rad:26,
     fact:'Seagrasses are flowering plants that returned to the sea about 100 million years ago; they even pollinate underwater. Meadows cover a fraction of a percent of the seafloor but bury a tenth of the ocean’s carbon each year.',
     parts:[part(() => buildSeagrass(BYKEY.seagrass.anchor, 71), { mat:[1, 0.2, 1, 0.2], sway:[0.12, 0.9, 2, 0] })],
