@@ -562,6 +562,17 @@ function mkFeatherStar() {
   }
   return mb;
 }
+function mkStargazer() {
+  // a stargazer (Uranoscopus), in metres, about 35 cm long, buried in sand: only the boxy top of its head shows, eyes on top looking
+  // straight up, an upturned mouth with fringed lips; the sand piled round it
+  const mb = new MB(), skin = [0.26, 0.22, 0.17], spot = [0.6, 0.56, 0.46], sand = [0.32, 0.29, 0.22];
+  ellip(mb, [0, 0, 0], [0.11, 0.035, 0.08], { n:6, m:12, shape:p => [p[0], Math.max(p[1], -0.005), p[2]], col:(u, v, p) => Math.sin(p[0] * 120) * Math.sin(p[2] * 110) > 0.5 ? spot : skin });
+  for (const sz of [1, -1]) { ellip(mb, [0.02, 0.036, sz * 0.026], [0.02, 0.016, 0.018], { n:5, m:8, col:(u, v, p) => p[1] > 0.044 ? [0.01, 0.01, 0.01] : [1.0, 0.92, 0.6] }); }
+  // the upturned mouth and its fringe of lips
+  ellip(mb, [0.095, 0.026, 0], [0.016, 0.022, 0.06], { n:4, m:8, col:fc([0.02, 0.015, 0.01]) });
+  for (let k = 0; k < 14; k++) { const z = -0.05 + k * 0.0077; tube(mb, { n:1, m:3, path:t => [0.11 + t * 0.01, 0.045 + t * 0.008, z], r:0.002, col:fc([0.95, 0.9, 0.8]), anim:() => [0, 0, 0.1, 0] }); }
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -711,6 +722,11 @@ function addShallows(REEF) {
     motion:{ type:'drift', amp:0.25, tilt:0.2 },
     parts:[part(mkFeatherStar, { mat:M_SKIN, swim2:[0, 2, 0.05, 0.7] })],
     views:[{ d:[0.4, 0.3, 1], k:1.6, hold:10, drift:0.025 }, { d:[0.3, 0.9, 0.4], k:1.6, hold:9, drift:0.025 }] });
+  addObj({ key:'stargazer', name:'stargazer', type:'Uranoscopus · an ambush hunter', kind:'fish', floor:[REEF[0] + 33.5, REEF[1] - 5, 0], size:0.35, vsize:0.35, rad:0.25, yaw:2,
+    fact:'It buries itself in sand with only its eyes and mouth showing, both on top of its head, and waits for a fish to swim over. Then it lunges upward and swallows it. Some stargazers can give an electric shock from organs behind their eyes, and it has venomous spines above its pectoral fins.',
+    motion:{ type:'hover', amp:0.001, turn:0.01 },
+    parts:[part(mkStargazer, { mat:M_SKIN })],
+    views:[{ d:[1, 0.25, 0.15], k:0.8, hold:10, drift:0.02 }, { d:[0.8, 0.7, 0.6], k:0.9, hold:9, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
