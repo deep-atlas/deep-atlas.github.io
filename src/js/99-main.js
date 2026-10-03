@@ -9,8 +9,12 @@ function frame(now) {
 function drawFrame(now) {
   const dt = Math.min(0.1, (now - lastNow) / 1000); lastNow = now;
   simTime += dt * (+SET.time);
+  // (set DEBUG.prof = {} to add up where each frame's time goes, in ms per stage)
+  const PF = DEBUG.prof, T = PF ? () => performance.now() : null; let t0 = PF ? T() : 0;
+  const lap = PF ? k => { const t = T(); PF[k] = (PF[k] || 0) + t - t0; t0 = t; } : null;
   asciiResize();
   if (typeof tick === 'function') tick(dt, now / 1000);
+  if (PF) lap('tick');
   // a camera that has gone non-finite would draw nothing ever again: put it back somewhere safe
   if (!CAM.pos.every(isFinite) || !CAM.fwd.every(isFinite) || !isFinite(CAM.scale)) {
     console.warn('camera reset: it had become non-finite');
@@ -19,7 +23,9 @@ function drawFrame(now) {
   }
   CAM.depth = -CAM.pos[1];
   updateLight(DEBUG.solo ? 6 : Math.max(0, CAM.depth), typeof TOD !== 'undefined' ? TOD.min : 630);
+  if (PF) lap('updateLight');
   updateUBO(simTime % 20000);
+  if (PF) lap('light');
   const A = ASCII;
   gl.bindFramebuffer(gl.FRAMEBUFFER, A.scene.fb);
   gl.viewport(0, 0, A.scene.w, A.scene.h);
@@ -28,15 +34,20 @@ function drawFrame(now) {
   gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.depthMask(true);
   gl.clearDepth(1); gl.clear(gl.DEPTH_BUFFER_BIT);
   drawTerrain();
+  if (PF) lap('bg+terrain');
   if (typeof drawWorld === 'function') drawWorld(false);
+  if (PF) lap('world');
   gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.depthMask(false);
   drawSnow(simTime);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   drawSeaFromAbove();
   if (typeof drawWorld === 'function') drawWorld(true);
   gl.depthMask(true); gl.disable(gl.BLEND);
+  if (PF) lap('snow+trans');
   asciiCompose(now / 1000);
+  if (PF) lap('ascii');
   if (typeof afterFrame === 'function') afterFrame();
+  if (PF) { lap('after'); PF.frames = (PF.frames || 0) + 1; }
 }
 
 // the font: build the glyph atlas again once the page font has arrived

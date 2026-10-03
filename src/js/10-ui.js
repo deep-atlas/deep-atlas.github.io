@@ -525,14 +525,23 @@ function buildLadder() {
     b.onclick = e => { e.stopPropagation(); userGo(o); };
     put(depthOf(o), b);
   }
+  Object.assign(LAD, { h: 0, top: '', txt: '', fk: undefined, ticks: null });
 }
+// the ladder only touches the DOM when something it shows has changed; its height is cached until buildLadder runs again
+const LAD = { h: 0, top: '', txt: '', fk: undefined, ticks: null };
 function updateLadder() {
-  const lad = $('ladder'), h = lad.getBoundingClientRect().height;
+  const lad = $('ladder');
+  if (!LAD.h) LAD.h = lad.getBoundingClientRect().height;
   const d = CAM.depth;
-  $('ladMark').style.top = (ladF(Math.max(d, 0)) * h) + 'px';
-  $('ladTxt').textContent = d < -0.5 ? 'above' : d < 1 ? fmtLen(Math.max(d, 0.01)) : fmtInt(d) + ' m';
+  const top = Math.round(ladF(Math.max(d, 0)) * LAD.h * 2) / 2 + 'px';
+  if (top !== LAD.top) $('ladMark').style.top = LAD.top = top;
+  const txt = d < -0.5 ? 'above' : d < 1 ? fmtLen(Math.max(d, 0.01)) : fmtInt(d) + ' m';
+  if (txt !== LAD.txt) $('ladTxt').textContent = LAD.txt = txt;
   const fk = VIEW.focus && VIEW.focus.key;
-  for (const t of lad.querySelectorAll('.tick[data-key]')) t.classList.toggle('here', t.dataset.key === fk);
+  if (fk !== LAD.fk || !LAD.ticks) {
+    LAD.fk = fk; LAD.ticks = LAD.ticks || [...lad.querySelectorAll('.tick[data-key]')];
+    for (const t of LAD.ticks) t.classList.toggle('here', t.dataset.key === fk);
+  }
 }
 {
   const lad = $('ladder');
