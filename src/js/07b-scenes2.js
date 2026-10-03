@@ -212,6 +212,29 @@ function mkSeaAngel() {
   return mb;
 }
 
+function mkPolarBear() {
+  // a polar bear swimming, one unit long, head at +x: a long body and neck, small head with short ears, the huge front paws
+  // it paddles with (the hind legs trail as rudders); the fur looks white but the hairs are clear, over black skin
+  const mb = new MB(), fur = [0.92, 0.9, 0.82], shade = [0.78, 0.76, 0.68], black = [0.05, 0.05, 0.06];
+  loft(mb, { n:28, m:16, sec:t => {
+      const f = t < 0.18 ? 0.45 + 0.55 * smooth(0, 0.18, t) : t < 0.7 ? 1 : 1 - 0.75 * smooth(0.7, 1, t);
+      return { x:0.3 - t * 0.8, y:0.01 * Math.sin(t * PI), w:0.13 * f, h:0.14 * f, e:2 };
+    }, col:(t, u, p, sy) => sy < -0.3 ? shade : fur, anim:t => [0.2 + t * 0.6, 0, 0, 0] });
+  // the head on its long neck, a black nose and eyes, round ears
+  ellip(mb, [0.39, 0.03, 0], [0.1, 0.075, 0.07], { n:8, m:12, col:fc(fur), anim:() => [0.05, 0, 0, 0] });
+  tube(mb, { n:3, m:8, path:t => [0.45 + t * 0.06, 0.02 - t * 0.01, 0], r:t => 0.045 - t * 0.012, col:t => t > 0.85 ? black : fur, capEnd:true, anim:() => [0.05, 0, 0, 0] });
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.43, 0.06, sz * 0.04], [0.008, 0.008, 0.006], { n:3, m:5, col:fc(black), anim:() => [0.05, 0, 0, 0] });
+    ellip(mb, [0.36, 0.1, sz * 0.045], [0.015, 0.02, 0.012], { n:3, m:6, col:fc(shade), anim:() => [0.05, 0, 0, 0] });
+    // front legs paddling, with broad paws
+    tube(mb, { n:5, m:6, path:t => [0.18 - t * 0.05, -0.06 - t * 0.17, sz * (0.08 + t * 0.03)], r:t => 0.045 - t * 0.012, col:fc(fur), anim:t => [0, 0, 0, 0] , capEnd:true });
+    ellip(mb, [0.12, -0.24, sz * 0.11], [0.06, 0.02, 0.045], { n:4, m:8, col:fc(shade) });
+    // hind legs trailing
+    tube(mb, { n:5, m:6, path:t => [-0.38 - t * 0.12, -0.03 - t * 0.04, sz * (0.06 + t * 0.02)], r:t => 0.045 - t * 0.015, col:fc(fur), anim:() => [1, 0, 0, 0], capEnd:true });
+  }
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -306,6 +329,11 @@ function addPlaces2() {
     motion:{ type:'hover', amp:0.04, turn:0.6, pitch:1.2 },
     parts:[[0, 0, 0], [-0.04, -0.03, 0.05], [0.05, 0.02, -0.05]].map((off, i) => part(mkSeaAngel, { scale:0.03 - i * 0.004, off, mat:[0.5, 1.4, 1, 0.5], trans:true, swim2:[0, 2, 0.008, 2.6 + i * 0.4] })),
     views:[{ d:[0.3, 0.1, 1], k:1.5, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.4, hold:9, drift:0.02 }] });
+  addObj({ key:'polarbear', name:'polar bear', type:'Ursus maritimus · a marine mammal', kind:'air', at:[ICE[0] + 18, ICE[1] + 16, 1.2], size:2.3, rad:1.6,
+    fact:'Classed as a marine mammal: it lives on the sea ice and hunts seals from it, and can swim for days at a stretch, one female for over 680 km. It paddles with its huge front paws and can dive for a minute or more to stalk a seal. As the summer ice shrinks, it must swim farther.',
+    motion:{ type:'circle', R:9, v:0.7, bob:0.15, bank:0.05 },
+    parts:[part(mkPolarBear, { scale:2.3, mat:[1, 0.5, 1, 0.4], swim:[0.02, 0.6, 0.6, 0], swim2:[1, 2, 0.12, 0.9] })],
+    views:[{ d:[0.3, -0.35, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, -0.2, 0.3], k:1.6, hold:9, drift:0.02 }, { d:[0.2, -0.85, 0.4], k:1.6, hold:9, drift:0.02 }] });
   addObj({ key:'lionsmane', name:'lion’s mane jellyfish', label:'lion’s mane', type:'Cyanea capillata', kind:'jellies', at:[ICE[0] - 14, ICE[1] + 8, 9], size:1.6, vsize:4, rad:3,
     fact:'The largest known jellyfish. Its bell can reach 2 m across and its hundreds of sticky tentacles trail over 30 m: one found in 1870 was longer than a blue whale. It thrives in cold Arctic and North Atlantic water.',
     motion:{ type:'drift', amp:0.4, tilt:0.15 },

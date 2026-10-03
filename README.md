@@ -32,7 +32,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **124 places** across five zones, plus Nautile. By zone:
+- **125 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins and
     sailfish, whale shark (with remoras), a basking shark, great white,
@@ -46,8 +46,8 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     drop-off, a manta, a green turtle; the kelp forest with a sea otter, sea lions, garibaldi and blacksmith; a shipwreck at
     30 m turned into a reef; a chambered nautilus on the deep reef slope.
   - **Coasts and poles**: mangroves with a box jellyfish in the channel, a seagrass meadow with a dugong and a leafy
-    seadragon, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, belugas, a lion's mane jellyfish and
-    sea angels.
+    seadragon, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, belugas, a swimming polar bear, a lion's mane
+    jellyfish and sea angels.
   - **Twilight and midnight zones**: lanternfish, hatchetfish, a 40 m siphonophore, barreleye, giant, colossal, bigfin, glass
     and cock-eyed squid, firefly squid at night, Atolla, the helmet jellyfish, a pyrosome, vampire squid, sperm whale,
     anglerfish, viperfish, black dragonfish, stoplight loosejaw, gulper eel, fangtooth, oarfish (upright, as they hang),
