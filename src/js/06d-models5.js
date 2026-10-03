@@ -573,6 +573,17 @@ function mkStargazer() {
   for (let k = 0; k < 14; k++) { const z = -0.05 + k * 0.0077; tube(mb, { n:1, m:3, path:t => [0.11 + t * 0.01, 0.045 + t * 0.008, z], r:0.002, col:fc([0.95, 0.9, 0.8]), anim:() => [0, 0, 0.1, 0] }); }
   return mb;
 }
+function mkNurseShark() {
+  // nurse shark, one unit long: brown, blunt broad head with two fleshy barbels by the nostrils, small mouth, rounded fins,
+  // two dorsal fins far back, a long upper tail lobe
+  const brown = [0.3, 0.22, 0.14], belly = [0.5, 0.4, 0.28];
+  const mb = fish({ H:0.09, W:0.1, tm:0.3, nose:0.3, ped:0.1, bodyLen:0.8, back:brown, belly, eye:[0.06, 0.25, 0.01], e:2.1,
+    camber:t => -0.06 * Math.sin(t * PI),
+    tail:'shark', tailH:0.09, tailL:0.24, tailCol:brown, dorsal:[{ at:0.5, len:0.1, h:0.06, col:brown }, { at:0.64, len:0.08, h:0.045, col:brown }],
+    anal:[{ at:0.66, len:0.06, h:0.03, col:brown }], pect:{ at:0.24, len:0.13, w:0.07, down:0.6, back:0.3, y:-0.5, col:brown }, pelv:{ at:0.48, len:0.06, w:0.04, y:-0.7 } });
+  for (const sz of [1, -1]) tube(mb, { n:3, m:4, path:t => [0.48 + t * 0.01, -0.03 - t * 0.025, sz * 0.025], r:0.004, col:fc(brown) });   // barbels
+  return mb;
+}
 function addShallows(REEF) {
   const KELP = BYKEY.kelp.anchor;
   addObj({ key:'cuttlefish', name:'cuttlefish', type:'broadclub cuttlefish · Sepia latimanus', kind:'cephs', floor:[REEF[0] + 2.2, REEF[1] + 2.6, 2.4], size:0.4, rad:0.3, yaw:2.4,
@@ -727,6 +738,11 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.001, turn:0.01 },
     parts:[part(mkStargazer, { mat:M_SKIN })],
     views:[{ d:[1, 0.25, 0.15], k:0.8, hold:10, drift:0.02 }, { d:[0.8, 0.7, 0.6], k:0.9, hold:9, drift:0.02 }] });
+  addObj({ key:'nurseshark', name:'nurse shark', type:'Ginglymostoma cirratum', kind:'sharks', floor:[REEF[0] + 6, REEF[1] - 18, 0.25], size:2.6, rad:1.4, yaw:0.4,
+    fact:'Unlike most sharks it can pump water over its gills while lying still, so by day it rests on the sand or under ledges, often piled up with others. At night it hunts, sucking prey out of crevices with a force strong enough to pull a conch from its shell.',
+    motion:{ type:'hover', amp:0.02, turn:0.08 },
+    parts:[part(mkNurseShark, { scale:2.6, mat:M_SKIN, ...FISH_SWIM(0.015, 0.25, 0.8, 2.4) })],
+    views:[{ d:[1, 0.12, 0.3], k:1.0, hold:10, drift:0.02 }, { d:[0.3, 0.35, 1], k:1.3, hold:9, drift:0.02 }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],

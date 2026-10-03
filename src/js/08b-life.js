@@ -476,6 +476,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    nurseshark:'up to ~3 m · breathes lying still · one of the strongest suction feeders',
     manatee:'up to ~4 m and 600 kg · eats ~10% of its weight a day',
     stargazer:'~35 cm · eyes on top of its head · some give an electric shock',
     seabutterfly:'~1 cm · shells dissolve in more acidic water',
