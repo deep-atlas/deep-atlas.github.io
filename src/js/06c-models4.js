@@ -348,6 +348,19 @@ function mkHumboldt() {
   // chromatophores it flashes from deep red to white
   return mkSquid({ mantle:0.5, mw:0.075, arms:0.25, tent:0.3, fin:0.11, finLen:0.2, eye:0.03, skin:[0.85, 0.25, 0.2], dark:[0.6, 0.12, 0.1] });
 }
+function mkPhantomJelly() {
+  // giant phantom jelly, one unit = the bell's width: a broad, deep red-brown bell and four huge, wavy, curtain-like oral arms
+  // that trail several times its width (up to about 10 m); no stinging tentacles at all
+  const mb = jelly({ h:0.35, bell:[0.4, 0.1, 0.12], flare:1.12,
+    pattern:(t, u) => t > 0.75 && fract(u * 24) < 0.15 ? [0.28, 0.06, 0.08] : null });
+  for (let k = 0; k < 4; k++) {
+    const a = (k + 0.5) / 4 * TAU, ph = k * 1.7, L = 5 + k * 0.6;
+    ribbon(mb, { n:60, path:t => [-0.15 - t * L, Math.cos(a) * (0.08 + t * 0.35) + Math.sin(t * 5 + ph) * 0.25 * t, Math.sin(a) * (0.08 + t * 0.35) + Math.cos(t * 4 + ph) * 0.25 * t],
+      side:t => [0, Math.cos(a + 1.5 + Math.sin(t * 8 + ph) * 0.9), Math.sin(a + 1.5 + Math.sin(t * 8 + ph) * 0.9)],
+      w:t => 0.22 * (1 - t * 0.55) * (0.85 + 0.3 * Math.sin(t * 13 + ph)), col:t => fract(t * 9 + k * 0.3) < 0.2 ? [0.3, 0.06, 0.08] : [0.48, 0.12, 0.14], anim:t => [0, 0, t * 0.6, 0.4 - t * 0.35] });
+  }
+  return mb;
+}
 function addDeepFolk(VENTS) {
   addObj({ key:'sixgill', name:'bluntnose sixgill shark', label:'sixgill shark', type:'Hexanchus griseus', kind:'sharks', floor:[25500, 500, 3.5], size:4.5, rad:3,
     fact:'An ancient lineage: six gill slits where most sharks have five, and a body plan little changed for about 200 million years. It rises from the deep at night to feed, and comes to whale falls to tear at the carcass.',
@@ -386,6 +399,11 @@ function addDeepFolk(VENTS) {
     post:(o, t) => { const f = 0.5 + 0.5 * Math.sin(t * 7.3) * Math.sin(t * 3.1 + 1); o.parts[0].tint = [lerp(1, 1.05, f), lerp(1, 3.0, f), lerp(1, 3.4, f)].map(c => c * lerp(1.3, 1, f)); },
     parts:[part(mkHumboldt, { inst:schoolMill(40, 2.0, 1.2, 3131, 1.4), school:[0, 1.2, 1, 0], mat:M_SKIN, shy:0.6, pulse:[0.5, 1.6, 0, 0], sway:[0.02, 1.5, 6, 0] })],
     views:[{ d:[0.3, 0.1, 1], k:0.55, hold:10, drift:0.02, frame:'world' }, { d:[0.2, -0.7, 0.5], k:0.45, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'phantomjelly', name:'giant phantom jelly', type:'Stygiomedusa gigantea', kind:'jellies', at:[19800, -400, 1100], size:1, vsize:4, rad:4,
+    fact:'One of the largest invertebrate predators in the deep: a bell about a metre across and four curtain-like arms up to 10 m long, with no stinging tentacles. Described over a century ago, it has been seen alive only about a hundred times. Small fish sometimes shelter among its arms.',
+    motion:{ type:'drift', amp:0.4, tilt:0.15 },
+    parts:[part(mkPhantomJelly, { scale:1, mat:[0.75, 0.7, 1, 0.4], trans:true, pulse:[0.08, 0.2, 0, 0], sway:[0.15, 0.25, 1.5, 0] })],
+    views:[{ d:[0.3, 0.12, 1], k:2.3, hold:11, drift:0.015, frame:'world', off:[0, -2.2, 0] }, { d:[0.5, 0.5, 0.8], k:0.9, hold:9, drift:0.015, frame:'world', off:[0, -0.3, 0] }] });
   addObj({ key:'isopod', name:'giant isopod', type:'Bathynomus giganteus', kind:'floor', floor:[15600, 300, 0.07], size:0.4, rad:0.3,
     fact:'A deep-sea relative of the woodlouse that grows to about half a metre, scavenging whatever falls to the floor. It can go years between meals: one in a Japanese aquarium refused food for more than five years.',
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },
