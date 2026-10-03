@@ -474,6 +474,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    walrus:'up to 1.5 tonnes · tusks up to 1 m · 400+ whiskers',
     spinners:'up to 7 spins in a single leap · leaps up to 3 m',
     mimic:'~60 cm across · impersonates at least 3 venomous animals · only discovered in 1998',
     sleepingwhales:'naps of ~10 to 15 minutes · about 7% of the day asleep',

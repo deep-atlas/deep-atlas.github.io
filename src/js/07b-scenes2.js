@@ -258,6 +258,25 @@ function buildLostCity(A, seed) {
   return mb;
 }
 
+function mkWalrus() {
+  // a walrus swimming, one unit long, head at +x: a vast wrinkled brown body, a small head with a broad bristly muzzle, two long
+  // ivory tusks pointing down and back, fore flippers it steers with and hind flippers it swims with
+  const mb = new MB(), skin = [0.55, 0.38, 0.3], dark = [0.4, 0.27, 0.22], ivory = [0.95, 0.92, 0.82];
+  loft(mb, { n:28, m:16, sec:t => {
+      const f = t < 0.15 ? 0.5 + 0.5 * smooth(0, 0.15, t) : t < 0.55 ? 1 : 1 - 0.8 * smooth(0.55, 1, t);
+      return { x:0.3 - t * 0.78, y:0.01, w:0.17 * f, h:0.15 * f, e:2 };
+    }, col:(t, u, p, sy) => Math.sin(p[0] * 70 + p[1] * 30) > 0.7 ? dark : skin, anim:t => [0.15 + t * 0.7, 0, 0, 0] });
+  ellip(mb, [0.35, 0.0, 0], [0.09, 0.08, 0.09], { n:8, m:12, col:fc(skin), anim:() => [0.05, 0, 0, 0] });
+  ellip(mb, [0.42, -0.03, 0], [0.05, 0.06, 0.085], { n:6, m:10, col:(u, v, p) => Math.sin(p[2] * 200) > 0.3 ? [0.8, 0.7, 0.55] : dark, anim:() => [0.05, 0, 0, 0] });   // the whiskered muzzle
+  for (const sz of [1, -1]) {
+    tube(mb, { n:6, m:6, path:t => [0.43 - t * 0.06, -0.06 - t * 0.2, sz * (0.035 - t * 0.008)], r:t => 0.014 * (1 - t * 0.6), col:fc(ivory), anim:() => [0.05, 0, 0, 0] });   // the tusks
+    ellip(mb, [0.38, 0.05, sz * 0.06], [0.01, 0.01, 0.007], { n:3, m:5, col:fc([0.05, 0.04, 0.04]), anim:() => [0.05, 0, 0, 0] });
+    fin(mb, [[0, 0.03], [0.1, 0.04], [0.2, 0.0], [0.1, -0.04], [0, -0.03]], { origin:[0.16, -0.1, sz * 0.12], ua:vnorm([-0.5, -0.3, sz]), va:[1, 0, 0], col:fc(dark), anim:(a) => [0.2, a * 2, 0, 0] });
+    fin(mb, [[0, 0.03], [0.08, 0.06], [0.16, 0.05], [0.17, -0.02], [0, -0.03]], { origin:[-0.46, -0.02, sz * 0.03], ua:vnorm([-1, 0, sz * 0.3]), va:[0, 0, sz], col:fc(dark), anim:() => [1, 0, 0, 0] });
+  }
+  return mb;
+}
+
 // ---- mangroves: trees standing in the sea on arching prop roots; the roots shelter young fish
 function buildMangroves(A, seed) {
   const mb = new MB(), r = rng(seed), bark = [0.45, 0.33, 0.24], root = [0.38, 0.3, 0.22], leaf = [0.25, 0.55, 0.22], leaf2 = [0.35, 0.65, 0.28];
@@ -357,6 +376,11 @@ function addPlaces2() {
     motion:{ type:'circle', R:9, v:0.7, bob:0.15, bank:0.05 },
     parts:[part(mkPolarBear, { scale:2.3, mat:[1, 0.5, 1, 0.4], swim:[0.02, 0.6, 0.6, 0], swim2:[1, 2, 0.12, 0.9] })],
     views:[{ d:[0.3, -0.35, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, -0.2, 0.3], k:1.6, hold:9, drift:0.02 }, { d:[0.2, -0.85, 0.4], k:1.6, hold:9, drift:0.02 }] });
+  addObj({ key:'walrus', name:'walrus', type:'Odobenus rosmarus', kind:'air', at:[ICE[0] + 30, ICE[1] - 4, 5], size:3.2, rad:2.2,
+    fact:'Up to 1.5 tonnes and 3.5 m. It feeds on the seafloor, finding clams with its 400 or more sensitive whiskers and sucking them out of their shells with its powerful mouth. The tusks, up to a metre long, are for fighting, for show, and for hauling out onto the ice.',
+    motion:{ type:'circle', R:10, v:0.8, bob:1, bank:0.08 },
+    parts:[part(mkWalrus, { scale:3.2, mat:M_SKIN, swim:[0.02, 0.5, 0.6, 0], swim2:[1, 2, 0.06, 0.6] })],
+    views:[{ d:[0.3, 0.1, 1], k:1.7, hold:10, drift:0.02 }, { d:[1, -0.2, 0.3], k:1.5, hold:9, drift:0.02 }] });
   addObj({ key:'lionsmane', name:'lion’s mane jellyfish', label:'lion’s mane', type:'Cyanea capillata', kind:'jellies', at:[ICE[0] - 14, ICE[1] + 8, 9], size:1.6, vsize:4, rad:3,
     fact:'The largest known jellyfish. Its bell can reach 2 m across and its hundreds of sticky tentacles trail over 30 m: one found in 1870 was longer than a blue whale. It thrives in cold Arctic and North Atlantic water.',
     motion:{ type:'drift', amp:0.4, tilt:0.15 },
