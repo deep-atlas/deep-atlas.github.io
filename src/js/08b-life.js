@@ -41,7 +41,7 @@ function triggerReact(o) {
   toast(o.react.text, 5200);
 }
 // animals that only come out at night
-const NIGHT_ONLY = ['flashlight', 'fireflysquid', 'bobtail'];
+const NIGHT_ONLY = ['flashlight', 'fireflysquid', 'bobtail', 'spanishdancer'];
 function tickNightLife() {
   for (const k of NIGHT_ONLY) { const f = BYKEY[k]; if (f) f.hidden = night() < 0.45; }
   // garden eels sink into their burrows when a diver comes near, and slowly rise again
@@ -546,6 +546,7 @@ function addLife() {
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
     pygmyseahorse:'~2 cm · lives its whole adult life on one sea fan',
     marineiguana:'up to ~1.3 m · dives to ~12 m · sneezes out salt',
+    spanishdancer:'up to ~40 cm · swims by flapping its mantle · eats sponges',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',

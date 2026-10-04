@@ -708,6 +708,25 @@ function mkLavaRock() {
     col:(u, v, p) => p[1] > 0.45 ? (Math.sin(p[0] * 17) * Math.sin(p[2] * 19) > 0.2 ? red : green) : lava });
   return mb;
 }
+function mkSpanishDancer() {
+  // a Spanish dancer (Hexabranchus sanguineus), one unit long, head at +x: a flat crimson body, its mantle edge a broad frilled skirt
+  // edged in white that it rolls and flaps to swim, two rhinophores at the front and a feathery tuft of gills at the back
+  const mb = new MB(), red = [0.9, 0.12, 0.12], deep = [0.6, 0.05, 0.08], edge = [1.0, 0.9, 0.85];
+  loft(mb, { n:20, m:12, sec:t => { const f = Math.sin(clamp(t * 1.15 + 0.06, 0, 1) * PI); return { x:0.42 - t * 0.84, y:0, w:0.12 * f + 0.01, h:0.06 * f + 0.008, e:2 }; },
+    col:(t, u, p) => Math.sin(p[0] * 60) * Math.sin(p[2] * 70) > 0.6 ? deep : red, anim:() => [0, 0, 0, 0] });
+  // the skirt: a wide wavy rim all round, which flaps up and down in a wave travelling back along the body
+  for (const sz of [1, -1]) {
+    const pts = [];
+    for (let k = 0; k <= 14; k++) { const t = k / 14, x = 0.4 - t * 0.8, f = Math.sin(clamp(t * 1.1 + 0.04, 0, 1) * PI); pts.push([x, sz * (0.12 * f + 0.02)]); }
+    for (let k = 14; k >= 0; k--) { const t = k / 14, x = 0.4 - t * 0.8, f = Math.sin(clamp(t * 1.1 + 0.04, 0, 1) * PI); pts.push([x, sz * (0.3 * f + 0.03)]); }
+    fin(mb, pts, { origin:[0, -0.01, 0], ua:[1, 0, 0], va:[0, 0, 1], open:true, rings:2,
+      col:(a, b) => Math.abs(b) > 0.25 * Math.sin(clamp((0.4 - a) / 0.8 * 1.1 + 0.04, 0, 1) * PI) ? edge : red,
+      anim:(a, b) => [clamp(0.4 - a, 0, 1), Math.abs(b) * 2.2, 0, 0] });
+  }
+  for (const sz of [1, -1]) tube(mb, { n:3, m:4, path:t => [0.36 + t * 0.02, 0.05 + t * 0.06, sz * 0.03], r:t => 0.012 * (1 - t * 0.5), col:fc(edge) });
+  for (let k = 0; k < 6; k++) { const a = k / 6 * TAU; tube(mb, { n:3, m:3, path:t => [-0.3 + Math.cos(a) * t * 0.06, 0.06 + t * 0.06, Math.sin(a) * t * 0.06], r:t => 0.01 * (1 - t * 0.6), col:fc([1.0, 0.75, 0.6]), anim:t => [0, 0, t * 0.3, 0] }); }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -936,6 +955,11 @@ function addShallows(REEF) {
     parts:[part(mkLavaRock, { mat:M_SOLID }),
       part(mkMarineIguana, { scale:1.2, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, swim:[0.002, 1.1, 0.6, 0], swim2:[0, 1.6, 0, 0] })],
     views:[{ d:[0.3, 0.55, 1], k:1.4, hold:12, drift:0.015, frame:'world', off:[0.1, 0.7, 0] }, { d:[1, 0.3, -0.4], k:1.3, hold:10, drift:0.015, frame:'world', off:[0.3, 0.7, 0] }] });
+  addObj({ key:'spanishdancer', name:'Spanish dancer', type:'Hexabranchus sanguineus · out only at night', kind:'floor', floor:[REEF[0] + 5, REEF[1] + 12, 1.6], size:0.3, vsize:0.36, rad:0.3,
+    fact:'One of the largest sea slugs, up to about 40 cm. By night it crawls over the reef feeding on sponges, but disturbed it lets go and swims, rolling and flapping the frilled red edge of its mantle like the skirt of a flamenco dancer. Its eggs, laid in a red ribbon-like rosette, carry toxins from the sponges it eats.',
+    motion:{ type:'circle', R:1.2, v:0.12, bob:0.3, bank:0.3 },
+    parts:[part(mkSpanishDancer, { scale:0.3, mat:M_SKIN, swim:[0.008, 0.8, 0.4, 0], swim2:[0, 1.4, 0.06, 0.9] })],
+    views:[{ d:[0.3, 1.1, 0.7], k:2.2, hold:10, drift:0.02 }, { d:[1, 0.5, 0.4], k:2.2, hold:9, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

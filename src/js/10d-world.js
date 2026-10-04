@@ -68,6 +68,7 @@ const WHERE = {
   pygmyseahorse:[-22.3, 166.4, 'Indo-Pacific reef slopes, 10 to 40 m down; first found off New Caledonia'],
   elephantseal:[35.7, -121.3, 'the eastern North Pacific; breeds on beaches of California and Mexico'],
   marineiguana:[-0.4, -91.6, 'the Galapagos Islands only; here Fernandina'],
+  spanishdancer:[-20.3, 57.6, 'Indo-Pacific reefs and the Red Sea; here Mauritius'],
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],
