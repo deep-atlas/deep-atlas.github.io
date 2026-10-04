@@ -607,6 +607,20 @@ function mkCrownOfThorns() {
     tube(mb, { n:2, m:3, path:t => vmad(p, out, t * 0.05), r:t => 0.006 * (1 - t * 0.8), col:t => t > 0.6 ? tip : spine }); }
   return mb;
 }
+function mkSwordfish() {
+  // a swordfish: a long, flat bill a third of its length, a stiff sickle of a dorsal fin, long low pectorals, no pelvic fins, no
+  // scales as an adult; dark bronze-purple above, paler below, and a huge eye (kept warm, with the brain, by a heater organ behind it)
+  const back = [0.24, 0.17, 0.22], belly = [0.72, 0.7, 0.68];
+  const mb = fish({ H:0.075, W:0.06, tm:0.3, nose:0.8, ped:0.05, bodyLen:0.66, back, belly, eye:[0.06, 0.15, 0.02], eyeCol:[0.08, 0.12, 0.2],
+    pattern:(t, sy) => mixc(belly, back, smooth(-0.25, 0.15, sy)),
+    tail:'lunate', tailH:0.2, tailL:0.14, tailCol:back,
+    dorsal:[{ at:0.13, len:0.11, h:0.17, col:back, pts:[[0, 0], [0.1, 1], [-0.25, 0.95], [-0.45, 0.35], [-1, 0]] }, { at:0.9, len:0.02, h:0.025, col:back }],
+    anal:[{ at:0.62, len:0.06, h:0.05, col:back }, { at:0.9, len:0.02, h:0.025, col:back }],
+    pect:{ at:0.2, len:0.17, w:0.03, down:0.75, back:0.6, y:-0.55, col:back } });
+  // the sword: flat, not round like a marlin's spear, and sharp-edged
+  loft(mb, { n:10, m:8, sec:t => ({ x:0.83 - t * 0.35, y:-0.004, w:0.004 + 0.024 * t, h:0.002 + 0.009 * t, e:2 }), col:fc(mixc(back, belly, 0.2)), anim:() => [0, 0, 0, 0] });
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -798,6 +812,12 @@ function addShallows(REEF) {
       part(mkThresher, { scale:3, body:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.85, 2.2) }),
       part(mkThresherTail, { scale:3, tail:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.85, 2.2) })],
     views:[{ d:[0.3, 0.05, 1], k:1.9, hold:16, drift:0.01, frame:'world' }, { d:[1, 0.45, 0.4], k:1.8, hold:14, drift:0.01, frame:'world' }] });
+  addObj({ key:'swordfish', name:'swordfish', type:'Xiphias gladius', kind:'fish', at:[16000, 200, 450], size:3, rad:1.8,
+    fact:'By day it hunts squid and fish far down in the cold dark, past 1,000 m at times; at night it rises close to the surface. A heater organ, a block of modified eye muscle, keeps its eyes and brain up to about 15 °C warmer than the water, which keeps its eyesight quick in the cold. It slashes at prey with its flat sword rather than spearing it.',
+    motion:{ type:'circle', R:10, v:1.6, bob:3, bank:0.15 },
+    // (deep by day, near the surface by night)
+    post:o => { const d = lerp(450, 40, smooth(0.15, 0.85, night())); o.pos = [o.pos[0], o.pos[1] - o.anchor[1] - d, o.pos[2]]; },
+    parts:[part(mkSwordfish, { scale:2.6, mat:M_SKIN, ...FISH_SWIM(0.045, 1.2, 0.85, 2.4) })], views:SIDE });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
