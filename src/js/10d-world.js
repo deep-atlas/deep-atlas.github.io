@@ -91,6 +91,7 @@ const WHERE = {
   narwhal:[73, -78, 'the Arctic; Baffin Bay and Greenland'],
   polarbear:[76.5, -20, 'the Arctic sea ice; here off north-east Greenland'],
   walrus:[65.5, -170, 'the Arctic; the Bering and Chukchi Seas'],
+  bowhead:[71.5, -156.8, 'Arctic seas year round; here off Utqiagvik, Alaska'],
   beluga:[58.8, -94.2, 'the Arctic; Hudson Bay in summer'],
   seabutterfly:[78, 10, 'polar and cold seas; Arctic and Southern Oceans'],
   seaangel:[76, 15, 'Arctic and Antarctic seas'],

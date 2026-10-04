@@ -605,6 +605,7 @@ function addLife() {
     octopusgarden:'~6,000 octopuses · 3,200 m down · eggs hatch in ~21 months in the warm seep',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
     salps:'chains up to several metres · some of the fastest-growing animals',
+    bowhead:'up to ~18 m · can live ~200 years · baleen up to ~4 m',
     lanternshark:'~20 cm · the smallest shark · a belly of light organs',
     glassoctopus:'up to ~45 cm · its eyes long and narrow to cast less shadow',
     giantsquid:'up to ~12 m · eyes up to 27 cm · first filmed alive in 2012',

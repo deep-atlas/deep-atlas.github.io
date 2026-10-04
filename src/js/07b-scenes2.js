@@ -374,6 +374,18 @@ function mkSawfish() {
     tube(mb, { n:2, m:3, path:t => [x, -0.005, sz * (w + t * 0.01)], r:t => 0.002 * (1 - t * 0.7), col:fc([0.95, 0.93, 0.85]) }); }
   return mb;
 }
+function mkBowhead() {
+  // a bowhead whale, one unit long: stout and black, no dorsal fin, a vast head about a third of its length with the mouth line arching
+  // high in a bow over long baleen, a white chin patch, and a pale band in front of the flukes
+  const black = [0.24, 0.25, 0.28], white = [0.95, 0.95, 0.93], grey = [0.6, 0.6, 0.62];
+  const mb = cetacean({ back:black, belly:black, H:0.085, W:0.09, nose:0.45, bodyLen:0.86, tm:0.42, eye:[0.3, -0.25, 0.006], tailH:0.13, tailL:0.09, ped:0.1,
+    hShape:t => t < 0.33 ? lerp(0.75, 1.15, smooth(0, 0.33, t)) : 1, camber:t => t < 0.33 ? 0.12 * Math.sin(t / 0.33 * PI) : 0,
+    skin:(t, sy) => t < 0.16 && sy < -0.15 && Math.sin(t * 160 + sy * 9) > -0.4 ? white : (t > 0.8 && t < 0.88 ? grey : black),
+    pect:{ at:0.36, len:0.08, w:0.04, down:0.6, back:0.4, y:-0.5, col:black } });
+  // the bow of the mouth, a pale line arching over the head
+  tube(mb, { n:12, m:4, path:t => [0.47 - t * 0.3, -0.02 + Math.sin(t * PI) * 0.05, 0], r:0.006, col:fc([0.25, 0.25, 0.27]), capEnd:false });
+  return mb;
+}
 function mkManatee() {
   // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
   // and a broad round paddle of a tail (a dugong's is a fluke)
@@ -424,6 +436,11 @@ function addPlaces2() {
     motion:{ type:'circle', R:22, v:1.6, bob:2, bank:0.12 },
     parts:[0, 1, 2, 3].map(i => part(mkNarwhal, { scale:4.5 - i * 0.25, off:[[0, 0, 0], [-4, 1.5, 3], [-6, -1, -2.8], [-10, 0.6, 1]][i], mat:M_SKIN, swim:[0.04, 0.5 + i * 0.03, 0.7, i * 1.3], swim2:[1, 2.5, 0, 0] })),
     views:[{ d:[0.45, 0.12, 1], k:1.3, hold:11, drift:0.02, off:[1.5, 0, 0] }, { d:[1, 0.2, 0.5], k:1.1, hold:9, drift:0.02, off:[2, 0, 0] }, { d:[0.3, -0.6, 0.6], k:2.2, hold:9, drift:0.02 }] });
+  addObj({ key:'bowhead', name:'bowhead whale', type:'Balaena mysticetus · the longest-lived mammal', kind:'air', at:[ICE[0] + 60, ICE[1] - 30, 22], size:16, rad:8,
+    fact:'It spends its whole life in Arctic waters, and can live 200 years: harpoon points made in the 1800s have been found in living whales. Its enormous bow-shaped head, a third of its length, holds the longest baleen of any whale, and is strong enough to break up through sea ice to breathe. Its blubber, up to about half a metre thick, is the thickest of any animal.',
+    motion:{ type:'circle', R:26, v:1.1, bob:2.5, bank:0.06 },
+    parts:[part(mkBowhead, { scale:16, mat:M_SKIN, ...WHALE_SWIM(0.03, 0.18) })],
+    views:[{ d:[0.3, 0.1, 1], k:1.25, hold:12, drift:0.015 }, { d:[1, -0.35, 0.3], k:1.3, hold:10, drift:0.015 }] });
   addObj({ key:'beluga', name:'belugas', type:'Delphinapterus leucas · the white whale', kind:'air', at:[ICE[0] - 25, ICE[1] - 12, 12], size:4.2, vsize:5, rad:6,
     fact:'Called the sea canary for its whistles, chirps and clicks, which carry through the ice. It has no dorsal fin, so it can swim right up under the ice, and a flexible neck that lets it turn its head. Its forehead, the melon, changes shape as it focuses its calls.',
     motion:{ type:'circle', R:18, v:1.3, bob:1.5, bank:0.1 },
