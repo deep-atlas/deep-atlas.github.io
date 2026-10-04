@@ -18,6 +18,7 @@ const WHERE = {
   cockeyed:[36.6, -123, 'the eastern Pacific, off California'],
   salps:[-55, -40, 'every ocean; huge blooms in the Southern Ocean'],
   lanternshark:[11, -75, 'the southern Caribbean, off Colombia and Venezuela'],
+  blackswallower:[20, -30, 'tropical and temperate oceans; often found dead off the Caribbean'],
   pyrosome:[44, -126, 'warm seas; a huge bloom reached Oregon in 2017'],
   fireflysquid:[36.8, 137.2, 'the Sea of Japan; spawns in Toyama Bay'],
   flowerbasket:[11, 124, 'the western Pacific, around the Philippines'],

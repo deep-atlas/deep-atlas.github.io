@@ -210,6 +210,19 @@ function mkLanternshark() {
     pect:{ at:0.25, len:0.1, w:0.05, col:back }, pelv:{ at:0.55, len:0.06, w:0.03, y:-0.7, col:back },
     extra:(mb, b) => gills(mb, b, 0.2, 5) });
 }
+function mkBlackSwallower() {
+  // a black swallower that has just eaten, one unit long: a slim dark fish with long jaws, its stomach stretched into a thin clear
+  // balloon hanging under it, a fish twice its own length curled up inside and showing through
+  const black = [0.1, 0.09, 0.1];
+  const mb = fish({ H:0.06, W:0.04, tm:0.25, nose:0.55, ped:0.1, bodyLen:0.84, back:black, belly:black, eye:[0.07, 0.3, 0.018], eyeCol:[0.4, 0.45, 0.5],
+    tail:'fork', tailH:0.07, tailL:0.12, tailCol:black,
+    dorsal:[{ at:0.3, len:0.08, h:0.04, col:black }, { at:0.45, len:0.3, h:0.04, col:black }], anal:[{ at:0.45, len:0.32, h:0.04, col:black }],
+    pect:{ at:0.2, len:0.08, w:0.03, col:black } });
+  ellip(mb, [0.12, -0.2, 0], [0.2, 0.17, 0.12], { n:10, m:16, col:fc([0.85, 0.8, 0.82, 0.15]), anim:() => [0.2, 0, 0, 0] });   // the stretched stomach
+  // the swallowed fish, folded double inside it, pale grey-brown
+  tube(mb, { n:20, m:6, path:t => { const a = t * PI * 1.15; return [0.12 + Math.cos(a) * 0.12, -0.2 + Math.sin(a) * 0.09, 0]; }, r:t => 0.035 * Math.sin(Math.min(1, t * 1.2 + 0.1) * PI) + 0.006, col:fc([0.55, 0.5, 0.45]), anim:() => [0.2, 0, 0, 0] });
+  return mb;
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -505,6 +518,11 @@ function addDeepFolk(VENTS) {
     fact:'About 20 cm long, small enough to sit in your hand: the smallest shark known. Like many lanternsharks it glows: thousands of tiny light organs on its belly match the faint light from above, so a hunter looking up sees no shadow. The light organs on its flanks may help others of its kind recognise it in the dark.',
     parts:[part(mkLanternshark, { inst:schoolCloud(9, 0.8, 0.4, 2020, 1, 0.3), school:[1, 0.2, 0.8, 0], mat:[1, 0.35, 1.4, 0.6], shy:2, ...FISH_SWIM(0.06, 1.2, 1, 2) })],
     views:[{ d:[0.3, 0.1, 1], k:1.4, hold:10, drift:0.02, frame:'world' }, { d:[0.2, -0.9, 0.3], k:1.3, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'blackswallower', name:'black swallower', type:'Chiasmodon niger · after a big meal', kind:'fish', at:[19300, 250, 1300], size:0.25, vsize:0.28, rad:0.25,
+    fact:'About 25 cm long, it can swallow fish more than twice its own length and ten times its weight, walking its jaws over them a bit at a time; its stomach stretches into a thin bag hanging below it. Sometimes it is too ambitious: swallowers have been found floating dead at the surface, the meal decaying inside them faster than they could digest it.',
+    motion:{ type:'hover', amp:0.12, turn:0.3 },
+    parts:[part(mkBlackSwallower, { scale:0.25, mat:M_SKIN, trans:true, ...FISH_SWIM(0.02, 0.6, 0.8, 2) })],
+    views:[{ d:[0.15, 0.1, 1], k:2.6, hold:10, drift:0.02 }, { d:[0.5, -0.6, 0.6], k:2.6, hold:9, drift:0.02 }] });
   addObj({ key:'pyrosome', name:'pyrosome', type:'a glowing colony · Pyrosoma atlanticum', kind:'jellies', at:[15400, 500, 550], size:0.5, rad:0.4,
     fact:'Not one animal but thousands of tiny clones sharing a tube, each pumping water through the wall to feed. Touch it and it glows: one zooid lights up, its neighbours see the light and answer, and a wave of blue-green light runs along the colony. Some kinds grow to over 10 m long.',
     motion:{ type:'hover', amp:0.3, turn:0.25, pitch:-0.15 },
