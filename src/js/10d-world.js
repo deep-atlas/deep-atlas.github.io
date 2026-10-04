@@ -108,6 +108,7 @@ const WHERE = {
   manta:[4.2, 73.5, 'Indo-Pacific reefs; the Maldives'],
   kelp:[36.6, -122, 'cool coasts; here Monterey, California'],
   velella:[37, -124, 'warm and temperate seas worldwide; often washed up on the US west coast'],
+  bluedragon:[-27, 153.5, 'warm open oceans; washed up on beaches of eastern Australia'],
   manowar:[26, -68, 'the warm Atlantic and Indian Oceans'],
   noctiluca:[4.2, 73.4, 'coasts worldwide; glowing beaches of the Maldives'],
   moonjelly:[35, 140, 'coastal seas worldwide'],

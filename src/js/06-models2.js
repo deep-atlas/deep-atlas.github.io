@@ -64,6 +64,21 @@ function mkVelella() {
   fin(mb, [[-0.42, 0.03], [0.42, 0.03], [0.05, 0.42]], { ua:vnorm([1, 0, 0.75]), va:[0, 1, 0], col:fc(sail), rings:2 });
   return mb;
 }
+function mkBlueDragon() {
+  // a blue dragon (Glaucus atlanticus), one unit long (about 3 cm): it floats upside down, so its belly, striped blue and white, faces the
+  // sky, and its silvery back faces the deep; three pairs of fans of finger-like cerata spread out to the sides, where it keeps the
+  // stinging cells of the man o' war it eats
+  const mb = new MB(), blue = [0.2, 0.48, 1.0], white = [0.92, 0.96, 1.0], navy = [0.06, 0.12, 0.45], silver = [0.72, 0.76, 0.82];
+  loft(mb, { n:20, m:12, sec:t => { const f = Math.sin(Math.min(1, t * 1.6 + 0.12) * PI / 2) * lerp(1, 0.15, smooth(0.45, 1, t)); return { x:0.5 - t, y:0, w:0.075 * f, h:0.045 * f, e:2 }; },
+    col:(t, u, p, sy) => sy < -0.2 ? silver : Math.abs(p[2]) < 0.016 ? white : (Math.abs(p[2]) > 0.055 ? navy : blue), anim:p => [0, 0, 0, 0] });
+  for (const sz of [1, -1]) tube(mb, { n:3, m:3, path:t => [0.48 + t * 0.03, 0.02 + t * 0.03, sz * 0.02], r:0.006, col:fc(blue) });   // the rhinophores
+  for (const [x, n, L] of [[0.3, 5, 0.18], [0.08, 6, 0.23], [-0.14, 5, 0.19]]) for (const sz of [1, -1]) for (let k = 0; k < n; k++) {
+    const a = (k / (n - 1) - 0.5) * 1.6, d = [Math.sin(a) * 0.9, 0.05, sz * Math.cos(a)];
+    tube(mb, { n:4, m:3, path:t => [x + d[0] * t * L, 0.005 + d[1] * t * L - t * t * 0.01, sz * 0.05 + d[2] * t * L], r:t => 0.016 * (1 - t * 0.5),
+      col:t => t > 0.75 ? navy : blue, anim:t => [0, 0, t * 0.3, 0] });
+  }
+  return mb;
+}
 function mkManOWar() {
   const mb = new MB(), fl = [0.35, 0.42, 1.0], crest = [0.95, 0.4, 0.75];
   // the float: a gas bladder with a crest it sails by, tentacles hanging below (this one is drawn in metres)

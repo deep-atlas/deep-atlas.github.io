@@ -45,8 +45,10 @@ function setBasis(fwd) {
 function clampCam(p, dist, air) {
   const m = clamp(dist * 0.08, 0.002, 1.5);
   const fy = floorY(p[0], p[2]) + m;
-  let y = Math.min(Math.max(p[1], fy), air ? 150 : -0.15);
-  if (air && Math.abs(y) < 0.12) y = y >= 0 ? 0.12 : -0.12;   // (never exactly in the surface)
+  // (never exactly in the surface; the gap shrinks for close looks at things a few centimetres long floating on it)
+  const gap = clamp((dist || 1) * 0.9, 0.02, 0.12);
+  let y = Math.min(Math.max(p[1], fy), air ? 150 : -Math.max(gap, 0.03) * 1.25);
+  if (air && Math.abs(y) < gap) y = y >= 0 ? gap : -gap;
   return [p[0], y, p[2]];
 }
 

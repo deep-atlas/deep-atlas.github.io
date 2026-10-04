@@ -215,6 +215,12 @@ function buildCatalog() {
     fact:'Giant kelp can grow 60 cm in a day, among the fastest of anything alive. Gas-filled floats hold its blades up to the light, and the forest shelters fish, seals and sea otters.',
     parts:[part(() => buildKelp(BYKEY.kelp.anchor, 8), { mat:[1, 1.1, 1, 0.3], sway:[1.1, 0.35, 0.08, 0] })],
     views:[{ d:[0.6, -0.45, 1], k:0.28, hold:12, drift:0.02, frame:'world', off:[0, 10, 0] }, { d:[0.2, -0.85, 0.4], k:0.22, hold:10, drift:0.02, frame:'world', off:[2, 8, 3] }, { d:[1, 0.05, 0.3], k:0.3, hold:9, drift:0.02, frame:'world', off:[0, 4, 0] }] });
+  addObj({ key:'bluedragon', vsize:0.028, name:'blue dragon', type:'a sea slug that eats man o’ war · Glaucus atlanticus', kind:'jellies', at:[4000.9, 40.6, 0.02], size:0.03, rad:0.05, yaw:0.7,
+    fact:'A sea slug about 3 cm long that floats upside down, held up by a bubble of air in its stomach: its blue belly faces the sky and its silvery back faces the deep, camouflage both ways. It eats the Portuguese man o’ war, and moves the stinging cells it swallows, unfired, into the tips of its finger-like cerata to use for its own defence.',
+    motion:{ type:'still', fn:(o, t) => { const A = o.anchor; o.pos = [A[0] + 0.3 * Math.sin(t * 0.05), -0.01 + 0.006 * Math.sin(t * 1.3), A[2] + 0.3 * Math.cos(t * 0.04)];
+      o.fwd = dirYP(o.yaw + 0.6 * Math.sin(t * 0.03), 0); o.up = [0, 1, 0]; o.side = vnorm(vcross(o.fwd, o.up)); } },
+    parts:[part(mkBlueDragon, { scale:0.03, mat:M_SKIN, sway:[0.004, 0.8, 30, 0] })],
+    views:[{ d:[0.4, 0.9, 0.6], k:2.0, hold:10, drift:0.02, air:true }, { d:[0.5, 0.35, 1], k:2.2, hold:9, drift:0.02, air:true }] });
   addObj({ key:'velella', vsize:1.3, name:'by-the-wind sailors', label:'by-the-wind sailors', type:'a fleet of Velella velella', kind:'jellies', at:[4070, 110, 0.03], size:0.07, rad:2,
     fact:'Each is a colony a few centimetres long, a float of air-filled rings with a stiff sail on top that catches the wind. They drift in fleets of millions, and their sails are set diagonally one way or the other, so that a shift in the wind can blow whole fleets ashore, piling beaches blue.',
     parts:[part(mkVelella, { inst:schoolCloud(150, 1.7, 0, 6061, 1, 0.04), school:[1, 0.075, 0.6, 0], mat:[0.8, 0.9, 1, 0.6], sway:[0.03, 1.2, 1, 0] })],

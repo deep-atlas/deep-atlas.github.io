@@ -516,6 +516,7 @@ function addLife() {
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',
     bobtail:'~3 cm · a light organ of glowing bacteria · vents ~95% of them each dawn',
+    bluedragon:'~3 cm · floats upside down on a swallowed bubble · steals its prey’s stings',
     velella:'~6 cm · a sail set diagonally · drifts in fleets of millions',
     thresher:'up to ~3.3 m · half of it tail · several sardines stunned per slap',
     nurseshark:'up to ~3 m · breathes lying still · one of the strongest suction feeders',
