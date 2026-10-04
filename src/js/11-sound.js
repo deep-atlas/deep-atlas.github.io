@@ -183,6 +183,17 @@ function tickSound(dt) {
     blip({ type:'sawtooth', f0:420, curve:[480, 560, 600, 610], dur:3.5, amp:0.05 * loud, att:0.4, vib:[5, 8], pan:bn.pan, bp:900, q:1.2, dry:false });
     what = 'a humpback’s feeding call: the net is closing';
   }
+  // a thresher's tail slap: a whoosh, a crack, and the fizz of bubbles where the tail tore through the water
+  const th = near('thresher', 60);
+  if (th && th.o._slapped && !th.o._slapSnd) {
+    th.o._slapSnd = true;
+    const loud = clamp(1 - th.d / 60, 0.2, 1);
+    noiseBurst({ f:700, q:0.8, amp:0.06 * loud, att:0.08, dur:0.3, dry:true });
+    noiseBurst({ f:2600, q:1.5, amp:0.09 * loud, att:0.002, dur:0.06, delay:0.28, dry:true });
+    for (let i = 0; i < 7; i++) noiseBurst({ f:3500 + Math.random() * 3000, q:4, amp:0.02 * loud, att:0.005, dur:0.04, delay:0.35 + i * 0.05 + Math.random() * 0.04, dry:false });
+    what = 'a thresher’s tail slap';
+  }
+  if (th && !th.o._slapped) th.o._slapSnd = false;
   // male walruses sing underwater: runs of knocks, then a ringing bell-like tone
   const wr = near('walrus', 120);
   if (wr && due('walrusBell')) {
