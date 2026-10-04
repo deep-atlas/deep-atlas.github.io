@@ -327,10 +327,11 @@ function mkTurtle() {
   mb.dup(rear, mirrorZ);
   return mb;
 }
-function mkManta() {
+function mkManta(o = {}) {
   // one unit = the wingspan. The disc is lofted nose to tail; its cross-section is a thin lens, its width the wings
+  // (o.back, o.patch: a mobula's colours, its shoulders dark rather than pale)
   const mb = new MB();
-  const back = [0.2, 0.21, 0.25], belly = [0.93, 0.93, 0.9], patch = [0.88, 0.88, 0.86];
+  const back = o.back || [0.2, 0.21, 0.25], belly = [0.93, 0.93, 0.9], patch = o.patch || [0.88, 0.88, 0.86];
   loft(mb, { n:28, m:30, sec:t => {
       // a broad head, the wings widening to pointed tips a little forward of the middle, then a concave trailing edge
       const span = t < 0.42 ? 0.06 + 0.44 * Math.pow(Math.sin(t / 0.42 * PI / 2), 1.1) : 0.5 * Math.pow(Math.max(0, 1 - (t - 0.42) / 0.55), 1.8) + 0.012;

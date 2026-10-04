@@ -436,6 +436,25 @@ function archerPost(o, t) {
   if (u >= 0.72 && !o._splash) { o._splash = true; spark(vadd(A, [0.25, -A[1], 0.08]), 0.15, 60, 1.4, [0.9, 0.97, 1.0]); }
   if (u < 0.5) { o._shot = false; o._splash = false; }
 }
+// ---- mobula rays leaping: each now and then bursts clear of the water, somersaults or flops, and smacks back down
+function mobulaPost(o, t) {
+  const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
+  o.parts.forEach((p, i) => {
+    const R = 2 + (i % 4) * 1.6, w = (0.25 + (i % 3) * 0.05) * (i % 2 ? 1 : -1), a = t * w + i * 1.7;
+    const T = 7 + (i % 5) * 2.3, u = (((t + i * 2.9) % T) + T) % T / T, s = u < 0.18 ? u / 0.18 : -1;
+    const h = s >= 0 ? Math.sin(s * PI) * (1.2 + (i % 3) * 0.4) : 0, dive = 1.2 + 0.5 * Math.sin(t * 0.4 + i);
+    const y = s >= 0 ? -dive * (1 - Math.sin(s * PI)) + h : -dive;
+    p.off = [Math.cos(a) * R, y - A[1], Math.sin(a) * R];
+    const tan = vmul([-Math.sin(a), 0, Math.cos(a)], Math.sign(w)), pitch = s >= 0 ? Math.cos(s * PI) * 1.1 : 0;
+    const f = vnorm(vadd(vmul(tan, Math.cos(pitch)), [0, Math.sin(pitch), 0]));
+    // (some flip right over, some belly-flop flat)
+    const roll = s >= 0 ? (i % 3 === 0 ? s * TAU : Math.sin(s * PI) * 0.6) : 0, sd = vnorm(vcross(f, [0, 1, 0])), up0 = vcross(sd, f);
+    p._f = f; p._u = vnorm(vadd(vmul(up0, Math.cos(roll)), vmul(sd, Math.sin(roll))));
+    if (s >= 0 && s < 0.1 && !p._up) { p._up = true; spark([A[0] + p.off[0], 0.2, A[2] + p.off[2]], 0.8, 70, 1.2, [0.85, 0.95, 1.0]); }
+    if (s >= 0.88 && !p._down) { p._down = true; spark([A[0] + p.off[0], 0.2, A[2] + p.off[2]], 1.4, 140, 1.8, [0.85, 0.95, 1.0]); }
+    if (s < 0) { p._up = false; p._down = false; }
+  });
+}
 function spinnerPost(o, t) {
   const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
   o.parts.forEach((p, i) => {
@@ -606,6 +625,7 @@ function addLife() {
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
     salps:'chains up to several metres · some of the fastest-growing animals',
     horseshoecrabs:'shell up to ~60 cm · blue, copper-based blood · ~450 million years old',
+    mobulas:'~1 m across · leap up to ~2 m clear of the water · schools of thousands',
     vaquita:'up to ~1.5 m · fewer than a dozen left · the rarest marine mammal',
     leopardseal:'up to ~3.5 m · eats penguins, seals and lots of krill',
     bowhead:'up to ~18 m · can live ~200 years · baleen up to ~4 m',

@@ -317,6 +317,12 @@ function buildCatalog() {
     motion:{ type:'still', fn:spinnerPost },
     parts:[0, 1, 2, 3, 4].map(i => part(mkDolphin, { scale:1.9 - (i % 2) * 0.2, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...WHALE_SWIM(0.05, 1.2 + i * 0.1) })),
     views:[{ d:[0.3, 0.1, 1], k:1.5, hold:14, drift:0.01, frame:'world', air:true, off:[0, 2.5, 0] }, { d:[0.4, -0.2, 1], k:1.4, hold:12, drift:0.01, frame:'world', off:[0, -1.5, 0] }] });
+  addObj({ key:'mobulas', name:'leaping mobula rays', label:'mobula rays', type:'Mobula munkiana · flying devil rays', kind:'air', at:[5500, 900, 2], size:1, vsize:8, rad:8,
+    fact:'In spring, mobula rays gather in the Gulf of California in schools of thousands, and over and over they burst out of the water, somersaulting or flopping, and smack back down with a crack that carries across the sea. Nobody knows quite why: to court, to signal, to shake off parasites, or all three.',
+    motion:{ type:'still', fn:mobulaPost },
+    parts:[...Array(12)].map((_, i) => part(() => mkManta({ back:[0.12, 0.12, 0.16], patch:[0.12, 0.12, 0.16] }), { scale:0.9 + (i % 3) * 0.12,
+      fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, swim2:[0, 2, 0.04, 2.2 + (i % 4) * 0.2] })),
+    views:[{ d:[0.3, 0.12, 1], k:1.6, hold:14, drift:0.01, frame:'world', air:true, off:[0, 1.2, 0] }, { d:[0.3, -0.45, 1], k:0.9, hold:12, drift:0.01, frame:'world', off:[0, -1.4, 0] }] });
   addObj({ key:'sleepingwhales', name:'sleeping sperm whales', label:'sleeping whales', type:'a family of Physeter macrocephalus, napping upright', kind:'air', at:[11800, 600, 14], size:12, vsize:18, rad:14,
     fact:'Sperm whales sleep in short naps of a few minutes, hanging motionless and upright just below the surface, heads up, often a whole family together. They were only discovered doing this in 2008, when a research boat drifted into a sleeping group that did not wake.',
     // hanging upright, swaying very slightly; every so often the family stirs
