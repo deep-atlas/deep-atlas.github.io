@@ -215,6 +215,10 @@ function buildCatalog() {
     fact:'Giant kelp can grow 60 cm in a day, among the fastest of anything alive. Gas-filled floats hold its blades up to the light, and the forest shelters fish, seals and sea otters.',
     parts:[part(() => buildKelp(BYKEY.kelp.anchor, 8), { mat:[1, 1.1, 1, 0.3], sway:[1.1, 0.35, 0.08, 0] })],
     views:[{ d:[0.6, -0.45, 1], k:0.28, hold:12, drift:0.02, frame:'world', off:[0, 10, 0] }, { d:[0.2, -0.85, 0.4], k:0.22, hold:10, drift:0.02, frame:'world', off:[2, 8, 3] }, { d:[1, 0.05, 0.3], k:0.3, hold:9, drift:0.02, frame:'world', off:[0, 4, 0] }] });
+  addObj({ key:'velella', vsize:1.3, name:'by-the-wind sailors', label:'by-the-wind sailors', type:'a fleet of Velella velella', kind:'jellies', at:[4070, 110, 0.03], size:0.07, rad:2,
+    fact:'Each is a colony a few centimetres long, a float of air-filled rings with a stiff sail on top that catches the wind. They drift in fleets of millions, and their sails are set diagonally one way or the other, so that a shift in the wind can blow whole fleets ashore, piling beaches blue.',
+    parts:[part(mkVelella, { inst:schoolCloud(150, 1.7, 0, 6061, 1, 0.04), school:[1, 0.075, 0.6, 0], mat:[0.8, 0.9, 1, 0.6], sway:[0.03, 1.2, 1, 0] })],
+    views:[{ d:[0.4, 0.9, 1], k:1.0, hold:12, drift:0.015, frame:'world', air:true, off:[0, 0.1, 0] }, { d:[0.3, -0.8, 0.6], k:0.9, hold:10, drift:0.015, frame:'world', off:[0, -0.1, 0] }] });
   addObj({ key:'manowar', vsize:4, name:'Portuguese man o’ war', label:'man o’ war', type:'a siphonophore that sails · Physalia physalis', kind:'jellies', at:[4000, 40, 0.15], size:0.3, rad:4,
     fact:'Not one animal but a colony of specialised individuals. Its gas float sails before the wind, while venomous tentacles trail beneath it, usually about 10 m and sometimes 30 m long. Little man-of-war fish live among the tentacles, sheltering from predators that would not dare follow.',
     // it floats: the bladder rides half out of the water, drifting and turning slowly before the wind

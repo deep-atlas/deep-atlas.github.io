@@ -54,6 +54,16 @@ function mkAtolla() {
     },
     tentacles:{ n:20, len:0.45, r:0.004, col:[0.55, 0.08, 0.1], seg:8, sway:0.2 } });
 }
+function mkVelella() {
+  // a by-the-wind sailor, one unit long (about 6 cm): an oval blue float of concentric air-filled rings, a fringe of short dark-blue
+  // tentacles under it, and a stiff clear sail set diagonally across it, so that whole fleets sail at an angle to the wind
+  const mb = new MB(), blue = [0.2, 0.45, 1.0], deep = [0.08, 0.2, 0.7], sail = [0.95, 0.97, 1.0];
+  ellip(mb, [0, 0, 0], [0.5, 0.05, 0.34], { n:4, m:24, col:(u, v, p) => Math.sin(Math.hypot(p[0] / 0.5, p[2] / 0.34) * 22) > 0.3 ? blue : deep });
+  for (let k = 0; k < 24; k++) { const a = k / 24 * TAU, b = [Math.cos(a) * 0.44, -0.03, Math.sin(a) * 0.3];
+    tube(mb, { n:3, m:3, path:t => [b[0] * (1 - t * 0.15), b[1] - t * 0.12, b[2] * (1 - t * 0.15)], r:t => 0.02 * (1 - t * 0.7), col:fc(deep), anim:t => [0, 0, t * 0.5, 0] }); }
+  fin(mb, [[-0.42, 0.03], [0.42, 0.03], [0.05, 0.42]], { ua:vnorm([1, 0, 0.75]), va:[0, 1, 0], col:fc(sail), rings:2 });
+  return mb;
+}
 function mkManOWar() {
   const mb = new MB(), fl = [0.35, 0.42, 1.0], crest = [0.95, 0.4, 0.75];
   // the float: a gas bladder with a crest it sails by, tentacles hanging below (this one is drawn in metres)
