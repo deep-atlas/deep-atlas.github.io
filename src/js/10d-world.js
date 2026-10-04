@@ -90,6 +90,7 @@ const WHERE = {
   tuna:[45, -30, 'the North Atlantic and Mediterranean'],
   orca:[48.5, -123.3, 'every ocean; here the Salish Sea'],
   seamount:[-44.3, 147.2, 'seamounts off Tasmania'],
+  basketstar:[56, -6.2, 'cold seas worldwide, from the Arctic to Antarctica'],
   roughy:[-43, 177, 'over seamounts; the Chatham Rise, New Zealand'],
   seep:[27.7, -91.3, 'the Gulf of Mexico'],
   seaice:[84, 0, 'the Arctic Ocean'],

@@ -624,6 +624,7 @@ function addLife() {
     octopusgarden:'~6,000 octopuses · 3,200 m down · eggs hatch in ~21 months in the warm seep',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
     salps:'chains up to several metres · some of the fastest-growing animals',
+    basketstar:'arms up to ~70 cm across · branching into thousands of tips',
     horseshoecrabs:'shell up to ~60 cm · blue, copper-based blood · ~450 million years old',
     mobulas:'~1 m across · leap up to ~2 m clear of the water · schools of thousands',
     vaquita:'up to ~1.5 m · fewer than a dozen left · the rarest marine mammal',

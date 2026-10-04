@@ -398,6 +398,23 @@ function mkHorseshoeCrab() {
   tube(mb, { n:6, m:5, path:t => [-0.2 - t * 0.42, 0.005 - t * 0.02, 0], r:t => 0.018 * (1 - t * 0.85), col:fc(dark), anim:t => [0, 0, t * 0.15, 0] });   // the telson
   return mb;
 }
+function mkBasketStar() {
+  // a basket star (Gorgonocephalus), in metres, perched on a coral stem: a small central disc, five arms that fork again and again into
+  // a mass of fine curling tendrils, spread up into the current like a net to catch drifting food
+  const mb = new MB(), arm = [0.95, 0.82, 0.62], tip = [1.0, 0.92, 0.8], r = rng(5151), stem = [0.55, 0.15, 0.2];
+  tube(mb, { n:6, m:5, path:t => [Math.sin(t * 2) * 0.03, t * 0.5, 0], r:t => 0.03 * (1 - t * 0.5), col:fc(stem) });   // the coral it sits on
+  ellip(mb, [0, 0.52, 0], [0.06, 0.025, 0.06], { n:5, m:10, col:fc(arm) });
+  const sway = p => [0, 0, Math.max(0, p[1] - 0.5) * 0.6, 0];
+  const branch = (p, d, len, rad, depth) => {
+    const bend = vnorm(vadd([(r() - 0.5) * 0.6, 0.5, (r() - 0.5) * 0.6], vmul(d, 0.6)));
+    const at = t => vadd(p, vadd(vmul(d, len * t), vmul(vsub(bend, d), len * t * t * 0.6)));
+    tube(mb, { n:3, m:3, path:at, r:t => rad * (1 - t * 0.3), col:depth < 2 ? fc(tip) : fc(arm), anim:t => sway(at(t)) });
+    if (depth > 0) { const e = at(1), nd = vnorm(vsub(at(1), at(0.8))), sd = vnorm(vcross(nd, [0, 1, 0.001]));
+      for (const s of [-1, 1]) branch(e, vnorm(vadd(nd, vmul(sd, s * 0.55))), len * 0.78, rad * 0.75, depth - 1); }
+  };
+  for (let k = 0; k < 5; k++) { const a = k / 5 * TAU; branch([Math.cos(a) * 0.05, 0.53, Math.sin(a) * 0.05], vnorm([Math.cos(a), 0.6, Math.sin(a)]), 0.12, 0.012, 5); }
+  return mb;
+}
 function mkManatee() {
   // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
   // and a broad round paddle of a tail (a dugong's is a fluke)
@@ -431,6 +448,10 @@ function addPlaces2() {
     parts:[part(() => buildSeamountGarden(BYKEY.seamount.anchor, 31), { mat:[1, 0.3, 1, 0.3], sway:[0.05, 0.6, 1.5, 0] }),
       part(mkOrangeRoughy, { inst:schoolMill(220, 5, 2.5, 77, 0.6), school:[0, 0.35, 1, 0], off:[0, 7, 0], mat:M_SKIN, shy:6, ...FISH_SWIM(0.05, 1.4, 0.9, 1.8) })],
     views:[{ d:[0.5, 0.25, 1], k:0.24, hold:12, drift:0.025, frame:'world', off:[0, 1.5, 0] }, { d:[-0.8, 0.12, 0.5], k:0.12, hold:10, drift:0.025, frame:'world', off:[3, 1, -2] }, { d:[0.3, 0.15, 1], k:0.3, hold:9, drift:0.02, frame:'world', off:[0, 6, 0] }] });
+  addObj({ key:'basketstar', name:'basket star', type:'Gorgonocephalus · a brittle star with branching arms', kind:'floor', floor:[SM[0] + 12, SM[1] + 12, 0], size:0.9, vsize:1.6, rad:0.9,
+    fact:'A relative of brittle stars whose five arms fork again and again into thousands of fine curling tips. By day it curls up on a coral; at night it climbs to the top and spreads its arms into the current like a living net, coiling the tips round small drifting animals and passing them to its mouth.',
+    parts:[part(mkBasketStar, { mat:M_SKIN, sway:[0.025, 0.5, 3, 0] })],
+    views:[{ d:[0.5, 0.35, 1], k:1.3, hold:10, drift:0.02, off:[0, 0.6, 0] }, { d:[0.2, 1, 0.3], k:1.2, hold:9, drift:0.02, off:[0, 0.6, 0] }] });
   addObj({ key:'roughy', name:'orange roughy', type:'Hoplostethus atlanticus', kind:'fish', place:true, floor:[SM[0], SM[1], 7], size:0.35, vsize:10, rad:7,
     fact:'They gather over seamounts to feed and spawn, and can live for 150 years or more, not breeding until they are about 30. Fished hard from the 1980s, many populations collapsed before anyone knew how slowly they grow.',
     views:[{ d:[0.3, 0.15, 1], k:0.45, hold:10, drift:0.02, frame:'world', off:[4, 0, 0] }, { d:[1, 0.1, 0.3], k:0.35, hold:9, drift:0.02, frame:'world', off:[0, 0, 4] }] });
