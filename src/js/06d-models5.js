@@ -767,6 +767,18 @@ function mkVaquita() {
     dorsal:[{ at:0.45, len:0.13, h:0.11, col:back, pts:[[0, 0], [-0.4, 1], [-0.6, 0.95], [-1, 0]] }],
     pect:{ at:0.24, len:0.1, w:0.045, down:0.6, back:0.4, y:-0.55, col:back } });
 }
+function mkTrevally() {
+  // a giant trevally, one unit long: deep-bodied and silver-grey, a steep blunt forehead, a row of hard scutes along the tail stalk,
+  // a long sickle of a forked tail and dark fins
+  const silver = [0.75, 0.77, 0.8], back = [0.4, 0.43, 0.48], fin = [0.22, 0.24, 0.28];
+  return fish({ H:0.16, W:0.06, tm:0.35, nose:0.5, ped:0.06, bodyLen:0.82, back, belly:silver, eye:[0.09, 0.3, 0.028], e:2,
+    hShape:t => t < 0.2 ? lerp(0.75, 1, smooth(0, 0.2, t)) : 1, camber:t => 0.12 * Math.sin(t * PI) * (1 - t),
+    pattern:(t, sy) => t > 0.72 && Math.abs(sy) < 0.2 ? [0.55, 0.56, 0.58] : mixc(silver, back, smooth(-0.1, 0.5, sy)),
+    tail:'lunate', tailH:0.2, tailL:0.16, tailCol:fin,
+    dorsal:[{ at:0.3, len:0.08, h:0.06, col:fin }, { at:0.44, len:0.32, h:0.1, col:fin, pts:[[0, 0], [-0.08, 1], [-0.3, 0.45], [-1, 0.18], [-1, 0]] }],
+    anal:[{ at:0.5, len:0.26, h:0.09, col:fin, pts:[[0, 0], [-0.08, 1], [-0.3, 0.45], [-1, 0.18], [-1, 0]] }],
+    pect:{ at:0.24, len:0.2, w:0.03, down:0.3, back:0.7, col:[0.6, 0.62, 0.66] }, pelv:{ at:0.3, len:0.05, w:0.02, y:-0.85, col:fin } });
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -1015,6 +1027,11 @@ function addShallows(REEF) {
     motion:{ type:'circle', R:8, v:1.4, bob:1.2, bank:0.15 },
     parts:[0, 1].map(i => part(mkVaquita, { scale:1.4 - i * 0.35, off:[[0, 0, 0], [-1.2, 0.3, 0.9]][i], mat:M_SKIN, ...WHALE_SWIM(0.05, 0.9 + i * 0.15) })),
     views:[{ d:[0.25, 0.1, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.7, hold:9, drift:0.02 }] });
+  addObj({ key:'trevally', name:'giant trevallies', type:'Caranx ignobilis · hunting off the reef edge', kind:'fish', at:[2100, -200, 9], size:1.4, vsize:3.4, rad:3.5, predator:true,
+    fact:'The biggest of the jacks, up to about 1.7 m and 80 kg, and a top predator of Indo-Pacific reefs. They hunt in packs along the reef edge, and in the Seychelles some have learned to leap out of the shallows and snatch young terns in flight, a hunt filmed in 2017.',
+    motion:{ type:'circle', R:6, v:2.2, bob:1.5, bank:0.25 },
+    parts:[0, 1, 2].map(i => part(mkTrevally, { scale:1.4 - i * 0.15, off:[[0, 0, 0], [-1.6, 0.4, 1.0], [-2.4, -0.4, -0.9]][i], mat:M_SILVER, ...FISH_SWIM(0.04, 1.4 + i * 0.1, 0.85, 2.4) })),
+    views:[{ d:[0.25, 0.1, 1], k:1.7, hold:10, drift:0.02 }, { d:[-0.5, -0.4, 1], k:1.6, hold:9, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

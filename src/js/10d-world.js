@@ -75,6 +75,7 @@ const WHERE = {
   flamboyant:[1.45, 125.2, 'sandy slopes of the Indo-Pacific; famous in the Lembeh Strait, Indonesia'],
   mobulas:[24.2, -109.9, 'the Gulf of California, Mexico, each spring'],
   vaquita:[31, -114.6, 'only the far northern Gulf of California, Mexico'],
+  trevally:[-9.4, 46.4, 'Indo-Pacific reefs; famous at Farquhar Atoll, Seychelles'],
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],
