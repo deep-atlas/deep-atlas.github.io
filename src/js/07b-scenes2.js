@@ -386,6 +386,18 @@ function mkBowhead() {
   tube(mb, { n:12, m:4, path:t => [0.47 - t * 0.3, -0.02 + Math.sin(t * PI) * 0.05, 0], r:0.006, col:fc([0.25, 0.25, 0.27]), capEnd:false });
   return mb;
 }
+function mkHorseshoeCrab() {
+  // an Atlantic horseshoe crab, one unit long, front at +x: a smooth olive-brown horseshoe of a shell, a hinged rear plate edged with
+  // spines, and a long straight tail spine (the telson) it uses to flip itself back over
+  const mb = new MB(), shell = [0.16, 0.11, 0.06], dark = [0.06, 0.04, 0.03], edge = [0.3, 0.22, 0.12];
+  ellip(mb, [0.17, 0, 0], [0.24, 0.07, 0.26], { n:8, m:20, shape:p => [p[0] < 0.05 ? p[0] : p[0], Math.max(p[1], -0.005), p[2]],
+    col:(u, v, p) => Math.abs(p[2]) > 0.22 ? edge : (Math.abs(p[2] - 0.1) < 0.02 || Math.abs(p[2] + 0.1) < 0.02 ? dark : shell) });
+  for (const sz of [1, -1]) ellip(mb, [0.25, 0.05, sz * 0.13], [0.025, 0.012, 0.012], { n:3, m:5, col:fc([0.08, 0.06, 0.04]) });   // the compound eyes
+  ellip(mb, [-0.1, 0, 0], [0.12, 0.05, 0.15], { n:6, m:14, col:fc(shell) });                                                            // the rear plate
+  for (const sz of [1, -1]) for (let k = 0; k < 5; k++) tube(mb, { n:2, m:3, path:t => [-0.04 - k * 0.03, 0, sz * (0.13 - k * 0.012 + t * 0.03)], r:0.005, col:fc(dark) });
+  tube(mb, { n:6, m:5, path:t => [-0.2 - t * 0.42, 0.005 - t * 0.02, 0], r:t => 0.018 * (1 - t * 0.85), col:fc(dark), anim:t => [0, 0, t * 0.15, 0] });   // the telson
+  return mb;
+}
 function mkManatee() {
   // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
   // and a broad round paddle of a tail (a dugong's is a fluke)
@@ -518,6 +530,11 @@ function addPlaces2() {
     readout:() => BYKEY.sawfish.slashing ? 'slashing: raking its saw from side to side through the sand' : 'up to ~7 m · senses buried prey with its saw · critically endangered',
     parts:[part(mkSawfish, { scale:4, mat:M_SKIN, ...FISH_SWIM(0.03, 0.5, 0.8, 2.2) })],
     views:[{ d:[0.3, 0.3, 1], k:1.5, hold:10, drift:0.015 }, { d:[-0.6, 0.25, 1], k:1.7, hold:9, drift:0.015 }] });
+  addObj({ key:'horseshoecrabs', name:'horseshoe crabs', type:'Limulus polyphemus · older than the dinosaurs', kind:'floor', floor:[300, -900, 0.02], size:0.5, vsize:1.5, rad:1.5,
+    fact:'Not crabs but relatives of spiders and scorpions, and almost unchanged for 450 million years. On spring high tides they crowd into the shallows by the hundred thousand to spawn, feeding migrating shorebirds with their eggs. Their blood is blue, carrying copper rather than iron, and an extract of it is used to check that vaccines and injected medicines are free of bacterial toxins.',
+    parts:[0, 1, 2, 3, 4, 5].map(i => part(mkHorseshoeCrab, { scale:0.5 - (i % 3) * 0.06, off:[[0, 0, 0], [0.7, 0, 0.5], [-0.6, 0, 0.7], [0.3, 0, -0.8], [-0.9, 0, -0.4], [1.1, 0, -0.2]][i],
+      fwd:o => dirYP(0.6 + i * 0.9 + 0.08 * Math.sin(simTime * 0.05 + i), 0), up:() => [0, 1, 0], mat:[1, 0.45, 1, 0.9], sway:[0.003, 1, 6, 0] })),
+    views:[{ d:[0.5, 0.9, 1], k:1.3, hold:10, drift:0.015, frame:'world' }, { d:[1, 0.3, 0.3], k:0.9, hold:9, drift:0.015, frame:'world' }] });
   addObj({ key:'manatee', name:'West Indian manatee', label:'manatee', type:'Trichechus manatus · a sea cow', kind:'air', floor:[MANG[0] + 275, MANG[1] + 5, 1.1], size:3, rad:2,
     fact:'A slow, gentle grazer of warm coasts and rivers, eating about a tenth of its weight in plants a day. It has no blubber to speak of and needs water above about 20 °C, so in winter Florida’s manatees crowd into warm springs. Boat propellers scar the backs of most adults.',
     motion:{ type:'circle', R:5, v:0.25, bob:0.15, bank:0.04 },

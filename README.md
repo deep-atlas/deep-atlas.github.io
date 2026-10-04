@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **175 places** across five zones, plus Nautile. By zone:
+- **176 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war with a blue dragon sea slug feeding on it, a fleet of by-the-wind sailors,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
     sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, vaquitas (the rarest marine mammal), whale shark (with remoras), a basking shark, great white,
@@ -49,7 +49,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     turtle hatchlings heading out to sea; the kelp forest with a sea otter, sea lions, a giant Pacific octopus, garibaldi and blacksmith; a shipwreck at
     30 m turned into a reef; a red-lipped batfish walking on the sand; a Galapagos marine iguana grazing algae off a lava boulder; a chambered nautilus on the deep reef slope.
   - **Coasts and poles**: mangroves with an archerfish shooting beetles off the leaves, a box jellyfish, a sawfish raking the sand and a manatee in the channel, a seagrass meadow with a dugong and a leafy
-    seadragon, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, a bowhead whale, belugas, a walrus, a swimming polar bear, a lion's mane
+    seadragon, horseshoe crabs gathering in the shallows, and the underside of Arctic sea ice with ice algae, brinicles, narwhals, a bowhead whale, belugas, a walrus, a swimming polar bear, a lion's mane
     jellyfish, sea angels and the sea butterflies they hunt.
   - **Twilight and midnight zones**: lanternfish, hatchetfish, a 40 m siphonophore, barreleye, giant, colossal, bigfin, glass,
     cock-eyed and Humboldt squid (flashing red and white), a see-through glass octopus, firefly squid at night, Atolla, the helmet jellyfish, a giant phantom jelly, a pyrosome, vampire squid, sperm whale,
