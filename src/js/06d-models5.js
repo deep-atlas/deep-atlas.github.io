@@ -22,7 +22,7 @@ function mkCuttlefish() {
   mb.xform({ v:0, i:0 }, rotY(PI));
   return mb;
 }
-function mkMantisShrimp() {
+function mkMantisShrimp(noClubs) {
   // the peacock mantis shrimp: a banded green body, orange clubs folded under like a praying mantis, stalked eyes that see colour
   // in a dozen channels and polarised light, and a red tail fan
   const mb = new MB(), green = [0.25, 0.75, 0.35], blue = [0.2, 0.45, 0.95], orange = [1.0, 0.45, 0.12], red = [0.95, 0.2, 0.25];
@@ -34,8 +34,8 @@ function mkMantisShrimp() {
     // eyes on stalks
     tube(mb, { n:3, m:4, path:t => [0.37 + t * 0.03, 0.02 + t * 0.07, sz * (0.015 + t * 0.02)], r:0.007, col:fc(green) });
     ellip(mb, [0.405, 0.1, sz * 0.04], [0.018, 0.012, 0.016], { n:4, m:8, col:(u, v, p) => Math.abs(p[1] - 0.1) < 0.004 ? [0.1, 0.1, 0.1] : [0.6, 0.85, 0.35] });
-    // the clubs (raptorial appendages), folded: they strike at about 23 m/s
-    tube(mb, { n:8, m:5, path:t => [0.33 + Math.sin(t * PI) * 0.1, -0.03 - t * 0.04, sz * 0.045], r:t => 0.012 + 0.008 * Math.sin(t * PI), col:t => t > 0.7 ? orange : green });
+    // the clubs (raptorial appendages), folded: they strike at about 23 m/s (drawn apart, by mkMantisClubs, when they move)
+    if (!noClubs) tube(mb, { n:8, m:5, path:t => [0.33 + Math.sin(t * PI) * 0.1, -0.03 - t * 0.04, sz * 0.045], r:t => 0.012 + 0.008 * Math.sin(t * PI), col:t => t > 0.7 ? orange : green });
     // antennae and the paddle-like antennal scales
     tube(mb, { n:10, m:3, path:t => [0.38 + t * 0.3, 0.03 + t * 0.06, sz * (0.03 + t * 0.12)], r:0.003, col:fc(orange), anim:t => [0, 0, t * 0.15, 0] });
     fin(mb, [[0, 0], [0.06, 0.01], [0.07, -0.02], [0.0, -0.015]], { origin:[0.38, 0.02, sz * 0.05], ua:[1, 0, 0], va:[0, 0, sz], col:fc([1.0, 0.6, 0.65]) });
@@ -121,6 +121,13 @@ function mkFlashlightFish() {
   return fish({ H:0.15, W:0.07, tm:0.3, nose:0.4, ped:0.18, bodyLen:0.8, back:black, belly:[0.1, 0.1, 0.12], eye:[0.1, 0.35, 0.04], eyeCol:[0.05, 0.05, 0.06], eyeRing:[0.3, 0.3, 0.35],
     tail:'fork', tailH:0.12, dorsal:[{ at:0.3, len:0.15, h:0.08 }, { at:0.55, len:0.2, h:0.06 }], anal:[{ at:0.6, len:0.18, h:0.06 }], pect:{ at:0.24, len:0.1, w:0.05 },
     extra:(mb) => { for (const sz of [1, -1]) ellip(mb, [0.42, -0.02, sz * 0.05], [0.04, 0.025, 0.02], { n:4, m:8, col:fc([0.55, 1.0, 0.9, 5]), anim:p => swimA(p) }); } });
+}
+function mkMantisClubs() {
+  // the peacock mantis shrimp's two clubs, alone, hinged at the origin (their base under the head), folded back along -x; the part
+  // that draws them swings them forward to strike
+  const mb = new MB(), green = [0.25, 0.75, 0.35], orange = [1.0, 0.45, 0.12];
+  for (const sz of [1, -1]) tube(mb, { n:8, m:5, path:t => [Math.sin(t * PI) * 0.1, -t * 0.04, sz * 0.045], r:t => 0.012 + 0.008 * Math.sin(t * PI), col:t => t > 0.7 ? orange : green });
+  return mb;
 }
 function mkBlacktip() {
   // a blacktip reef shark: sandy grey above, white below, every fin tip dipped in black
@@ -813,10 +820,19 @@ function addShallows(REEF) {
     post:(o, t) => { const c = (t + 7) % 26, e = smooth(0, 1.5, c) * smooth(9, 7, c); o.parts[0].fx = e > 0.01 ? [-e, 0, 0, 0] : null; },
     parts:[part(mkCuttlefish, { scale:0.4, mat:M_SKIN, swim2:[0, 2, 0.02, 1.5], sway:[0.008, 2, 10, 0] })],
     views:[{ d:[0.3, -0.2, 1], k:2.4, hold:10, drift:0.02 }, { d:[0.9, -0.1, 0.4], k:2.2, hold:9, drift:0.02 }, { d:[0.2, 0.7, 0.6], k:2.6, hold:8, drift:0.02 }] });
-  addObj({ key:'mantisshrimp', name:'peacock mantis shrimp', label:'mantis shrimp', type:'Odontodactylus scyllarus', kind:'floor', floor:[REEF[0] - 4.5, REEF[1] + 5, 0.03], size:0.15, rad:0.12, yaw:0.5,
+  addObj({ key:'mantisshrimp', name:'peacock mantis shrimp', label:'mantis shrimp', type:'Odontodactylus scyllarus', kind:'floor', floor:[REEF[0] + 30, REEF[1] + 4, 0.03], size:0.15, rad:0.12, yaw:0.5,
     fact:'Its clubs strike at about 23 m/s, fast enough to boil the water in front of them into collapsing bubbles. Its eyes have a dozen kinds of colour receptor and see polarised light.',
     motion:{ type:'crawl', R:0.3, v:0.015, h:0.03 },
-    parts:[part(mkMantisShrimp, { scale:0.15, mat:M_SKIN, sway:[0.004, 2, 30, 0] })],
+    // now and then it strikes: the clubs snap forward faster than the eye can follow, with a flash and a pop of bubbles
+    post:(o, t) => { const c = (t + 4) % 12, s = c < 0.6 ? c / 0.6 : -1, p = o.parts[1];
+      const a = s < 0 ? 0 : s < 0.08 ? s / 0.08 * 1.6 : 1.6 * (1 - smooth(0.08, 1, s)), up = o.up, f = o.fwd, sd = o.side || vcross(f, up);
+      p._f = vnorm(vadd(vmul(f, Math.cos(a)), vmul(up, -Math.sin(a)))); p._u = vnorm(vadd(vmul(up, Math.cos(a)), vmul(f, Math.sin(a))));
+      if (s > 0.05 && !o._hit) { o._hit = true; const tip = vadd(o.pos, vadd(vmul(f, 0.075), vmul(up, -0.01)));
+        spark(tip, 0.015, 12, 1.4, [1.0, 0.95, 0.8]); setTimeout(() => spark(tip, 0.025, 16, 0.8, [0.85, 0.95, 1.0]), 60); }
+      if (s < 0) o._hit = false; o.striking = s >= 0; },
+    readout:() => BYKEY.mantisshrimp.striking ? 'strike! the club hits at ~23 m/s; the bubble it leaves collapses with a flash and a bang' : 'strike ~23 m/s · 12 to 16 kinds of colour receptor (we have 3)',
+    parts:[part(() => mkMantisShrimp(true), { scale:0.15, mat:M_SKIN, sway:[0.004, 2, 30, 0] }),
+      part(mkMantisClubs, { scale:0.15, off:[0.33 * 0.15, -0.03 * 0.15, 0], fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN })],
     views:[{ d:[0.7, 0.45, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.15, 0.2], k:2.0, hold:9, drift:0.02 }] });
   addObj({ key:'nudibranch', name:'nudibranchs', type:'sea slugs · a few centimetres each', kind:'floor', floor:[REEF[0] + 1.5, REEF[1] - 2.2, 0.0], size:0.05, vsize:0.35, rad:0.35,
     fact:'Their bright colours are a warning: many store the stinging cells or toxins of the sponges, anemones and corals they eat, and use them for their own defence. The frilly tuft on the back is their gills.',
