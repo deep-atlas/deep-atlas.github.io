@@ -129,6 +129,27 @@ function mkSpiderCrab() {
   return mb;
 }
 
+function mkPompeiiWorms(C, O) {
+  // a colony of Pompeii worms on the wall of chimney C, in metres relative to O: papery tubes crowded together, each standing out
+  // from the wall, a worm's head poking from many with a crown of red gills and the grey fleece of bacteria on its back just showing
+  const mb = new MB(), r = rng(551), tubeC = [0.95, 0.93, 0.88], dirt = [0.62, 0.5, 0.36], gill = [1.0, 0.2, 0.18], fleece = [0.78, 0.78, 0.76];
+  for (let k = 0; k < 50; k++) {
+    const t = 0.2 + r() * 0.14, phi = PI + (r() - 0.5) * 1.1, n = [Math.cos(phi), 0, Math.sin(phi)];
+    const base = vsub(vmad(C.path(t), n, C.rad(t) * 0.93), O), L = 0.2 + r() * 0.14;
+    const dir = vnorm(vadd(n, [(r() - 0.5) * 0.3, 0.2 + r() * 0.4, (r() - 0.5) * 0.3])), at = u => vmad(base, dir, u * L);
+    tube(mb, { n:5, m:5, path:at, r:u => 0.013 * (1 + 0.15 * Math.sin(u * 9 + k)), col:u => Math.sin(u * 11 + k * 2.3) > 0.6 ? dirt : tubeC, capEnd:false });
+    if (r() < 0.6) {
+      const o = at(1), out = 0.03 + r() * 0.03;
+      tube(mb, { n:3, m:5, path:u => vmad(o, dir, u * out), r:0.009, col:fc(fleece), anim:u => [0, 0, u * 0.5, 0] });
+      const h = vmad(o, dir, out), sd = vnorm(vcross(dir, [0, 1, 0])), sd2 = vcross(dir, sd);
+      for (let g = 0; g < 4; g++) {
+        const a = g / 4 * TAU, gd = vnorm(vadd(dir, vadd(vmul(sd, Math.cos(a) * 0.9), vmul(sd2, Math.sin(a) * 0.9))));
+        tube(mb, { n:3, m:3, path:u => vmad(h, gd, u * 0.045), r:u => 0.006 * (1 - u * 0.6), col:fc(gill), anim:u => [0, 0, 0.5 + u * 0.4, 0] });
+      }
+    }
+  }
+  return mb;
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -469,6 +490,12 @@ function addDeepFolk(VENTS) {
     fact:'First found at vents in the South Pacific in 2005. Watch them wave their arms in slow rhythm: yeti crabs farm bacteria on the bristles of their arms and chest, waving them through the vent’s chemical-rich water, then comb the bacteria off with their mouthparts to eat.',
     parts:[part(mkYetiCrabs, { scale:1, mat:[1, 0.5, 1, 0.4], sway:[0.02, 2.2, 3, 0] })],
     views:[{ d:[0.6, 0.55, 1], k:1.8, hold:10, drift:0.025, frame:'world' }, { d:[1, 0.25, 0.3], k:1.3, hold:9, drift:0.025, frame:'world' }] });
+  // (their colony sits on the real wall of the second chimney, about a quarter of the way up)
+  const VA = BYKEY.vents.anchor, PC = ventChimneyAt(VA, 1, 13), PO = vmad(PC.path(0.27), [-1, 0, 0], PC.rad(0.27)), PW = vadd(VA, PO);
+  addObj({ key:'pompeii', name:'Pompeii worms', type:'Alvinella pompejana · in tubes on a chimney wall', kind:'floor', at:[PW[0], PW[2], -PW[1]], size:0.13, vsize:1.2, rad:0.7, yaw:0,
+    fact:'Among the most heat-tolerant animals known. They live in papery tubes on the walls of black smokers, where the water at the tail end of a tube has been measured at around 80 °C while the head, poking out, sits nearer 20 °C. A fleece of bacteria grows on their backs, perhaps insulating them, fed by mucus the worms secrete.',
+    parts:[part(() => mkPompeiiWorms(PC, PO), { mat:[1, 0.45, 1, 0.4], sway:[0.012, 1.6, 6, 0] })],
+    views:[{ d:[-0.6, 0.25, 0.8], k:2.0, hold:10, drift:0.015, frame:'world' }, { d:[-0.55, -0.15, -0.85], k:1.5, hold:9, drift:0.015, frame:'world' }] });
   addObj({ key:'scalyfoot', name:'scaly-foot snails', type:'Chrysomallon squamiferum · armoured with iron', kind:'floor', floor:[VENTS[0] - 2, VENTS[1] - 5, 0.04], size:0.05, vsize:0.4, rad:0.3,
     fact:'The only animal known to build its armour from iron: its foot is covered in hundreds of scales of iron sulphide, drawn from the vent water. It does not need to hunt: bacteria living in a swollen gland in its throat make its food from the vent’s chemicals.',
     parts:[part(mkScalyFoot, { mat:[1, 0.5, 1, 1.4] })],

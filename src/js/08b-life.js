@@ -466,6 +466,7 @@ function addLife() {
     greatwhite:'up to 6 m · senses a billionth of a volt · bursts to ~40 km/h',
     whaleshark:'up to ~18 m · filters ~6,000 litres of water an hour',
     colossal:'eyes ~27 cm across · ~495 kg · swivelling hooks on its arms',
+    pompeii:'~13 cm · tail end in water up to ~80 °C · head near 20 °C',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
     glassoctopus:'up to ~45 cm · its eyes long and narrow to cast less shadow',
     giantsquid:'up to ~12 m · eyes up to 27 cm · first filmed alive in 2012',

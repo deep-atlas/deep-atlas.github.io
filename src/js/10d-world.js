@@ -140,6 +140,7 @@ const WHERE = {
   beakedwhale:[33.4, -119.2, 'every ocean; record dives off California'],
   lostcity:[30.13, -42.12, 'the Atlantis Massif, Mid-Atlantic Ridge'],
   vents:[9.8, -104.3, 'mid-ocean ridges; the East Pacific Rise'],
+  pompeii:[12.8, -103.9, 'vents on the East Pacific Rise'],
   tubeworms:[0.8, -86.2, 'Pacific vents; the Galapagos Rift'],
   whalefall:[36.6, -122.4, 'deep floors worldwide; studied in Monterey Canyon'],
   hagfish:[36.6, -122.5, 'cold seas worldwide; on whale falls off California'],

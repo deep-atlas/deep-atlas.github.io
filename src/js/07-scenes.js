@@ -135,14 +135,21 @@ function buildKelp(A, seed) {
   return mb;
 }
 
+// a chimney's shape, relative to the vent field's anchor A: its centre line path(t) and radius rad(t), t from foot to top
+// (w is its own random wobble, the k-th draw of the field's seed; ventChimneyAt finds it again, for animals living on its walls)
+const VENT_CHIMNEYS = [[0, 0, 11], [7, 4, 7], [-6, 6, 8.5], [3, -8, 5.5]];
+function ventChimney(A, k, w) {
+  const [cx, cz, H] = VENT_CHIMNEYS[k], y0 = groundAt(A, cx, cz) - 0.3;
+  return { H, path:t => [cx + Math.sin(t * 3 + w) * 0.3, y0 + t * H, cz + Math.cos(t * 2.5 + w) * 0.25],
+    rad:t => (1.4 - t * 1.0) * (1 + 0.25 * Math.sin(t * 23 + w * 5)) * (H / 10 + 0.3) };
+}
+function ventChimneyAt(A, k, seed) { const r = rng(seed); let w = 0; for (let i = 0; i <= k; i++) w = (r() - 0.5) * 0.8; return ventChimney(A, k, w); }
 function buildVents(A, seed) {
   const mb = new MB(), r = rng(seed), tops = [];
-  const chimneys = [[0, 0, 11], [7, 4, 7], [-6, 6, 8.5], [3, -8, 5.5]];
-  for (const [cx, cz, H] of chimneys) {
-    const y0 = groundAt(A, cx, cz) - 0.3, w = (r() - 0.5) * 0.8;
-    const path = t => [cx + Math.sin(t * 3 + w) * 0.3, y0 + t * H, cz + Math.cos(t * 2.5 + w) * 0.25];
+  for (let k = 0; k < VENT_CHIMNEYS.length; k++) {
+    const { H, path, rad } = ventChimney(A, k, (r() - 0.5) * 0.8);
     tube(mb, { n:Math.ceil(H * 2), m:12, path, capEnd:true,
-      r:t => (1.4 - t * 1.0) * (1 + 0.25 * Math.sin(t * 23 + w * 5)) * (H / 10 + 0.3),
+      r:rad,
       col:(t, u, p) => {
         const n = Math.sin(p[1] * 3.1 + u * 11) * Math.sin(u * 23 + p[1] * 1.7);
         if (n > 0.55) return [0.75, 0.42, 0.15];          // iron oxides
