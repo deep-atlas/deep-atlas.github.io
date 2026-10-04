@@ -757,6 +757,16 @@ function mkLeopardSeal() {
   }
   return mb;
 }
+function mkVaquita() {
+  // a vaquita, one unit long (about 1.4 m): a small chunky porpoise, grey above shading pale below, a blunt head with no beak, a tall
+  // triangular dorsal fin, and the dark rings round its eyes and dark lips that give it a made-up look
+  const back = [0.5, 0.52, 0.55], belly = [0.86, 0.86, 0.85], ring = [0.08, 0.08, 0.1];
+  return cetacean({ back, belly, H:0.11, W:0.1, nose:0.4, bodyLen:0.87, tm:0.38, eye:[0.11, 0.1, 0.014], eyeRing:ring, tailH:0.13, tailL:0.1,
+    skin:(t, sy, sz) => { const de = Math.hypot((t - 0.11) * 0.87, (sy - 0.1) * 0.11 * 0.8); if (Math.abs(sz) > 0.3 && de < 0.03) return ring;
+      if (t < 0.05 && Math.abs(sy) < 0.25) return ring; return mixc(belly, back, smooth(-0.35, 0.15, sy)); },
+    dorsal:[{ at:0.45, len:0.13, h:0.11, col:back, pts:[[0, 0], [-0.4, 1], [-0.6, 0.95], [-1, 0]] }],
+    pect:{ at:0.24, len:0.1, w:0.045, down:0.6, back:0.4, y:-0.55, col:back } });
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -1000,6 +1010,11 @@ function addShallows(REEF) {
     motion:{ type:'circle', R:9, v:1.8, bob:3, bank:0.3, dir:-1 },
     parts:[part(mkLeopardSeal, { scale:3.2, mat:M_SKIN, swim:[0.025, 1, 0.6, 0], swim2:[1, 2.2, 0.06, 1] })],
     views:[{ d:[0.25, 0.1, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.8, hold:9, drift:0.02 }] });
+  addObj({ key:'vaquita', name:'vaquitas', type:'Phocoena sinus · the rarest marine mammal', kind:'air', at:[1800, 1200, 5], size:1.4, vsize:3, rad:2.5,
+    fact:'A small, shy porpoise found only in the far northern Gulf of California. Fewer than a dozen are thought to be left: they drown in gillnets set illegally for totoaba, a fish whose swim bladder sells for a fortune. Surveys keep finding a few, including calves, so it is not too late if the nets stop.',
+    motion:{ type:'circle', R:8, v:1.4, bob:1.2, bank:0.15 },
+    parts:[0, 1].map(i => part(mkVaquita, { scale:1.4 - i * 0.35, off:[[0, 0, 0], [-1.2, 0.3, 0.9]][i], mat:M_SKIN, ...WHALE_SWIM(0.05, 0.9 + i * 0.15) })),
+    views:[{ d:[0.25, 0.1, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.7, hold:9, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

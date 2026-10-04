@@ -73,6 +73,7 @@ const WHERE = {
   marineiguana:[-0.4, -91.6, 'the Galapagos Islands only; here Fernandina'],
   spanishdancer:[-20.3, 57.6, 'Indo-Pacific reefs and the Red Sea; here Mauritius'],
   flamboyant:[1.45, 125.2, 'sandy slopes of the Indo-Pacific; famous in the Lembeh Strait, Indonesia'],
+  vaquita:[31, -114.6, 'only the far northern Gulf of California, Mexico'],
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],
