@@ -42,7 +42,7 @@ const TOURS = [
   { id:'light', name:'living light', blurb:'Bioluminescence: most animals of the deep make their own light.',
     stops:['noctiluca', 'combjelly', 'lanternfish', 'hatchetfish', 'glasssquid', 'lanternshark', 'atolla', 'pyrosome', 'cookiecutter', 'cockeyed', 'helmetjelly', 'seapens', 'vampsquid', 'dragonfish', 'siphonophore', 'anglerfish', 'loosejaw', 'viperfish', 'gulper', 'chickenmonster'] },
   { id:'tiny', name:'tiny life', blurb:'The drifting plankton that feeds the ocean, down to a single cell.',
-    stops:['copepod', 'salps', 'krill', 'penguin', 'seaangel', 'seabutterfly', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
+    stops:['copepod', 'salps', 'krill', 'penguin', 'leopardseal', 'seaangel', 'seabutterfly', 'diatoms', 'radiolarian', 'noctiluca', 'prochlorococcus', 'xeno', 'amphipods'] },
   { id:'reef', name:'the reef', blurb:'A shallow coral reef and its neighbours.',
     stops:['reef', 'blacktip', 'nurseshark', 'thresher', 'snappers', 'grouper', 'clownfish', 'seahorse', 'lionfish', 'parrotfish', 'cuttlefish', 'mantisshrimp', 'nudibranch', 'xmastree', 'cots', 'pygmyseahorse', 'featherstar', 'puffer', 'gardeneels', 'goby', 'blueringed', 'flounder', 'giantclam', 'seakrait', 'coconutoctopus', 'flamboyant', 'mimic', 'frogfish', 'torpedo', 'stargazer', 'stingray', 'moray', 'octopus', 'bluetang', 'turtle', 'hatchlings', 'manta', 'barracuda', 'kelp', 'sealion', 'giantoctopus', 'blacksmith', 'garibaldi', 'seaotter'] },
   { id:'night', name:'a night dive', night:true, blurb:'The same sea after dark: corals spawning, flashlight fish blinking, the lanternfish risen from the deep, plankton that glow when touched.',

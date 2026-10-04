@@ -140,6 +140,7 @@ const WHERE = {
   bluewhale:[34, -120.5, 'every ocean; off California in summer'],
   copepod:[58, -20, 'every ocean'],
   diatoms:[50, -30, 'every ocean'],
+  leopardseal:[-64.5, -62.5, 'round Antarctica; here off the Antarctic Peninsula'],
   penguin:[-64.8, -63.5, 'the coasts of Antarctica'],
   radiolarian:[-5, -140, 'every ocean'],
   prochlorococcus:[22.8, -158, 'warm oceans worldwide; Station ALOHA, Hawaii'],

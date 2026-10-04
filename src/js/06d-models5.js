@@ -741,6 +741,22 @@ function mkFlamboyant() {
   for (const sz of [1, -1]) tube(mb, { n:4, m:4, path:t => [-0.05 + t * 0.12, 0.02 - t * 0.04, sz * 0.06], r:0.02, col:fc(pink), anim:t => [0, 0, 0.3, 0] });   // the walking flaps
   return mb;
 }
+function mkLeopardSeal() {
+  // a leopard seal, one unit long, head at +x: long and sleek, silver-grey with dark spots, a big reptile-like head with a wide gape,
+  // and long fore flippers it swims with like a sea lion
+  const mb = new MB(), grey = [0.6, 0.62, 0.66], pale = [0.85, 0.86, 0.88], spot = [0.22, 0.23, 0.26];
+  loft(mb, { n:28, m:16, sec:t => { const f = t < 0.18 ? 0.55 + 0.45 * Math.sin(t / 0.18 * PI / 2) : 1 - 0.85 * Math.pow((t - 0.18) / 0.82, 1.6);
+      return { x:0.3 - t * 0.76, y:0, w:0.085 * f, h:0.085 * f, e:2 }; },
+    col:(t, u, p, sy) => Math.sin(p[0] * 70) * Math.sin(p[2] * 60 + p[1] * 50) > 0.55 ? spot : (sy < -0.3 ? pale : grey), anim:t => [0.15 + t * 0.85, 0, 0, 0] });
+  // the head: long, flat-topped and broad, with a deep gape line
+  loft(mb, { n:10, m:12, sec:t => ({ x:0.47 - t * 0.2, y:0.005, w:0.05 + 0.03 * t, h:0.035 + 0.03 * t, e:2.2 }), col:(t, u, p, sy) => Math.abs(sy) < 0.12 && t < 0.8 ? [0.15, 0.12, 0.12] : (sy < 0 ? pale : grey), anim:() => [0.06, 0, 0, 0] });
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.42, 0.035, sz * 0.045], [0.012, 0.012, 0.008], { n:3, m:6, col:fc([0.02, 0.02, 0.02]), anim:() => [0.06, 0, 0, 0] });
+    fin(mb, [[0, 0.025], [0.12, 0.03], [0.26, 0.012], [0.28, -0.01], [0.15, -0.025], [0, -0.025]], { origin:[0.18, -0.04, sz * 0.06], ua:vnorm([-0.5, -0.5, sz * 0.75]), va:[1, 0, 0], col:fc(grey), anim:a => [0.3, a * 3, 0, 0] });
+    fin(mb, [[0, 0.012], [0.07, 0.035], [0.13, 0.04], [0.14, -0.01], [0, -0.012]], { origin:[-0.44, 0, sz * 0.012], ua:vnorm([-1, -0.1, sz * 0.4]), va:vnorm([0, 1, sz * 0.4]), col:fc(grey), anim:() => [1, 0, 0, 0] });
+  }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -979,6 +995,11 @@ function addShallows(REEF) {
     motion:{ type:'crawl', R:0.25, v:0.01, h:0 },
     parts:[part(mkFlamboyant, { scale:0.08, mat:M_SKIN, sway:[0.004, 2, 30, 0] })],
     views:[{ d:[0.6, 0.45, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.2, 0.2], k:2.2, hold:9, drift:0.02 }] });
+  addObj({ key:'leopardseal', name:'leopard seal', type:'Hydrurga leptonyx · the Antarctic’s top seal predator', kind:'air', at:[10012, 210, 20], size:3.2, rad:2, predator:true,
+    fact:'Up to about 3.5 m long, with a huge reptile-like head and a gape wide enough to take a penguin whole. It patrols the ice edges where penguins enter and leave the water, but much of what it eats is krill, sieved through cusped cheek teeth much as a crabeater seal does. Underwater its long trilling calls carry for kilometres.',
+    motion:{ type:'circle', R:9, v:1.8, bob:3, bank:0.3, dir:-1 },
+    parts:[part(mkLeopardSeal, { scale:3.2, mat:M_SKIN, swim:[0.025, 1, 0.6, 0], swim2:[1, 2.2, 0.06, 1] })],
+    views:[{ d:[0.25, 0.1, 1], k:1.8, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:1.8, hold:9, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

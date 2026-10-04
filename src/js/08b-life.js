@@ -605,6 +605,7 @@ function addLife() {
     octopusgarden:'~6,000 octopuses · 3,200 m down · eggs hatch in ~21 months in the warm seep',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
     salps:'chains up to several metres · some of the fastest-growing animals',
+    leopardseal:'up to ~3.5 m · eats penguins, seals and lots of krill',
     bowhead:'up to ~18 m · can live ~200 years · baleen up to ~4 m',
     blackswallower:'~25 cm · swallows fish twice its length and 10× its weight',
     lanternshark:'~20 cm · the smallest shark · a belly of light organs',
