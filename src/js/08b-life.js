@@ -414,6 +414,28 @@ function iguanaPost(o, t) {
   const sd = vnorm(vcross(f, [0, 1, 0])); p._f = f; p._u = vnorm(vcross(sd, f));
   o.grazing = u < 0.68; o.breathing = u > 0.84 && u < 0.88;
 }
+// ---- an archerfish: it hangs just under the surface eyeing an insect on a leaf above, spits a jet of water that knocks it off,
+// and darts to snatch it the moment it lands
+function archerPost(o, t) {
+  const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
+  const T = 14, u = (((t + 3) % T) + T) % T / T, leaf = [0, 0.66 - A[1], 0], fish = o.parts[1], bug = o.parts[2];
+  const aim = [-0.35, -A[1] - 0.12, 0.05];
+  let fp = aim, fd = vnorm(vsub(leaf, aim)), bp = leaf.slice(), show = true;
+  if (u > 0.62 && u < 0.72) { const s = (u - 0.62) / 0.1; bp = [lerp(0, 0.25, s), lerp(leaf[1], -A[1], s * s), lerp(0, 0.08, s)]; }
+  if (u >= 0.72 && u < 0.78) { const s = (u - 0.72) / 0.06; bp = [0.25, -A[1] + 0.005, 0.08]; fp = vlerp(aim, [0.12, -A[1] - 0.06, 0.06], ease(s)); fd = vnorm([1, 0.3, 0.1]); }
+  if (u >= 0.78) { show = u > 0.97; fp = vlerp([0.12, -A[1] - 0.06, 0.06], aim, ease((u - 0.78) / 0.19)); fd = vnorm(vlerp([1, 0.2, 0.1], vsub(leaf, aim), (u - 0.78) / 0.19)); }
+  fish.off = fp; const sd = vnorm(vcross(fd, [0, 1, 0])); fish._f = fd; fish._u = vnorm(vcross(sd, fd));
+  bug.off = bp; bug.hideBug = !show;
+  o.aiming = u < 0.6;
+  // the shot: a string of droplets racing up from its mouth to the leaf
+  if (u > 0.6 && !o._shot) {
+    o._shot = true; const m = vadd(A, vmad(fp, fd, 0.1));
+    for (let k = 0; k < 8; k++) setTimeout(() => spark(vlerp(m, vadd(A, leaf), (k + 1) / 8), 0.09, 50, 1.6, [0.9, 0.97, 1.0]), k * 25);
+    if (VIEW.focus === o && !RIDE.on) toast('The shot: pressing its tongue to a groove in the roof of its mouth, it squirts a jet of water that knocks the beetle off the leaf.', 5000);
+  }
+  if (u >= 0.72 && !o._splash) { o._splash = true; spark(vadd(A, [0.25, -A[1], 0.08]), 0.15, 60, 1.4, [0.9, 0.97, 1.0]); }
+  if (u < 0.5) { o._shot = false; o._splash = false; }
+}
 function spinnerPost(o, t) {
   const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
   o.parts.forEach((p, i) => {
@@ -551,6 +573,7 @@ function addLife() {
     wreck:'a wreck is colonised by reef life within a few years',
     sargassum:'floats on berry-like bladders · never touches the bottom',
     sargassumfish:'clambers through the weed on hand-like fins',
+    archerfish:'~20 cm · hits insects over a metre above the water',
     mangroves:'roots that breathe air · nurseries for reef fish',
     seagrass:'flowering plants, not seaweed · lock away carbon fast',
     dugong:'eats ~30 kg of seagrass a day',

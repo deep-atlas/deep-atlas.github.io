@@ -334,6 +334,31 @@ function mkDugong() {
     pect:{ at:0.2, len:0.1, w:0.05, down:0.7, back:0.4, y:-0.5, col:skin },
     extra:(mb) => ellip(mb, [0.47, -0.06, 0], [0.04, 0.035, 0.05], { n:5, m:8, col:fc([0.62, 0.52, 0.45]), anim:p => swimA(p) }) });
 }
+function mkArcherfish() {
+  // a banded archerfish, one unit long, snout at +x: a deep, flat, silvery body with black wedge bands down its back, a pointed snout
+  // with a groove in the roof of the mouth for shooting water, big eyes set to look up through the surface, and fins set far back
+  const silver = [0.92, 0.93, 0.9], back = [0.62, 0.64, 0.5], black = [0.05, 0.05, 0.06];
+  return fish({ H:0.17, W:0.055, tm:0.42, nose:0.75, ped:0.14, bodyLen:0.8, back, belly:silver, eye:[0.12, 0.35, 0.04], e:2.1,
+    camber:t => 0.15 * t * (1 - t),
+    pattern:(t, sy) => sy > -0.1 && [0.3, 0.46, 0.62, 0.8].some(b => Math.abs(t - b - sy * 0.04) < 0.035 * (0.5 + sy)) ? black : null,
+    tail:'truncate', tailH:0.15, tailL:0.16, tailCol:back,
+    dorsal:[{ at:0.55, len:0.22, h:0.09, col:black }], anal:[{ at:0.5, len:0.28, h:0.08, col:back }],
+    pect:{ at:0.27, len:0.1, w:0.05, col:[0.85, 0.85, 0.75] }, pelv:{ at:0.36, len:0.06, w:0.03, y:-0.85 } });
+}
+function mkOverhang() {
+  // a mangrove branch leaning out over the water, in metres, leaves along it, and the beetle's leaf at the tip (at x = 0)
+  const mb = new MB(), bark = [0.4, 0.3, 0.2], leaf = [0.3, 0.55, 0.2], r = rng(77);
+  tube(mb, { n:10, m:6, path:t => [-1.6 + t * 1.65, 0.75 + (1 - t) * 0.7 - t * 0.12, Math.sin(t * 2) * 0.1], r:t => 0.05 * (1 - t * 0.7), col:fc(bark) });
+  for (let k = 0; k < 16; k++) { const t = 0.3 + k / 16 * 0.72, x = -1.6 + t * 1.65, y = 0.75 + (1 - t) * 0.7 - t * 0.12, a = r() * TAU;
+    ellip(mb, [x + Math.cos(a) * 0.06, y + 0.02 + r() * 0.05, Math.sin(a) * 0.1], [0.07, 0.012, 0.035], { n:3, m:6, col:fc(leaf) }); }
+  ellip(mb, [0, 0.66, 0], [0.09, 0.012, 0.045], { n:3, m:8, col:fc([0.4, 0.62, 0.25]) });
+  return mb;
+}
+function mkBeetle() {
+  const mb = new MB();
+  ellip(mb, [0, 0, 0], [0.5, 0.3, 0.32], { n:6, m:10, col:(u, v, p) => p[1] > 0.12 && Math.abs(p[2]) < 0.04 ? [0.1, 0.1, 0.1] : [0.75, 0.2, 0.1] });
+  return mb;
+}
 function mkManatee() {
   // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
   // and a broad round paddle of a tail (a dugong's is a fluke)
@@ -439,6 +464,14 @@ function addPlaces2() {
     parts:[part(() => buildMangroves(BYKEY.mangroves.anchor, 61), { mat:[1, 0.3, 1, 0.3] }),
       part(mkAnthias, { inst:schoolCloud(90, 8, 0.3, 66, 1, 0.4), school:[1, 0.08, 1, 0], off:[0, 0.5, 0], tint:[0.6, 0.7, 0.55], mat:M_SKIN, shy:16, ...FISH_SWIM(0.07, 3, 0.9, 1.8) })],
     views:[{ d:[0.6, -0.1, 1], k:0.2, hold:12, drift:0.02, frame:'world', off:[0, 0.4, 0] }, { d:[0.6, 0.35, 1], k:0.75, hold:10, drift:0.015, frame:'world', off:[0, 3, 0], air:true }, { d:[1, 0.02, 0.2], k:0.12, hold:9, drift:0.02, frame:'world', off:[2, 0.2, 2] }] });
+  addObj({ key:'archerfish', name:'banded archerfish', label:'archerfish', type:'Toxotes jaculatrix · shoots insects down with water', kind:'fish', at:[MANG[0] + 22, MANG[1] + 4, 0.0], size:0.2, vsize:1.6, rad:1,
+    fact:'It hunts from below the surface, spotting insects on leaves above and knocking them down with a jet of water, squirted by pressing its tongue against a groove in the roof of its mouth. It allows for the bending of light at the surface, can hit targets over a metre up, and darts to the landing spot before the insect even hits the water.',
+    motion:{ type:'still', fn:archerPost },
+    readout:() => BYKEY.archerfish.aiming ? 'taking aim at a beetle on the leaf above' : 'the shot, and a dash to the landing spot',
+    parts:[part(mkOverhang, { mat:M_SOLID, sway:[0.01, 0.6, 2, 0] }),
+      part(mkArcherfish, { scale:0.2, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SILVER, ...FISH_SWIM(0.03, 2, 0.9, 2) }),
+      part(mkBeetle, { scale:0.03, show:o => !o.parts[2].hideBug, mat:M_SOLID })],
+    views:[{ d:[0.3, 0.12, 1], k:1.0, hold:14, drift:0.01, frame:'world', air:true, off:[0, 0.35, 0] }, { d:[0.5, -0.35, 1], k:0.9, hold:12, drift:0.01, frame:'world', off:[-0.2, -0.05, 0] }] });
   addObj({ key:'boxjelly', name:'box jellyfish', type:'sea wasp · Chironex fleckeri', kind:'jellies', at:[MANG[0] + 115, MANG[1], 0.9], size:0.25, vsize:0.6, rad:0.6,
     fact:'One of the most venomous animals alive: its tentacles carry millions of stinging cells. Unlike most jellyfish it swims fast and sees: 24 eyes in four clusters, some with lenses, steer it along the channels off the mangroves, where it hunts shrimp and small fish.',
     motion:{ type:'drift', amp:0.25, tilt:0.35 },
