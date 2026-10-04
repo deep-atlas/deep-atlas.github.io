@@ -512,6 +512,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     thresher:'up to ~3.3 m · half of it tail · several sardines stunned per slap',
     nurseshark:'up to ~3 m · breathes lying still · one of the strongest suction feeders',
     manatee:'up to ~4 m and 600 kg · eats ~10% of its weight a day',

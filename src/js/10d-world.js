@@ -63,6 +63,7 @@ const WHERE = {
   frogfish:[-8.4, 115.7, 'Indo-Pacific reefs; famous at Tulamben, Bali'],
   featherstar:[-5.5, 150.5, 'Indo-Pacific reefs; Papua New Guinea and Indonesia'],
   stargazer:[43.3, 5.4, 'sandy bottoms of the Mediterranean and eastern Atlantic'],
+  cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   thresher:[11.33, 124.11, 'warm seas of the Indo-Pacific; Monad Shoal, Malapascua, Philippines'],
   nurseshark:[24.6, -81.5, 'warm Atlantic and eastern Pacific coasts; the Florida Keys'],
   stingray:[19.4, -81.3, 'the Caribbean; Stingray City, Grand Cayman'],

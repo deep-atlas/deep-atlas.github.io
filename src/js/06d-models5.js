@@ -584,6 +584,29 @@ function mkNurseShark() {
   for (const sz of [1, -1]) tube(mb, { n:3, m:4, path:t => [0.48 + t * 0.01, -0.03 - t * 0.025, sz * 0.025], r:0.004, col:fc(brown) });   // barbels
   return mb;
 }
+function mkCrownOfThorns() {
+  // a crown-of-thorns starfish on a table coral, in metres: sixteen arms bristling with red-tipped spines, draped over the coral's
+  // plate, which is bleached white where it has already fed and still brown-green beyond
+  const mb = new MB(), live = [0.45, 0.36, 0.18], dead = [0.88, 0.87, 0.83], skin = [0.26, 0.1, 0.24], spine = [0.95, 0.3, 0.2], tip = [1.0, 0.75, 0.35];
+  const S = [0.08, 0.47, 0.04];
+  tube(mb, { n:4, m:8, path:t => [0, t * 0.38, 0], r:t => 0.07 - t * 0.03, col:fc([0.6, 0.58, 0.5]) });
+  ellip(mb, [0, 0.38, 0], [0.55, 0.035, 0.48], { n:6, m:28, shape:p => [p[0], p[1] + 0.02 * Math.sin(p[0] * 30) * Math.sin(p[2] * 27), p[2]],
+    col:(u, v, p) => Math.hypot(p[0] - S[0], p[2] - S[2]) < 0.36 + 0.04 * Math.sin(Math.atan2(p[2], p[0]) * 7) ? dead : live });
+  ellip(mb, S, [0.15, 0.045, 0.15], { n:6, m:14, col:fc(skin) });
+  const r = rng(77);
+  for (let k = 0; k < 16; k++) {
+    const a = k / 16 * TAU + 0.1, L = 0.13 + r() * 0.03, d = [Math.cos(a), 0, Math.sin(a)];
+    const at = t => [S[0] + d[0] * (0.12 + t * L), S[1] - 0.01 - t * t * 0.025, S[2] + d[2] * (0.12 + t * L)];
+    tube(mb, { n:6, m:5, path:at, r:t => 0.04 * (1 - t * 0.6), col:fc(skin), anim:t => [0, 0, t * 0.15, 0] });
+    for (let j = 1; j <= 4; j++) {
+      const p = at(j / 5), out = vnorm([d[0] * 0.5 + (r() - 0.5) * 0.4, 1, d[2] * 0.5 + (r() - 0.5) * 0.4]), ls = 0.05 * (1 - j * 0.12);
+      tube(mb, { n:2, m:3, path:t => vmad(p, out, t * ls), r:t => 0.006 * (1 - t * 0.8), col:t => t > 0.6 ? tip : spine, anim:() => [0, 0, j / 5 * 0.15, 0] });
+    }
+  }
+  for (let k = 0; k < 24; k++) { const a = r() * TAU, d = r() * 0.11, p = [S[0] + Math.cos(a) * d, S[1] + 0.035, S[2] + Math.sin(a) * d], out = vnorm([(r() - 0.5) * 0.6, 1, (r() - 0.5) * 0.6]);
+    tube(mb, { n:2, m:3, path:t => vmad(p, out, t * 0.05), r:t => 0.006 * (1 - t * 0.8), col:t => t > 0.6 ? tip : spine }); }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -775,6 +798,10 @@ function addShallows(REEF) {
       part(mkThresher, { scale:3, body:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.85, 2.2) }),
       part(mkThresherTail, { scale:3, tail:true, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, ...FISH_SWIM(0.03, 0.8, 0.85, 2.2) })],
     views:[{ d:[0.3, 0.05, 1], k:1.9, hold:16, drift:0.01, frame:'world' }, { d:[1, 0.45, 0.4], k:1.8, hold:14, drift:0.01, frame:'world' }] });
+  addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
+    fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
+    parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
+    views:[{ d:[0.5, 1.1, 0.7], k:2.1, hold:10, drift:0.02, off:[0, 0.42, 0] }, { d:[1, 0.35, 0.2], k:1.8, hold:9, drift:0.02, off:[0, 0.42, 0] }] });
   addObj({ key:'stingray', name:'southern stingray', type:'Hypanus americanus', kind:'sharks', floor:[REEF[0] + 36, REEF[1] - 4, 0.02], size:1.5, rad:0.9, yaw:2.6,
     fact:'It spends much of the day buried in sand with only its eyes and spiracles showing, breathing through the spiracles so it does not take in sand. It hunts by blowing jets of water to uncover buried clams and worms.',
     parts:[part(mkStingray, { scale:1.5, mat:M_SKIN, swim2:[0, 2, 0.01, 0.2], sway:[0.01, 0.6, 3, 0] })],
