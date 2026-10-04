@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **162 places** across five zones, plus Nautile. By zone:
+- **163 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war with a blue dragon sea slug feeding on it, a fleet of by-the-wind sailors,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
     sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
@@ -59,7 +59,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
   - **The deep floor**: black-smoker vents with giant tube worms, Pompeii worms in tubes on a chimney wall, yeti crabs and iron-armoured scaly-foot snails; the
     Lost City's white limestone towers; a cold seep
     whose brine pool is a lake on the seafloor, with a Venus' flower basket; a whale fall with hagfish and a sixgill shark; the Titanic's
-    bow; giant isopod; a giant sea spider; dumbo octopus; a sea toad; the abyssal plain with the ghost octopus "Casper", sea pigs, xenophyophores, tripod fish, grenadiers and the
+    bow; giant isopod; a giant sea spider; a meadow of sea pens that glow when disturbed; dumbo octopus; a sea toad; the abyssal plain with the ghost octopus "Casper", sea pigs, xenophyophores, tripod fish, grenadiers and the
     swimming sea cucumber; the Mariana Trench with a supergiant amphipod, snailfish, hadal amphipods and the Challenger Deep.
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you

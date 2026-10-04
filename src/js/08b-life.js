@@ -454,6 +454,8 @@ function addLife() {
   set('octopus', { react:{ type:'colour', dur:9, text:'The octopus flushes dark red and squirts a cloud of ink, a decoy to hide behind while it gets away. Then it fades back into the colours of the reef: its skin is packed with colour cells it opens and closes at will.' } });
   set('pyrosome', { lights:[{ at:[0, 0, 0], col:[0.35, 1.0, 0.8], power:o => (o.reactEnv || 0) * 0.3, reach:0.8, flick:4 }],
     react:{ type:'wave', dur:8, text:'Touched, the pyrosome lights up: each tiny zooid answers its neighbour’s light, and a glow runs the length of the colony.' } });
+  set('seapens', { lights:[{ at:[0, 0.3, 0], col:[0.35, 1.0, 0.6], power:o => (o.reactEnv || 0) * 0.4, reach:3, metres:true, flick:3 }],
+    react:{ type:'wave', dur:9, text:'Disturbed, the sea pens glow: a wave of green light ripples across the meadow from colony to colony.' } });
   set('blueringed', { react:{ type:'colour', dur:8, text:'Alarmed, the blue-ringed octopus flashes its rings electric blue: a warning that it carries enough venom to kill.' } });
   set('fireflysquid', { lights:[{ at:[0, 0, 0], col:[0.25, 0.6, 1.0], power:0.6, reach:1.8, flick:1.2 }] });
   set('cookiecutter', { lights:[{ at:[0, -0.05, 0], col:[0.3, 0.95, 0.75], power:0.25, reach:0.6 }] });
@@ -482,6 +484,7 @@ function addLife() {
     whaleshark:'up to ~18 m · filters ~6,000 litres of water an hour',
     colossal:'eyes ~27 cm across · ~495 kg · swivelling hooks on its arms',
     pompeii:'~13 cm · tail end in water up to ~80 °C · head near 20 °C',
+    seapens:'colonies up to ~40 cm · glow green when touched',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
     glassoctopus:'up to ~45 cm · its eyes long and narrow to cast less shadow',
     giantsquid:'up to ~12 m · eyes up to 27 cm · first filmed alive in 2012',

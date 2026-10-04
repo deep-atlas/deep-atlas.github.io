@@ -19,6 +19,7 @@ const WHERE = {
   pyrosome:[44, -126, 'warm seas; a huge bloom reached Oregon in 2017'],
   fireflysquid:[36.8, 137.2, 'the Sea of Japan; spawns in Toyama Bay'],
   flowerbasket:[11, 124, 'the western Pacific, around the Philippines'],
+  seapens:[56.5, -6, 'muddy floors worldwide; here the sea lochs of western Scotland'],
   seaspider:[-75, 165, 'cold and deep seas worldwide; giants in the Ross Sea, Antarctica'],
   isopod:[26, -88, 'the Gulf of Mexico and western Atlantic'],
   chickenmonster:[-64, 112, 'the deep Southern Ocean and Gulf of Mexico'],

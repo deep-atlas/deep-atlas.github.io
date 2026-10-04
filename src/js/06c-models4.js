@@ -150,6 +150,19 @@ function mkPompeiiWorms(C, O) {
   }
   return mb;
 }
+function mkSeaPens(A) {
+  // a meadow of phosphorescent sea pens (Pennatula), in metres: each a colony like a quill, a fleshy stalk dug into the mud and a
+  // feathered top of leaf-like rows of polyps, standing in the current; touched, a wave of green light runs along them
+  const mb = new MB(), r = rng(4242), stalk = [0.9, 0.62, 0.55], leaf = [0.95, 0.42, 0.42], tip = [1.0, 0.85, 0.75];
+  for (let k = 0; k < 26; k++) {
+    const a = r() * TAU, d = Math.sqrt(r()) * 1.3, x = Math.cos(a) * d, z = Math.sin(a) * d, H = 0.32 + r() * 0.2, lean = 0.15 + r() * 0.15, y0 = groundAt(A, x, z) - 0.03;
+    const at = t => [x + lean * t * t * H, y0 + t * H, z];
+    tube(mb, { n:6, m:5, path:at, r:t => 0.016 * (1 - t * 0.5), col:fc(stalk), anim:t => [0, 0, t * 0.5, 0] });
+    for (let j = 0; j < 9; j++) { const t = 0.35 + j * 0.07, p = at(t), w = 0.075 * Math.sin((j + 0.5) / 9 * PI) + 0.015;
+      for (const s of [1, -1]) fin(mb, [[0, -0.008], [w, -0.004], [w * 0.9, 0.012], [0, 0.01]], { origin:p, ua:[0, 0.25, s], va:[1, 0.2, 0], col:(a2) => a2 > w * 0.6 ? tip : leaf, anim:() => [0, 0, t * 0.5, 0], rings:1 }); }
+  }
+  return mb;
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -476,6 +489,10 @@ function addDeepFolk(VENTS) {
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },
     parts:[part(mkGiantIsopod, { scale:0.4, mat:[1, 0.4, 1, 0.6], sway:[0.01, 2, 20, 0] })],
     views:[{ d:[0.7, 0.45, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.2, 0.2], k:1.9, hold:9, drift:0.02 }, { d:[0.1, 0.95, 0.2], k:2.4, hold:8, drift:0.02 }] });
+  addObj({ key:'seapens', name:'sea pens', type:'a meadow of Pennatula · touch them and they glow', kind:'floor', floor:[13000, 700, 0], size:0.45, vsize:1.6, rad:1.5,
+    fact:'Each looks like an old quill pen but is a colony of polyps: one anchors it in the mud, the rest feed from the current on its feathery leaves. Disturbed, sea pens glow, a wave of green light rippling along the colony, and some can deflate and pull themselves down into the mud.',
+    parts:[part(() => mkSeaPens(BYKEY.seapens.anchor), { mat:M_SKIN, sway:[0.03, 0.5, 3, 0] })],
+    views:[{ d:[0.4, 0.6, 1], k:1.3, hold:10, drift:0.02, frame:'world', off:[0, 0.3, 0] }, { d:[1, 0.25, 0.3], k:0.7, hold:9, drift:0.02, frame:'world', off:[0, 0.3, 0] }] });
   addObj({ key:'seaspider', name:'giant sea spider', type:'Colossendeis · a pycnogonid', kind:'floor', floor:[17000, 900, 0.0], size:0.6, rad:0.35,
     fact:'Not a true spider: a sea spider is nearly all legs, with a body so thin that its gut and reproductive organs run out into them. It has no gills; oxygen soaks in through its leg cuticle, and the gut squeezing in and out pumps its blood. Deep and polar species grow far bigger than shallow ones, with legs spanning up to about 70 cm.',
     motion:{ type:'crawl', R:0.8, v:0.02, h:0 },
