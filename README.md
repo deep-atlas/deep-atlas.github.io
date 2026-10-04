@@ -34,12 +34,12 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **161 places** across five zones, plus Nautile. By zone:
+- **162 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war with a blue dragon sea slug feeding on it, a fleet of by-the-wind sailors,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
     sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
     hammerheads, a thresher shark tail-slapping sardines, bluefin tuna, a swordfish (deep by day, near the surface at night), sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school), a
-    family of sperm whales asleep upright, and the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
+    family of sperm whales asleep upright, an elephant seal asleep in a falling-leaf spiral on a deep dive, and the blue whale. Plankton: copepod, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
     penguins hunting through it.
   - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
     camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a crown-of-thorns starfish bleaching a table coral, two pygmy seahorses hiding on a sea fan, a feather star, a giant clam, a frogfish, a sea krait, a pufferfish, a blue-ringed octopus,

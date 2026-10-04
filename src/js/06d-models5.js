@@ -662,6 +662,25 @@ function mkPygmyFan() {
   for (const a of [-0.55, -0.15, 0.2, 0.6]) branch([0, 0, 0], a, 0.2, 0.007, 4);
   return mb;
 }
+function mkElephantSeal() {
+  // a northern elephant seal bull, one unit long, head at +x: a huge spindle of blubber, grey-brown, short fore flippers, hind flippers
+  // that sweep side to side to swim, big dark eyes for the deep, and the drooping, trunk-like nose that names it
+  const mb = new MB(), back = [0.74, 0.7, 0.64], belly = [0.86, 0.83, 0.78], dark = [0.42, 0.37, 0.32];
+  loft(mb, { n:28, m:16, sec:t => {
+      const f = t < 0.2 ? 0.55 + 0.45 * Math.sin(t / 0.2 * PI / 2) : 1 - 0.85 * Math.pow((t - 0.2) / 0.8, 1.8);
+      return { x:0.34 - t * 0.78, y:0, w:0.15 * f, h:0.15 * f, e:2 };
+    },
+    col:(t, u, p, sy) => sy < -0.3 ? belly : (t < 0.18 && Math.sin(p[0] * 90) * Math.sin(p[2] * 80) > 0.5 ? dark : back), anim:t => [0.15 + t * 0.85, 0, 0, 0] });
+  ellip(mb, [0.38, 0.01, 0], [0.09, 0.085, 0.085], { n:8, m:12, col:fc(back), anim:() => [0.08, 0, 0, 0] });
+  tube(mb, { n:6, m:8, path:t => [0.45 + t * 0.07, 0.02 - t * t * 0.06, 0], r:t => 0.05 - t * 0.012, col:t => t > 0.9 ? dark : back, anim:() => [0.04, 0, 0, 0] });   // the nose
+  for (const sz of [1, -1]) {
+    ellip(mb, [0.43, 0.04, sz * 0.06], [0.022, 0.022, 0.012], { n:3, m:6, col:fc([0.02, 0.02, 0.03]), anim:() => [0.08, 0, 0, 0] });
+    fin(mb, [[0, 0.02], [0.08, 0.025], [0.13, 0.0], [0.07, -0.02], [0, -0.02]], { origin:[0.22, -0.09, sz * 0.11], ua:vnorm([-0.4, -0.5, sz * 0.75]), va:[1, 0, 0], col:fc(dark), anim:a => [0.3, a * 1.5, 0, 0] });
+    fin(mb, [[0, 0.015], [0.07, 0.05], [0.13, 0.06], [0.14, -0.01], [0.07, -0.02], [0, -0.015]], { origin:[-0.44, 0, sz * 0.015], ua:vnorm([-1, 0, sz * 0.35]), va:vnorm([0, 1, sz * 0.3]),
+      col:fc(dark), anim:() => [1, 0, 0, 0] });
+  }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -875,6 +894,14 @@ function addShallows(REEF) {
       ...[[0.55, 0.12, 1], [0.3, -0.2, -1]].map(([y, z, d]) => part(() => mkSeahorse({ skin:[0.96, 0.6, 0.66], ring:[0.9, 0.5, 0.58], knobs:[0.95, 0.22, 0.28] }),
         { scale:0.02, off:[0.012, y, z], fwd:o => vmul(o.side, d), up:o => o.up, mat:M_SOLID, sway:[0.02, 1, 4, 0] }))],
     views:[{ d:[1, 0.15, 0.25], k:1.5, hold:10, drift:0.015, off:[0, 0.4, 0] }, { d:[1, 0.08, 0.3], k:0.09, hold:9, drift:0.01, off:[0.01, 0.55, 0.12] }, { d:[1, 0.1, -0.3], k:0.09, hold:9, drift:0.01, off:[0.01, 0.3, -0.2] }] });
+  addObj({ key:'elephantseal', name:'northern elephant seal', label:'elephant seal', type:'Mirounga angustirostris · asleep on a dive', kind:'air', at:[15000, 1100, 200], size:4.5, rad:2.4,
+    fact:'At sea for months, it naps on deep dives instead of on the surface, where sharks and orcas hunt. Glide down, roll onto its back, and drift deeper in slow loops like a falling leaf: tags that read seals’ brain waves found them sleeping this way in 2023, for only about two hours a day. Then it wakes and swims back up to breathe.',
+    motion:{ type:'still', fn:sealSleepPost },
+    // (asleep, it stops swimming and just drifts)
+    post:o => { o.parts[0].swim[0] = o.asleep ? 0.004 : 0.03; },
+    readout:() => BYKEY.elephantseal.asleep ? 'asleep: upside down, drifting deeper in slow loops' : BYKEY.elephantseal.fwd[1] > 0 ? 'awake, swimming up to breathe' : 'gliding down into the dark',
+    parts:[part(mkElephantSeal, { scale:4.5, mat:M_SKIN, swim:[0.03, 0.4, 0.6, 0], swim2:[1, 2.2, 0, 0] })],
+    views:[{ d:[0.3, 0.15, 1], k:1.4, hold:12, drift:0.015 }, { d:[1, -0.4, 0.3], k:1.4, hold:10, drift:0.015 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

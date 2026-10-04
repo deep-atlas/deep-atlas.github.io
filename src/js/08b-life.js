@@ -386,6 +386,21 @@ function thresherPost(o, t) {
   if (s < 0 || s > 1) o._slapped = false;
 }
 
+// ---- an elephant seal asleep on a deep dive: it glides down, rolls on its back, and drifts deeper in slow loops like a falling leaf
+// (the "sleep spiral"), wakes, and swims back up to breathe
+function sealSleepPost(o, t) {
+  const A = o.anchor, T = 160, u = (((t + 40) % T) + T) % T / T;
+  const top = -60, bot = -320, sleep0 = 0.25, sleep1 = 0.7;
+  let y, f, roll = 0;
+  const a = t * 0.12, R = 7, loop = [A[0] + Math.cos(a) * R, 0, A[2] + Math.sin(a) * R], tan = [-Math.sin(a), 0, Math.cos(a)];
+  if (u < sleep0) { const s = u / sleep0; y = lerp(top, -160, s); f = vnorm([tan[0], -0.45, tan[2]]); }
+  else if (u < sleep1) { const s = (u - sleep0) / (sleep1 - sleep0); y = lerp(-160, bot, s); roll = PI * smooth(0, 0.12, s) * (1 - smooth(0.88, 1, s)); f = vnorm([tan[0], -0.15, tan[2]]); }
+  else { const s = (u - sleep1) / (1 - sleep1); y = lerp(bot, top, s); f = vnorm([tan[0], 0.55, tan[2]]); }
+  o.pos = [loop[0], y, loop[2]];
+  const sd = vnorm(vcross(f, [0, 1, 0])), up0 = vcross(sd, f);
+  o.fwd = f; o.up = vnorm(vadd(vmul(up0, Math.cos(roll)), vmul(sd, Math.sin(roll)))); o.side = vcross(o.fwd, o.up);
+  o.asleep = u >= sleep0 && u < sleep1;
+}
 function spinnerPost(o, t) {
   const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
   o.parts.forEach((p, i) => {
