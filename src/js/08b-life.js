@@ -401,6 +401,19 @@ function sealSleepPost(o, t) {
   o.fwd = f; o.up = vnorm(vadd(vmul(up0, Math.cos(roll)), vmul(sd, Math.sin(roll)))); o.side = vcross(o.fwd, o.up);
   o.asleep = u >= sleep0 && u < sleep1;
 }
+// ---- a marine iguana: it clings to a rock grazing algae, then swims up to breathe and back down, with sideways sweeps of its tail
+function iguanaPost(o, t) {
+  const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
+  const p = o.parts[1], T = 90, u = (((t + 20) % T) + T) % T / T, rock = [0.1, 0.7, 0], surf = [1.6, -A[1] - 0.22, 0.9];
+  let pos, f;
+  if (u < 0.68) { const bob = Math.max(0, Math.sin(t * 2.4)) * 0.04; pos = vadd(rock, [0, bob * 0.3, 0]); f = vnorm([1, -0.25 - bob, 0.15 * Math.sin(t * 0.3)]); p.swim[0] = 0.002; }
+  else if (u < 0.86) { const s = ease((u - 0.68) / 0.18); pos = [lerp(rock[0], surf[0], s), lerp(rock[1], surf[1], s) + Math.sin(s * PI) * 0.2, lerp(rock[2], surf[2], s)];
+    f = vnorm(vsub([lerp(rock[0], surf[0], s + 0.02), lerp(rock[1], surf[1], s + 0.02), lerp(rock[2], surf[2], s + 0.02)], pos)); if (s > 0.92) f = vnorm([1, 0, 0.5]); p.swim[0] = 0.06; }
+  else { const s = ease((u - 0.86) / 0.14); pos = [lerp(surf[0], rock[0], s), lerp(surf[1], rock[1], s), lerp(surf[2], rock[2], s)]; f = vnorm([lerp(-0.5, 1, s), lerp(-0.7, -0.25, s), -0.2]); p.swim[0] = 0.06; }
+  p.off = pos;
+  const sd = vnorm(vcross(f, [0, 1, 0])); p._f = f; p._u = vnorm(vcross(sd, f));
+  o.grazing = u < 0.68; o.breathing = u > 0.84 && u < 0.88;
+}
 function spinnerPost(o, t) {
   const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
   o.parts.forEach((p, i) => {
@@ -531,6 +544,7 @@ function addLife() {
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
     pygmyseahorse:'~2 cm · lives its whole adult life on one sea fan',
+    marineiguana:'up to ~1.3 m · dives to ~12 m · sneezes out salt',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',

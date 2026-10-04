@@ -681,6 +681,33 @@ function mkElephantSeal() {
   }
   return mb;
 }
+function mkMarineIguana() {
+  // a Galapagos marine iguana, one unit long, head at +x: a stocky dark body, a blunt short snout for cropping algae (often crusted
+  // white with the salt it sneezes out), a crest of spines down its back, long-clawed legs for clinging to rock in the surf, and a
+  // flattened tail more than half its length that it swims with
+  const mb = new MB(), skin = [0.1, 0.1, 0.1], mott = [0.22, 0.14, 0.1], salt = [0.9, 0.88, 0.84], crest = [0.3, 0.28, 0.25];
+  const prof = t => t < 0.12 ? 0.6 + 0.4 * Math.sin(t / 0.12 * PI / 2) : t < 0.42 ? 1 : 1 - 0.95 * Math.pow((t - 0.42) / 0.58, 0.8);
+  const hgt = t => 0.06 * prof(t) * (t > 0.42 ? 1.3 : 1);
+  loft(mb, { n:32, m:12, sec:t => ({ x:0.28 - t * 0.98, y:0, w:0.075 * prof(t) * (t > 0.42 ? 0.55 : 1), h:hgt(t), e:2 }),
+    col:(t, u, p) => Math.sin(p[0] * 80) * Math.sin(p[2] * 90 + p[1] * 60) > 0.35 ? mott : skin, anim:t => [Math.max(0, t - 0.15), 0, 0, 0] });
+  ellip(mb, [0.33, 0.01, 0], [0.065, 0.045, 0.05], { n:6, m:10, col:(u, v, p) => p[1] > 0.025 ? salt : skin });
+  for (const sz of [1, -1]) ellip(mb, [0.34, 0.025, sz * 0.035], [0.008, 0.008, 0.006], { n:3, m:5, col:fc([0.02, 0.02, 0.02]) });
+  for (let k = 0; k < 22; k++) { const x = 0.26 - k * 0.035, h = 0.025 * (1 - k / 26), y = hgt((0.28 - x) / 0.98) * 0.92;
+    tube(mb, { n:2, m:3, path:t => [x, y + t * h, 0], r:t => 0.006 * (1 - t), col:fc(crest), anim:() => [clamp(0.5 - x, 0, 1) * 0.8, 0, 0, 0] }); }
+  for (const [x, sz] of [[0.18, 1], [0.18, -1], [-0.1, 1], [-0.1, -1]]) {
+    const at = t => [x + (t > 0.5 ? (t - 0.5) * 0.12 : 0), -0.02 - Math.sin(Math.min(1, t * 2) * PI / 2) * 0.05, sz * (0.06 + Math.min(t, 0.5) * 0.14)];
+    tube(mb, { n:5, m:4, path:at, r:t => 0.016 * (1 - t * 0.5), col:fc(skin) });
+    for (let c = -1; c <= 1; c++) tube(mb, { n:2, m:3, path:t => vadd(at(1), [t * 0.035, -0.005, c * t * 0.012]), r:0.003, col:fc([0.1, 0.1, 0.1]) });
+  }
+  return mb;
+}
+function mkLavaRock() {
+  // a boulder of black lava, in metres, its top furred with the short red and green algae marine iguanas graze
+  const mb = new MB(), lava = [0.17, 0.16, 0.16], green = [0.55, 0.95, 0.45], red = [0.95, 0.5, 0.4];
+  ellip(mb, [0, 0.0, 0], [1.1, 0.62, 0.85], { n:10, m:16, shape:p => [p[0], p[1] + 0.05 * Math.sin(p[0] * 4) * Math.sin(p[2] * 5) * Math.max(0, 1 - p[1] / 0.5), p[2]],
+    col:(u, v, p) => p[1] > 0.45 ? (Math.sin(p[0] * 17) * Math.sin(p[2] * 19) > 0.2 ? red : green) : lava });
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -902,6 +929,13 @@ function addShallows(REEF) {
     readout:() => BYKEY.elephantseal.asleep ? 'asleep: upside down, drifting deeper in slow loops' : BYKEY.elephantseal.fwd[1] > 0 ? 'awake, swimming up to breathe' : 'gliding down into the dark',
     parts:[part(mkElephantSeal, { scale:4.5, mat:M_SKIN, swim:[0.03, 0.4, 0.6, 0], swim2:[1, 2.2, 0, 0] })],
     views:[{ d:[0.3, 0.15, 1], k:1.4, hold:12, drift:0.015 }, { d:[1, -0.4, 0.3], k:1.4, hold:10, drift:0.015 }] });
+  addObj({ key:'marineiguana', name:'marine iguana', type:'Amblyrhynchus cristatus · the only lizard that feeds in the sea', kind:'air', floor:[700, -700, 0], size:1.2, vsize:1.5, rad:1.2,
+    fact:'Found only on the Galapagos Islands. It dives into the cold sea to crop algae off the rocks with its blunt snout, clinging on against the surge with long claws, and swims with sideways sweeps of its flattened tail. Glands by its nose take the extra salt out of its blood, and it sneezes it out, which is why its head is often crusted white.',
+    motion:{ type:'still', fn:iguanaPost },
+    readout:() => BYKEY.marineiguana.grazing ? 'grazing algae off the rock, clinging on with its claws' : 'swimming up to breathe, sweeping its tail side to side',
+    parts:[part(mkLavaRock, { mat:M_SOLID }),
+      part(mkMarineIguana, { scale:1.2, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, swim:[0.002, 1.1, 0.6, 0], swim2:[0, 1.6, 0, 0] })],
+    views:[{ d:[0.3, 0.55, 1], k:1.4, hold:12, drift:0.015, frame:'world', off:[0.1, 0.7, 0] }, { d:[1, 0.3, -0.4], k:1.3, hold:10, drift:0.015, frame:'world', off:[0.3, 0.7, 0] }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
