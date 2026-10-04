@@ -199,6 +199,17 @@ function buildOctopusGarden(A) {
   }
   return mb;
 }
+function mkLanternshark() {
+  // a dwarf lanternshark, one unit long (about 20 cm): a slim dark-brown shark with big green-glinting eyes, two dorsal fins each
+  // with a spine, and the belly and flanks dotted with tiny light organs that glow blue to erase its silhouette from below
+  const back = [0.2, 0.15, 0.12], belly = [0.12, 0.1, 0.1];
+  return fish({ H:0.075, W:0.065, tm:0.32, nose:0.6, ped:0.1, bodyLen:0.8, back, belly, eye:[0.09, 0.25, 0.03], eyeCol:[0.2, 0.75, 0.55], eyeRing:[0.1, 0.3, 0.25],
+    glowAt:(t, sy, sz, p) => sy < -0.35 && t > 0.08 && t < 0.85 && Math.sin(p[0] * 260) * Math.sin(p[2] * 240) > 0.2 ? [...BIO, 2.2] : null,
+    tail:'shark', tailH:0.09, tailL:0.2, tailCol:back,
+    dorsal:[{ at:0.36, len:0.08, h:0.06, col:back }, { at:0.62, len:0.08, h:0.07, col:back }],
+    pect:{ at:0.25, len:0.1, w:0.05, col:back }, pelv:{ at:0.55, len:0.06, w:0.03, y:-0.7, col:back },
+    extra:(mb, b) => gills(mb, b, 0.2, 5) });
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -490,6 +501,10 @@ function addDeepFolk(VENTS) {
     parts:[0, 1, 2].map(i => part(mkSalpChain, { scale:0.55 - i * 0.08, off:[i * 0.25 - 0.25, i * 0.22 - 0.2, (i - 1) * 0.3], fwd:o => vnorm([1, 0.15 * Math.sin(simTime * 0.2 + i), 0.3 * Math.cos(simTime * 0.15 + i * 2)]), up:() => [0, 1, 0],
       mat:[0.3, 1.3, 1, 0.8], trans:true, swim:[0.06, 0.6 + i * 0.1, 1, 0], swim2:[0, 1, 0, 0], pulse:[0.4, 0.3, 0, 0] })),
     views:[{ d:[0.3, 0.2, 1], k:1.6, hold:10, drift:0.02, frame:'world' }, { d:[1, -0.3, 0.2], k:1.4, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'lanternshark', name:'dwarf lanternsharks', label:'lanternsharks', type:'Etmopterus perryi · the smallest known shark', kind:'sharks', at:[16500, -500, 400], size:0.2, vsize:1.2, rad:1,
+    fact:'About 20 cm long, small enough to sit in your hand: the smallest shark known. Like many lanternsharks it glows: thousands of tiny light organs on its belly match the faint light from above, so a hunter looking up sees no shadow. The light organs on its flanks may help others of its kind recognise it in the dark.',
+    parts:[part(mkLanternshark, { inst:schoolCloud(9, 0.8, 0.4, 2020, 1, 0.3), school:[1, 0.2, 0.8, 0], mat:[1, 0.35, 1.4, 0.6], shy:2, ...FISH_SWIM(0.06, 1.2, 1, 2) })],
+    views:[{ d:[0.3, 0.1, 1], k:1.4, hold:10, drift:0.02, frame:'world' }, { d:[0.2, -0.9, 0.3], k:1.3, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'pyrosome', name:'pyrosome', type:'a glowing colony · Pyrosoma atlanticum', kind:'jellies', at:[15400, 500, 550], size:0.5, rad:0.4,
     fact:'Not one animal but thousands of tiny clones sharing a tube, each pumping water through the wall to feed. Touch it and it glows: one zooid lights up, its neighbours see the light and answer, and a wave of blue-green light runs along the colony. Some kinds grow to over 10 m long.',
     motion:{ type:'hover', amp:0.3, turn:0.25, pitch:-0.15 },
