@@ -163,6 +163,18 @@ function mkSeaPens(A) {
   }
   return mb;
 }
+function mkSalpChain() {
+  // a chain of salps, one unit long: a string of clear barrels, each ringed with muscle bands it squeezes to jet water through itself,
+  // with a small orange-brown gut showing through; the chain wavers as it swims
+  const mb = new MB(), clear = [0.82, 0.9, 1.0], band = [0.9, 0.96, 1.0, 0.25], gut = [0.95, 0.5, 0.2];
+  const n = 11;
+  for (let k = 0; k < n; k++) {
+    const x = 0.46 - k / (n - 1) * 0.92, z = Math.sin(k * 0.9) * 0.02, sd = k % 2 ? 1 : -1;
+    ellip(mb, [x, 0, z + sd * 0.02], [0.045, 0.034, 0.04], { n:6, m:10, col:(u, v, p) => Math.abs(Math.sin((p[0] - x) * 110)) < 0.25 ? band : clear, anim:() => [k / n, 0, 0, 0.15] });
+    ellip(mb, [x - 0.025, -0.006, z + sd * 0.02], [0.01, 0.01, 0.01], { n:3, m:5, col:fc(gut), anim:() => [k / n, 0, 0, 0] });
+  }
+  return mb;
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -448,6 +460,12 @@ function addDeepFolk(VENTS) {
     fact:'One eye is twice the size of the other. It swims tilted, the big eye looking up for the silhouettes of prey against the last faint daylight, the small one looking down for flashes of living light.',
     motion:{ type:'hover', amp:0.05, turn:0.4 },
     parts:[part(mkCockeyedSquid, { scale:0.3, mat:M_SKIN, pulse:[0.6, 0.3, 0, 0], sway:[0.02, 0.5, 4, 0], swim2:[0, 2, 0.2, 0.35] })], views:[{ d:[0.2, 0.3, 1], k:1.3, hold:10, drift:0.025 }, { d:[-0.5, 0.2, 0.8], k:1.4, hold:8, drift:-0.03 }] });
+  addObj({ key:'salps', name:'salps', type:'chains of Salpa · clear barrels that swim by jet', kind:'jellies', at:[14700, -800, 80], size:0.5, vsize:1.3, rad:1.2,
+    fact:'Not jellyfish but relatives of ours, distant ones: each salp is a clear barrel that pumps water through itself to swim and to filter food. They bud off clones in long chains, and when food is plentiful a bloom can grow faster than almost any other animal. Their dense droppings sink fast, carrying carbon down into the deep sea.',
+    motion:{ type:'drift', amp:0.4, tilt:0.1 },
+    parts:[0, 1, 2].map(i => part(mkSalpChain, { scale:0.55 - i * 0.08, off:[i * 0.25 - 0.25, i * 0.22 - 0.2, (i - 1) * 0.3], fwd:o => vnorm([1, 0.15 * Math.sin(simTime * 0.2 + i), 0.3 * Math.cos(simTime * 0.15 + i * 2)]), up:() => [0, 1, 0],
+      mat:[0.3, 1.3, 1, 0.8], trans:true, swim:[0.06, 0.6 + i * 0.1, 1, 0], swim2:[0, 1, 0, 0], pulse:[0.4, 0.3, 0, 0] })),
+    views:[{ d:[0.3, 0.2, 1], k:1.6, hold:10, drift:0.02, frame:'world' }, { d:[1, -0.3, 0.2], k:1.4, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'pyrosome', name:'pyrosome', type:'a glowing colony · Pyrosoma atlanticum', kind:'jellies', at:[15400, 500, 550], size:0.5, rad:0.4,
     fact:'Not one animal but thousands of tiny clones sharing a tube, each pumping water through the wall to feed. Touch it and it glows: one zooid lights up, its neighbours see the light and answer, and a wave of blue-green light runs along the colony. Some kinds grow to over 10 m long.',
     motion:{ type:'hover', amp:0.3, turn:0.25, pitch:-0.15 },

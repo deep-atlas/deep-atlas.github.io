@@ -16,6 +16,7 @@ const WHERE = {
   sixgill:[47.5, -122.5, 'deep water worldwide; often seen in Puget Sound'],
   helmetjelly:[60.5, 5.2, 'the deep North Atlantic, and Norwegian fjords'],
   cockeyed:[36.6, -123, 'the eastern Pacific, off California'],
+  salps:[-55, -40, 'every ocean; huge blooms in the Southern Ocean'],
   pyrosome:[44, -126, 'warm seas; a huge bloom reached Oregon in 2017'],
   fireflysquid:[36.8, 137.2, 'the Sea of Japan; spawns in Toyama Bay'],
   flowerbasket:[11, 124, 'the western Pacific, around the Philippines'],

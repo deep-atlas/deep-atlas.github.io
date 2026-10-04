@@ -499,6 +499,7 @@ function addLife() {
     pompeii:'~13 cm · tail end in water up to ~80 °C · head near 20 °C',
     seapens:'colonies up to ~40 cm · glow green when touched',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
+    salps:'chains up to several metres · some of the fastest-growing animals',
     glassoctopus:'up to ~45 cm · its eyes long and narrow to cast less shadow',
     giantsquid:'up to ~12 m · eyes up to 27 cm · first filmed alive in 2012',
     mantisshrimp:'strike ~23 m/s · 12 to 16 kinds of colour receptor (we have 3)',
