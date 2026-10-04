@@ -71,6 +71,7 @@ const WHERE = {
   elephantseal:[35.7, -121.3, 'the eastern North Pacific; breeds on beaches of California and Mexico'],
   marineiguana:[-0.4, -91.6, 'the Galapagos Islands only; here Fernandina'],
   spanishdancer:[-20.3, 57.6, 'Indo-Pacific reefs and the Red Sea; here Mauritius'],
+  flamboyant:[1.45, 125.2, 'sandy slopes of the Indo-Pacific; famous in the Lembeh Strait, Indonesia'],
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],

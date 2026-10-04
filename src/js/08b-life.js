@@ -654,6 +654,7 @@ function addLife() {
     pygmyseahorse:'~2 cm · lives its whole adult life on one sea fan',
     marineiguana:'up to ~1.3 m · dives to ~12 m · sneezes out salt',
     spanishdancer:'up to ~40 cm · swims by flapping its mantle · eats sponges',
+    flamboyant:'~8 cm · walks rather than swims · one of the few toxic cuttlefish',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',

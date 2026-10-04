@@ -727,6 +727,20 @@ function mkSpanishDancer() {
   for (let k = 0; k < 6; k++) { const a = k / 6 * TAU; tube(mb, { n:3, m:3, path:t => [-0.3 + Math.cos(a) * t * 0.06, 0.06 + t * 0.06, Math.sin(a) * t * 0.06], r:t => 0.01 * (1 - t * 0.6), col:fc([1.0, 0.75, 0.6]), anim:t => [0, 0, t * 0.3, 0] }); }
   return mb;
 }
+function mkFlamboyant() {
+  // a flamboyant cuttlefish, one unit long (about 8 cm), arms forward at +x: a short broad mantle in dark chocolate brown, its rim and
+  // the knobs on its back flushed yellow and purple, white bands rippling over it, the arms tipped pink, walking on two flaps under it
+  const mb = new MB(), brown = [0.12, 0.05, 0.03], yellow = [1.0, 0.85, 0.2], purple = [0.75, 0.25, 0.85], white = [0.98, 0.95, 0.9], pink = [1.0, 0.45, 0.55];
+  loft(mb, { n:20, m:16, sec:t => { const f = Math.pow(Math.sin(Math.min(1, t * 1.2 + 0.1) * PI), 0.5); return { x:-0.45 + t * 0.6, y:0.06, w:0.17 * f, h:0.12 * f, e:2 }; },
+    col:(t, u, p, sy) => { const sx = Math.abs(p[2]) / 0.17; if (sx > 0.8 && sy > -0.3) return Math.sin(p[0] * 40) > 0 ? yellow : purple;
+      return Math.sin(p[0] * 35 + p[2] * 8) > 0.75 ? white : brown; }, anim:() => [0, 0, 0, 0] });
+  for (let k = 0; k < 7; k++) { const x = -0.35 + k * 0.08, z = (k % 2 ? 1 : -1) * 0.05; ellip(mb, [x, 0.19, z], [0.025, 0.035, 0.025], { n:3, m:6, col:fc(k % 3 ? yellow : purple) }); }
+  ellip(mb, [0.22, 0.08, 0], [0.07, 0.08, 0.1], { n:6, m:10, col:(u, v, p) => Math.abs(p[2]) > 0.06 && p[1] > 0.1 ? [0.95, 0.85, 0.3] : brown });
+  for (let k = 0; k < 8; k++) { const a = k / 8 * TAU + 0.2;
+    tube(mb, { n:5, m:4, path:t => [0.28 + t * 0.15, 0.08 + Math.cos(a) * (0.02 + t * 0.04) - t * 0.03, Math.sin(a) * (0.03 + t * 0.05)], r:t => 0.022 * (1 - t * 0.7), col:t => t > 0.6 ? pink : brown, anim:t => [0, 0, t * 0.2, 0] }); }
+  for (const sz of [1, -1]) tube(mb, { n:4, m:4, path:t => [-0.05 + t * 0.12, 0.02 - t * 0.04, sz * 0.06], r:0.02, col:fc(pink), anim:t => [0, 0, 0.3, 0] });   // the walking flaps
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -960,6 +974,11 @@ function addShallows(REEF) {
     motion:{ type:'circle', R:1.2, v:0.12, bob:0.3, bank:0.3 },
     parts:[part(mkSpanishDancer, { scale:0.3, mat:M_SKIN, swim:[0.008, 0.8, 0.4, 0], swim2:[0, 1.4, 0.06, 0.9] })],
     views:[{ d:[0.3, 1.1, 0.7], k:2.2, hold:10, drift:0.02 }, { d:[1, 0.5, 0.4], k:2.2, hold:9, drift:0.02 }] });
+  addObj({ key:'flamboyant', name:'flamboyant cuttlefish', type:'Ascarosepia pfefferi · walks the sand in warning colours', kind:'cephs', floor:[REEF[0] + 30, REEF[1] - 9, 0.0], size:0.08, vsize:0.08, rad:0.1, yaw:1,
+    fact:'Only about 8 cm long, it walks over the sand on two flaps under its mantle and its lowest arms rather than swimming, its cuttlebone too small to keep it afloat for long. Disturbed, it ripples with chocolate brown, white, yellow and purple: a warning, it seems, since its flesh contains a toxin, a rarity among cuttlefish.',
+    motion:{ type:'crawl', R:0.25, v:0.01, h:0 },
+    parts:[part(mkFlamboyant, { scale:0.08, mat:M_SKIN, sway:[0.004, 2, 30, 0] })],
+    views:[{ d:[0.6, 0.45, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.2, 0.2], k:2.2, hold:9, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
