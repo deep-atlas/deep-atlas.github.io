@@ -129,6 +129,24 @@ function mkSpiderCrab() {
   return mb;
 }
 
+function mkSeaSpider() {
+  // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
+  // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
+  const mb = new MB(), red = [0.85, 0.3, 0.2], pale = [0.98, 0.8, 0.65];
+  const legC = t => Math.abs(Math.sin(t * PI * 3.5)) < 0.12 ? pale : red;
+  tube(mb, { n:8, m:6, path:t => [0.05 - t * 0.11, 0.16, 0], r:t => 0.012 * (1 - t * 0.3), col:fc(red), capStart:true });   // the trunk
+  tube(mb, { n:6, m:6, path:t => [0.05 + t * 0.12, 0.16 - t * 0.03, 0], r:t => 0.014 * (1 - t * 0.35), col:fc(mixc(red, pale, 0.25)) });   // the proboscis
+  ellip(mb, [0.035, 0.18, 0], [0.008, 0.012, 0.008], { n:4, m:6, col:fc([0.1, 0.06, 0.05]) });   // the eye tubercle
+  for (const sz of [1, -1]) for (let k = 0; k < 4; k++) {
+    const phi = 1.2 - k * 0.55, dir = [Math.sin(phi) * 0.9, 0, sz * Math.cos(phi)], L = 0.48;
+    const base = [0.03 - k * 0.025, 0.16, sz * 0.012];
+    tube(mb, { n:20, m:4, path:t => { const reach = t * L, h = 0.16 + 0.12 * Math.sin(Math.min(1, t * 2.2) * PI / 2) - 0.28 * smooth(0.4, 1, t);
+        return [base[0] + dir[0] * reach, h, base[2] + dir[2] * reach]; },
+      r:t => 0.006 * (1 - t * 0.6), col:legC, anim:t => [0, 0, t * 0.04, 0] });
+  }
+  return mb;
+}
+
 // ---- open water of the twilight and midnight zones
 function mkDragonfish() {
   // the black dragonfish: velvet-black, rows of lights along its belly, a glowing cheek organ, and a chin barbel tipped with a lure
@@ -437,6 +455,11 @@ function addDeepFolk(VENTS) {
     motion:{ type:'crawl', R:1.2, v:0.03, h:0.07 },
     parts:[part(mkGiantIsopod, { scale:0.4, mat:[1, 0.4, 1, 0.6], sway:[0.01, 2, 20, 0] })],
     views:[{ d:[0.7, 0.45, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.2, 0.2], k:1.9, hold:9, drift:0.02 }, { d:[0.1, 0.95, 0.2], k:2.4, hold:8, drift:0.02 }] });
+  addObj({ key:'seaspider', name:'giant sea spider', type:'Colossendeis · a pycnogonid', kind:'floor', floor:[17000, 900, 0.0], size:0.6, rad:0.35,
+    fact:'Not a true spider: a sea spider is nearly all legs, with a body so thin that its gut and reproductive organs run out into them. It has no gills; oxygen soaks in through its leg cuticle, and the gut squeezing in and out pumps its blood. Deep and polar species grow far bigger than shallow ones, with legs spanning up to about 70 cm.',
+    motion:{ type:'crawl', R:0.8, v:0.02, h:0 },
+    parts:[part(mkSeaSpider, { scale:0.6, mat:[1, 0.35, 1, 0.5], sway:[0.012, 1.4, 25, 0] })],
+    views:[{ d:[0.8, 0.45, 1], k:1.9, hold:10, drift:0.02 }, { d:[1, 0.12, 0.25], k:1.6, hold:9, drift:0.02 }] });
   addObj({ key:'chickenmonster', name:'headless chicken monster', label:'swimming sea cucumber', type:'a swimming sea cucumber · Enypniastes eximia', kind:'floor', floor:[44200, 500, 1.2], size:0.25, rad:0.25,
     fact:'A sea cucumber that swims. It settles to scoop up sediment, then lifts off again by rowing with its webbed veil, its gut visible through its see-through body. Disturbed, it can glow and shed glowing skin to distract a predator.',
     motion:{ type:'drift', amp:0.15, tilt:0.0 },
