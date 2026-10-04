@@ -98,6 +98,7 @@ const WHERE = {
   sargassum:[30, -60, 'the Sargasso Sea, North Atlantic'],
   sargassumfish:[28, -63, 'floating weed in the Atlantic'],
   archerfish:[1.4, 103.8, 'mangroves of South-East Asia and northern Australia; here Singapore'],
+  sawfish:[-15.5, 136, 'tropical coasts and rivers; now mostly northern Australia'],
   mangroves:[21.9, 89.3, 'tropical coasts; the Sundarbans, Bangladesh and India'],
   boxjelly:[-16.9, 145.8, 'northern Australia, such as off Cairns'],
   manatee:[28.9, -82.6, 'warm coasts and rivers of the Caribbean; Crystal River, Florida'],

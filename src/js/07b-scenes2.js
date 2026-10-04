@@ -359,6 +359,21 @@ function mkBeetle() {
   ellip(mb, [0, 0, 0], [0.5, 0.3, 0.32], { n:6, m:10, col:(u, v, p) => p[1] > 0.12 && Math.abs(p[2]) < 0.04 ? [0.1, 0.1, 0.1] : [0.75, 0.2, 0.1] });
   return mb;
 }
+function mkSawfish() {
+  // a largetooth sawfish, one unit long, snout at +x: a ray built like a shark, flat-headed, olive-grey above and pale below, with a
+  // long flat saw (the rostrum, about a quarter of its length) edged with teeth, two tall dorsal fins and a shark-like tail
+  const back = [0.55, 0.52, 0.4], belly = [0.9, 0.88, 0.82];
+  const mb = fish({ H:0.055, W:0.075, tm:0.28, nose:0.5, ped:0.12, bodyLen:0.74, back, belly, eye:[0.06, 0.6, 0.008], e:2.2,
+    hShape:t => lerp(0.55, 1, smooth(0, 0.3, t)), pattern:(t, sy) => mixc(belly, back, smooth(-0.35, -0.05, sy)),
+    tail:'shark', tailH:0.08, tailL:0.2, tailCol:back,
+    dorsal:[{ at:0.42, len:0.09, h:0.09, col:back }, { at:0.68, len:0.07, h:0.07, col:back }],
+    pect:{ at:0.2, len:0.13, w:0.09, down:0.15, back:0.6, y:-0.4, col:back }, pelv:{ at:0.45, len:0.07, w:0.05, y:-0.7, col:back } });
+  // (the fish's snout is at +0.5; the saw reaches out beyond it)
+  loft(mb, { n:8, m:8, sec:t => ({ x:0.74 - t * 0.27, y:-0.005, w:0.016 + 0.01 * t, h:0.005 + 0.004 * t, e:2 }), col:fc(mixc(back, belly, 0.3)), anim:() => [0, 0, 0, 0] });
+  for (const sz of [1, -1]) for (let k = 0; k < 20; k++) { const x = 0.73 - k * 0.012, w = 0.016 + 0.01 * (0.74 - x) / 0.27;
+    tube(mb, { n:2, m:3, path:t => [x, -0.005, sz * (w + t * 0.01)], r:t => 0.002 * (1 - t * 0.7), col:fc([0.95, 0.93, 0.85]) }); }
+  return mb;
+}
 function mkManatee() {
   // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
   // and a broad round paddle of a tail (a dugong's is a fluke)
@@ -477,6 +492,15 @@ function addPlaces2() {
     motion:{ type:'drift', amp:0.25, tilt:0.35 },
     parts:[part(mkBoxJelly, { scale:0.25, mat:[0.4, 0.8, 0.2, 0.4], trans:true, pulse:[0.16, 0.9, 0, 0], sway:[0.05, 0.7, 4, 0] })],
     views:[{ d:[0.3, 0.05, 1], k:2.6, hold:10, drift:0.02, frame:'world', off:[0, -0.15, 0] }, { d:[0.5, -0.3, 0.8], k:2.4, hold:9, drift:0.02, frame:'world' }] });
+  addObj({ key:'sawfish', name:'largetooth sawfish', label:'sawfish', type:'Pristis pristis · a ray with a saw', kind:'sharks', floor:[MANG[0] + 180, MANG[1] + 50, 0.35], size:4, rad:2,
+    fact:'Not a shark but a ray, up to about 7 m long, a quarter of it saw. The saw is packed with sensors that pick up the electric fields of hidden prey; it slashes sideways through schools of fish and pins them to the bottom. The young grow up in mangroves and rivers. Once found along a fifth of the world’s coasts, it is now critically endangered.',
+    motion:{ type:'circle', R:5, v:0.35, bob:0.08, bank:0.04 },
+    // every so often it slashes its saw from side to side, raking the bottom
+    post:(o, t) => { const c = (t + o.idx) % 20, e = smooth(0, 0.5, c) * smooth(3.5, 3, c), sw = e * 0.5 * Math.sin(c * 9);
+      if (e > 0.01) { const sd = o.side || vcross(o.fwd, o.up); o.fwd = vnorm(vadd(o.fwd, vmul(sd, sw))); o.side = vnorm(vcross(o.fwd, o.up)); } o.slashing = e > 0.3; },
+    readout:() => BYKEY.sawfish.slashing ? 'slashing: raking its saw from side to side through the sand' : 'up to ~7 m · senses buried prey with its saw · critically endangered',
+    parts:[part(mkSawfish, { scale:4, mat:M_SKIN, ...FISH_SWIM(0.03, 0.5, 0.8, 2.2) })],
+    views:[{ d:[0.3, 0.3, 1], k:1.5, hold:10, drift:0.015 }, { d:[-0.6, 0.25, 1], k:1.7, hold:9, drift:0.015 }] });
   addObj({ key:'manatee', name:'West Indian manatee', label:'manatee', type:'Trichechus manatus · a sea cow', kind:'air', floor:[MANG[0] + 275, MANG[1] + 5, 1.1], size:3, rad:2,
     fact:'A slow, gentle grazer of warm coasts and rivers, eating about a tenth of its weight in plants a day. It has no blubber to speak of and needs water above about 20 °C, so in winter Florida’s manatees crowd into warm springs. Boat propellers scar the backs of most adults.',
     motion:{ type:'circle', R:5, v:0.25, bob:0.15, bank:0.04 },
