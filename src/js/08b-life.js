@@ -514,6 +514,7 @@ function addLife() {
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
+    icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',
     thresher:'up to ~3.3 m · half of it tail · several sardines stunned per slap',
     nurseshark:'up to ~3 m · breathes lying still · one of the strongest suction feeders',
     manatee:'up to ~4 m and 600 kg · eats ~10% of its weight a day',

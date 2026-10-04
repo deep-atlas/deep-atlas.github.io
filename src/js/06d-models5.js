@@ -621,6 +621,17 @@ function mkSwordfish() {
   loft(mb, { n:10, m:8, sec:t => ({ x:0.83 - t * 0.35, y:-0.004, w:0.004 + 0.024 * t, h:0.002 + 0.009 * t, e:2 }), col:fc(mixc(back, belly, 0.2)), anim:() => [0, 0, 0, 0] });
   return mb;
 }
+function mkIcefish() {
+  // a blackfin icefish: a ghostly pale body with dusky bands, a long flat crocodile snout, big eyes, black fins, broad fan pectorals,
+  // and long pelvic fins it props itself on; its gills are white, because its blood has no red cells
+  const pale = [0.86, 0.86, 0.84], band = [0.36, 0.35, 0.36], black = [0.07, 0.07, 0.08], gillW = [0.99, 0.99, 0.97];
+  return fish({ H:0.07, W:0.075, tm:0.36, nose:0.28, ped:0.12, bodyLen:0.86, back:pale, belly:pale, eye:[0.17, 0.4, 0.028], e:2.3,
+    hShape:t => lerp(0.42, 1, smooth(0.02, 0.32, t)), wShape:t => lerp(0.8, 1, smooth(0, 0.3, t)),
+    pattern:(t, sy) => t > 0.24 && t < 0.29 && sy > -0.5 && sy < 0.4 ? gillW : (t > 0.32 && Math.sin(t * 26) > 0.55 && sy > -0.3 ? band : null),
+    tail:'truncate', tailH:0.075, tailL:0.09, tailCol:black,
+    dorsal:[{ at:0.33, len:0.08, h:0.08, col:black }, { at:0.45, len:0.38, h:0.045, col:black }], anal:[{ at:0.52, len:0.3, h:0.04, col:black }],
+    pect:{ at:0.3, len:0.15, w:0.11, down:0.2, back:0.4, y:-0.2, col:[0.25, 0.25, 0.27] }, pelv:{ at:0.28, len:0.17, w:0.05, y:-0.85, col:black } });
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -818,6 +829,11 @@ function addShallows(REEF) {
     // (deep by day, near the surface by night)
     post:o => { const d = lerp(450, 40, smooth(0.15, 0.85, night())); o.pos = [o.pos[0], o.pos[1] - o.anchor[1] - d, o.pos[2]]; },
     parts:[part(mkSwordfish, { scale:2.6, mat:M_SKIN, ...FISH_SWIM(0.045, 1.2, 0.85, 2.4) })], views:SIDE });
+  addObj({ key:'icefish', name:'blackfin icefish', label:'icefish', type:'Chaenocephalus aceratus', kind:'fish', floor:[12200, 900, 0.12], size:0.6, rad:0.4, yaw:1.2,
+    fact:'The only backboned animals with no red blood cells: their blood is clear and their gills white. Antarctic water near freezing holds so much oxygen that they get by on what dissolves straight into the plasma, with a big heart and wide vessels to pump a lot of it. Their blood also carries antifreeze proteins.',
+    motion:{ type:'hover', amp:0.03, turn:0.15 },
+    parts:[part(mkIcefish, { scale:0.6, mat:M_SKIN, ...FISH_SWIM(0.02, 0.4, 0.9, 2) })],
+    views:[{ d:[0.3, 0.2, 1], k:2.2, hold:10, drift:0.02 }, { d:[1, 0.35, 0.4], k:2.2, hold:9, drift:0.02 }, { d:[0.9, 0.05, -0.1], k:1.8, hold:8, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
