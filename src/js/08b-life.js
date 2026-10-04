@@ -451,7 +451,7 @@ function mobulaPost(o, t) {
     const roll = s >= 0 ? (i % 3 === 0 ? s * TAU : Math.sin(s * PI) * 0.6) : 0, sd = vnorm(vcross(f, [0, 1, 0])), up0 = vcross(sd, f);
     p._f = f; p._u = vnorm(vadd(vmul(up0, Math.cos(roll)), vmul(sd, Math.sin(roll))));
     if (s >= 0 && s < 0.1 && !p._up) { p._up = true; spark([A[0] + p.off[0], 0.2, A[2] + p.off[2]], 0.8, 70, 1.2, [0.85, 0.95, 1.0]); }
-    if (s >= 0.88 && !p._down) { p._down = true; spark([A[0] + p.off[0], 0.2, A[2] + p.off[2]], 1.4, 140, 1.8, [0.85, 0.95, 1.0]); }
+    if (s >= 0.88 && !p._down) { p._down = true; spark([A[0] + p.off[0], 0.2, A[2] + p.off[2]], 1.4, 140, 1.8, [0.85, 0.95, 1.0]); o.flops = (o.flops || 0) + 1; }
     if (s < 0) { p._up = false; p._down = false; }
   });
 }

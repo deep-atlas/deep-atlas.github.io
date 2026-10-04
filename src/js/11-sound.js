@@ -194,6 +194,17 @@ function tickSound(dt) {
     what = 'a thresher’s tail slap';
   }
   if (th && !th.o._slapped) th.o._slapSnd = false;
+  // mobula rays smacking back down onto the sea: a slap and a splash for each
+  const mo = near('mobulas', 80);
+  if (mo && mo.o.flops !== SND.flops) {
+    if (SND.flops != null) {
+      const loud = clamp(1 - mo.d / 80, 0.15, 1) * (CAM.depth < 0 ? 1 : 0.5);
+      noiseBurst({ f:1400, q:1.2, amp:0.08 * loud, att:0.002, dur:0.08, dry:true });
+      noiseBurst({ f:500, q:0.7, amp:0.05 * loud, att:0.01, dur:0.45, delay:0.03, dry:true });
+      what = 'mobula rays smacking down onto the sea';
+    }
+    SND.flops = mo.o.flops;
+  }
   // male walruses sing underwater: runs of knocks, then a ringing bell-like tone
   const wr = near('walrus', 120);
   if (wr && due('walrusBell')) {
