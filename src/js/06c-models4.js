@@ -175,6 +175,30 @@ function mkSalpChain() {
   }
   return mb;
 }
+// copy the whole of mesh src into dst, its points moved by f (for scattering many copies of one creature through a scene);
+// mirror: f turns it inside out (flips one axis), so the triangles are wound the other way to keep their outsides out
+function stamp(dst, src, f, mirror) {
+  const v0 = dst.count, I = src.I;
+  for (let k = 0; k < src.count; k++) dst.v(f([src.P[k * 3], src.P[k * 3 + 1], src.P[k * 3 + 2]]), [src.C[k * 4], src.C[k * 4 + 1], src.C[k * 4 + 2], src.C[k * 4 + 3]], [src.A[k * 4], src.A[k * 4 + 1], src.A[k * 4 + 2], src.A[k * 4 + 3]]);
+  for (let k = 0; k < I.length; k += 3) dst.I.push(I[k] + v0, I[k + (mirror ? 2 : 1)] + v0, I[k + (mirror ? 1 : 2)] + v0);
+}
+function buildOctopusGarden(A) {
+  // the Octopus Garden, in metres: outcrops of dark pillow lava where warm water seeps out, and thousands of pearl octopuses (here a
+  // few dozen) clinging to them upside down, arms wrapped over their eggs, the brooding mothers pale, almost white
+  const mb = new MB(), r = rng(3203), lava = [0.06, 0.06, 0.07], mat = [0.3, 0.27, 0.22];
+  const rocks = [[0, 0, 1.1], [2.2, 1.4, 0.8], [-2, 1.6, 0.9], [1.2, -2.2, 0.8], [-1.6, -1.8, 0.7], [3.4, -1, 0.6]];
+  for (const [x, z, s] of rocks) ellip(mb, [x, groundAt(A, x, z) - s * 0.15, z], [s, s * 0.4, s * 0.85], { n:8, m:12,
+    shape:p => [p[0], p[1] + 0.06 * s * Math.sin(p[0] * 5) * Math.sin(p[2] * 6), p[2]], col:(u, v, p) => Math.sin(p[0] * 9) * Math.sin(p[2] * 8) > 0.6 ? mat : lava });
+  const pale = mkOctopus({ skin:[0.96, 0.9, 0.92], mott:[0.85, 0.75, 0.82] }), pink = mkOctopus({ skin:[0.88, 0.6, 0.72], mott:[0.7, 0.45, 0.58] });
+  for (let k = 0; k < 46; k++) {
+    const R = rocks[k % rocks.length], a = r() * TAU, d = Math.sqrt(r()) * R[2] * 0.85, x = R[0] + Math.cos(a) * d, z = R[1] + Math.sin(a) * d * 0.85;
+    const top = groundAt(A, R[0], R[1]) - R[2] * 0.15 + R[2] * 0.4 * Math.sqrt(Math.max(0, 1 - (d / R[2]) ** 2)), s = 0.4 + r() * 0.12, yaw = r() * TAU, tilt = (r() - 0.5) * 0.5;
+    // (upside down, the mantle hanging low and the webbed arms curled up over the eggs on the rock)
+    stamp(mb, r() < 0.7 ? pale : pink, p => { const q = [p[0] * s, -p[1] * s * 0.8, p[2] * s], c = Math.cos(yaw), sn = Math.sin(yaw);
+      return [x + q[0] * c - q[2] * sn, top + 0.12 + q[1] + q[0] * tilt, z + q[0] * sn + q[2] * c]; }, true);
+  }
+  return mb;
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -511,6 +535,10 @@ function addDeepFolk(VENTS) {
     fact:'Each looks like an old quill pen but is a colony of polyps: one anchors it in the mud, the rest feed from the current on its feathery leaves. Disturbed, sea pens glow, a wave of green light rippling along the colony, and some can deflate and pull themselves down into the mud.',
     parts:[part(() => mkSeaPens(BYKEY.seapens.anchor), { mat:M_SKIN, sway:[0.03, 0.5, 3, 0] })],
     views:[{ d:[0.4, 0.6, 1], k:1.3, hold:10, drift:0.02, frame:'world', off:[0, 0.3, 0] }, { d:[1, 0.25, 0.3], k:0.7, hold:9, drift:0.02, frame:'world', off:[0, 0.3, 0] }] });
+  addObj({ key:'octopusgarden', name:'the Octopus Garden', label:'octopus garden', type:'thousands of brooding pearl octopuses · Muusoctopus robustus', kind:'places', floor:[25200, -900, 0], size:8, rad:5,
+    fact:'Found in 2018 on an extinct volcano off California, 3,200 m down: about 6,000 octopuses, mostly mothers, clinging upside down to the rocks with their eggs. They gather where warm water seeps from the seafloor, which speeds the eggs’ growth: here they hatch in under two years, when in the cold they would take far longer.',
+    parts:[part(() => buildOctopusGarden(BYKEY.octopusgarden.anchor), { mat:M_SKIN, sway:[0.02, 0.4, 2, 0] })],
+    views:[{ d:[0.4, 0.55, 1], k:0.9, hold:12, drift:0.015, frame:'world', off:[0, 0.4, 0] }, { d:[0.3, 0.8, 0.6], k:0.45, hold:10, drift:0.015, frame:'world', off:[0, 0.4, 0] }] });
   addObj({ key:'seaspider', name:'giant sea spider', type:'Colossendeis · a pycnogonid', kind:'floor', floor:[17000, 900, 0.0], size:0.6, rad:0.35,
     fact:'Not a true spider: a sea spider is nearly all legs, with a body so thin that its gut and reproductive organs run out into them. It has no gills; oxygen soaks in through its leg cuticle, and the gut squeezing in and out pumps its blood. Deep and polar species grow far bigger than shallow ones, with legs spanning up to about 70 cm.',
     motion:{ type:'crawl', R:0.8, v:0.02, h:0 },

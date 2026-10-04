@@ -54,7 +54,7 @@ const TOURS = [
   { id:'weird', name:'weird and wonderful', blurb:'Living fossils, slingshot jaws, a fish of jelly: the strangest faces of the deep.',
     stops:['seadragon', 'marineiguana', 'batfish', 'spidercrab', 'seaspider', 'coelacanth', 'nautilus', 'oarfish', 'glasssquid', 'glassoctopus', 'frilledshark', 'chimaera', 'isopod', 'goblinshark', 'barreleye', 'blobfish', 'icefish', 'vampsquid', 'loosejaw', 'seatoad', 'greenlandshark', 'anglerfish', 'fangtooth', 'bigfin', 'colossal', 'chickenmonster', 'tripodfish'] },
   { id:'dark', name:'life without the sun', blurb:'Where food comes from chemistry, or falls from above.',
-    stops:['isopod', 'lostcity', 'vents', 'tubeworms', 'pompeii', 'yeticrab', 'scalyfoot', 'whalefall', 'hagfish', 'sixgill', 'abyss', 'casper', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'trench', 'alicella', 'snailfish', 'amphipods', 'challenger'] },
+    stops:['isopod', 'lostcity', 'vents', 'tubeworms', 'pompeii', 'yeticrab', 'scalyfoot', 'whalefall', 'octopusgarden', 'hagfish', 'sixgill', 'abyss', 'casper', 'seapig', 'chickenmonster', 'xeno', 'tripodfish', 'grenadier', 'trench', 'alicella', 'snailfish', 'amphipods', 'challenger'] },
   { id:'sizes', name:'from a whale to a microbe', blurb:'One long zoom through size: every animal at its true size beside the last, from a 25 m blue whale to a single cell under a thousandth of a millimetre.', journey:true },
   { id:'random', name:'a random swim', blurb:'Anywhere in the atlas, places you have not seen first.', random:true },
 ];
