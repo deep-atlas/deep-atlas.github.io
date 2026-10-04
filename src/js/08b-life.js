@@ -512,6 +512,7 @@ function addLife() {
     phantomjelly:'bell ~1 m · arms up to 10 m · seen alive ~100 times',
     alicella:'up to 34 cm · about 20 times the size of a beach sand hopper',
     casper:'~10 cm · seen at 4,290 m · guards its eggs for years',
+    pygmyseahorse:'~2 cm · lives its whole adult life on one sea fan',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',

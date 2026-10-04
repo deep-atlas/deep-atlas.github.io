@@ -321,9 +321,9 @@ function mkAmphipod() {
   }
   return mb;
 }
-function mkSeahorse() {
-  // drawn standing: one unit tall, the snout facing +x
-  const mb = new MB(), skin = [1.0, 0.75, 0.2], ring = [0.85, 0.55, 0.1];
+function mkSeahorse(o = {}) {
+  // drawn standing: one unit tall, the snout facing +x (o: skin and ring colours, and knobs: a colour for the bumps of a pygmy seahorse)
+  const mb = new MB(), skin = o.skin || [1.0, 0.75, 0.2], ring = o.ring || [0.85, 0.55, 0.1];
   const spine = t => {
     if (t < 0.15) return [0.05 + t * 0.4, 0.42 - t * 0.2, 0];
     if (t < 0.6) { const u = (t - 0.15) / 0.45; return [0.1 - Math.sin(u * PI) * 0.12, 0.39 - u * 0.5, 0]; }
@@ -338,6 +338,7 @@ function mkSeahorse() {
   fin(mb, [[0, 0], [-0.05, 0.08], [-0.13, 0.07], [-0.15, 0]], { origin:[-0.06, 0.12, 0], ua:[0.2, -1, 0], va:[-1, -0.1, 0], col:fc([1, 0.9, 0.6]), anim:(a, b) => [0, 0, Math.abs(b) * 0.4, 0] });
   // the coronet
   tube(mb, { n:3, m:5, path:t => [0.02, 0.46 + t * 0.06, 0], r:0.02, col:fc(ring) });
+  if (o.knobs) { const r = rng(31); for (let k = 0; k < 22; k++) { const p = spine(0.05 + r() * 0.6); ellip(mb, [p[0] + (r() - 0.5) * 0.1, p[1], (r() - 0.5) * 0.12], [0.035, 0.035, 0.035], { n:4, m:6, col:fc(o.knobs) }); } }
   return mb;
 }
 function mkXenophyophore(seed) {

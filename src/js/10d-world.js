@@ -63,6 +63,7 @@ const WHERE = {
   frogfish:[-8.4, 115.7, 'Indo-Pacific reefs; famous at Tulamben, Bali'],
   featherstar:[-5.5, 150.5, 'Indo-Pacific reefs; Papua New Guinea and Indonesia'],
   stargazer:[43.3, 5.4, 'sandy bottoms of the Mediterranean and eastern Atlantic'],
+  pygmyseahorse:[-22.3, 166.4, 'Indo-Pacific reef slopes, 10 to 40 m down; first found off New Caledonia'],
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],

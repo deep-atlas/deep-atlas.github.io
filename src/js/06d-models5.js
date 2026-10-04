@@ -648,6 +648,20 @@ function mkBobtail() {
   }
   return mb;
 }
+function mkPygmyFan() {
+  // a sea fan (Muricella), in metres, branching in the y-z plane: pink branches dotted with red knobs (its polyps), the same knobs a
+  // pygmy seahorse living on it grows over its own body
+  const mb = new MB(), pink = [0.95, 0.5, 0.55], knob = [0.95, 0.22, 0.28], r = rng(919);
+  const sway = p => [0, 0, Math.max(0, p[1]) * 0.35, 0];
+  const branch = (p, a, len, rad, depth) => {
+    const bend = (r() - 0.5) * 0.3, at = t => [0, p[1] + Math.cos(a + bend * t) * len * t, p[2] + Math.sin(a + bend * t) * len * t];
+    tube(mb, { n:5, m:4, path:at, r:t => rad * (1 - t * 0.3), col:fc(pink), anim:t => sway(at(t)) });
+    for (let k = 0; k < Math.ceil(len * 40); k++) { const q = at(r()); ellip(mb, [(r() - 0.5) * 0.008, q[1], q[2]], [0.0055, 0.0055, 0.0055], { n:3, m:5, col:fc(knob), anim:() => sway(q) }); }
+    if (depth > 0) { const e = at(1); for (const s of [-1, 1]) branch(e, a + s * (0.32 + r() * 0.2), len * (0.68 + r() * 0.12), rad * 0.75, depth - 1); }
+  };
+  for (const a of [-0.55, -0.15, 0.2, 0.6]) branch([0, 0, 0], a, 0.2, 0.007, 4);
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -855,6 +869,12 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.06, turn:0.5 },
     parts:[part(mkBobtail, { scale:0.035, mat:M_SKIN, swim2:[0, 2, 0.04, 1.2] })],
     views:[{ d:[0.3, 0.15, 1], k:2.4, hold:10, drift:0.025 }, { d:[0.3, -0.7, 0.6], k:2.4, hold:9, drift:0.025 }] });
+  addObj({ key:'pygmyseahorse', name:'pygmy seahorses', type:'Hippocampus bargibanti · on a sea fan', kind:'fish', floor:[REEF[0] - 17, REEF[1] + 11, 0], size:0.02, vsize:0.9, rad:0.6, yaw:0,
+    fact:'About 2 cm long, they spend their whole adult lives on a single sea fan, and their bodies grow pink or yellow bumps that match its polyps so exactly that the first ones were only noticed in 1969, on a sea fan already collected for a museum. Can you spot the two here?',
+    parts:[part(mkPygmyFan, { mat:M_SOLID, sway:[0.01, 0.4, 2, 0] }),
+      ...[[0.55, 0.12, 1], [0.3, -0.2, -1]].map(([y, z, d]) => part(() => mkSeahorse({ skin:[0.96, 0.6, 0.66], ring:[0.9, 0.5, 0.58], knobs:[0.95, 0.22, 0.28] }),
+        { scale:0.02, off:[0.012, y, z], fwd:o => vmul(o.side, d), up:o => o.up, mat:M_SOLID, sway:[0.02, 1, 4, 0] }))],
+    views:[{ d:[1, 0.15, 0.25], k:1.5, hold:10, drift:0.015, off:[0, 0.4, 0] }, { d:[1, 0.08, 0.3], k:0.09, hold:9, drift:0.01, off:[0.01, 0.55, 0.12] }, { d:[1, 0.1, -0.3], k:0.09, hold:9, drift:0.01, off:[0.01, 0.3, -0.2] }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
