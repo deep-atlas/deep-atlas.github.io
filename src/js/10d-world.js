@@ -66,6 +66,7 @@ const WHERE = {
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],
+  bobtail:[21.3, -157.8, 'sandy shallows round Hawaii; studied in Kaneohe Bay, Oahu'],
   thresher:[11.33, 124.11, 'warm seas of the Indo-Pacific; Monad Shoal, Malapascua, Philippines'],
   nurseshark:[24.6, -81.5, 'warm Atlantic and eastern Pacific coasts; the Florida Keys'],
   stingray:[19.4, -81.3, 'the Caribbean; Stingray City, Grand Cayman'],

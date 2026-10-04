@@ -41,7 +41,7 @@ function triggerReact(o) {
   toast(o.react.text, 5200);
 }
 // animals that only come out at night
-const NIGHT_ONLY = ['flashlight', 'fireflysquid'];
+const NIGHT_ONLY = ['flashlight', 'fireflysquid', 'bobtail'];
 function tickNightLife() {
   for (const k of NIGHT_ONLY) { const f = BYKEY[k]; if (f) f.hidden = night() < 0.45; }
   // garden eels sink into their burrows when a diver comes near, and slowly rise again
@@ -515,6 +515,7 @@ function addLife() {
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',
+    bobtail:'~3 cm · a light organ of glowing bacteria · vents ~95% of them each dawn',
     thresher:'up to ~3.3 m · half of it tail · several sardines stunned per slap',
     nurseshark:'up to ~3 m · breathes lying still · one of the strongest suction feeders',
     manatee:'up to ~4 m and 600 kg · eats ~10% of its weight a day',

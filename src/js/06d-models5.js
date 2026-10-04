@@ -632,6 +632,22 @@ function mkIcefish() {
     dorsal:[{ at:0.33, len:0.08, h:0.08, col:black }, { at:0.45, len:0.38, h:0.045, col:black }], anal:[{ at:0.52, len:0.3, h:0.04, col:black }],
     pect:{ at:0.3, len:0.15, w:0.11, down:0.2, back:0.4, y:-0.2, col:[0.25, 0.25, 0.27] }, pelv:{ at:0.28, len:0.17, w:0.05, y:-0.85, col:black } });
 }
+function mkBobtail() {
+  // a Hawaiian bobtail squid, one unit long (about 3 cm): a round mantle with two ear-like fins, big eyes, eight short arms,
+  // speckled with pigment, and the light organ on its underside glowing faint blue with its bacteria
+  const mb = new MB(), skin = [0.88, 0.72, 0.55], spot = [0.55, 0.25, 0.12];
+  const sp = p => Math.sin(p[0] * 90) * Math.sin(p[1] * 80 + p[2] * 85) > 0.45 ? spot : skin;
+  ellip(mb, [0.1, 0, 0], [0.24, 0.19, 0.2], { n:10, m:14, col:(u, v, p) => sp(p), anim:() => [0, 0, 0, 0.08] });
+  for (const sz of [1, -1]) ellip(mb, [0.12, 0.03, sz * 0.22], [0.11, 0.02, 0.09], { n:5, m:10, col:fc(skin), anim:() => [0, 0.6, 0, 0] });
+  ellip(mb, [-0.17, 0, 0], [0.11, 0.14, 0.17], { n:8, m:12, col:(u, v, p) => sp(p) });
+  for (const sz of [1, -1]) ellip(mb, [-0.15, 0.04, sz * 0.13], [0.07, 0.07, 0.05], { n:5, m:8, col:fc([0.04, 0.05, 0.08]) });
+  ellip(mb, [0.06, -0.16, 0], [0.11, 0.04, 0.09], { n:5, m:10, col:fc([...BIO, 1.2]) });
+  for (let k = 0; k < 8; k++) {
+    const a = k / 8 * TAU + 0.2;
+    tube(mb, { n:6, m:4, path:t => [-0.27 - t * 0.2, Math.cos(a) * (0.03 + t * 0.06), Math.sin(a) * (0.03 + t * 0.06)], r:t => 0.025 * (1 - t * 0.8), col:fc(skin), anim:t => [0, 0, t * 0.25, 0] });
+  }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -834,6 +850,11 @@ function addShallows(REEF) {
     motion:{ type:'hover', amp:0.03, turn:0.15 },
     parts:[part(mkIcefish, { scale:0.6, mat:M_SKIN, ...FISH_SWIM(0.02, 0.4, 0.9, 2) })],
     views:[{ d:[0.3, 0.2, 1], k:2.2, hold:10, drift:0.02 }, { d:[1, 0.35, 0.4], k:2.2, hold:9, drift:0.02 }, { d:[0.9, 0.05, -0.1], k:1.8, hold:8, drift:0.02 }] });
+  addObj({ key:'bobtail', name:'Hawaiian bobtail squid', label:'bobtail squid', type:'Euprymna scolopes · out only at night', kind:'cephs', floor:[REEF[0] + 12, REEF[1] + 20, 0.3], size:0.035, vsize:0.055, rad:0.06,
+    fact:'By day it lies buried in the sand. At night it hunts in the shallows, and a light organ on its belly, filled with glowing bacteria, shines down to match the moonlight from above, so it casts no shadow for hunters below. Each dawn it squirts out most of the bacteria and buries itself again; the few left behind regrow by dusk.',
+    motion:{ type:'hover', amp:0.06, turn:0.5 },
+    parts:[part(mkBobtail, { scale:0.035, mat:M_SKIN, swim2:[0, 2, 0.04, 1.2] })],
+    views:[{ d:[0.3, 0.15, 1], k:2.4, hold:10, drift:0.025 }, { d:[0.3, -0.7, 0.6], k:2.4, hold:9, drift:0.025 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

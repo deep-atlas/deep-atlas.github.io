@@ -34,7 +34,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **157 places** across five zones, plus Nautile. By zone:
+- **158 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
     sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, whale shark (with remoras), a basking shark, great white,
@@ -43,7 +43,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     penguins hunting through it.
   - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
     camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a crown-of-thorns starfish bleaching a table coral, a feather star, a giant clam, a frogfish, a sea krait, a pufferfish, a blue-ringed octopus,
-    blacktip reef sharks, a resting nurse shark, snappers, a grouper at a cleaning station, flashlight fish at night, and on the sand garden eels, a
+    blacktip reef sharks, a resting nurse shark, snappers, a grouper at a cleaning station, flashlight fish and a bobtail squid at night, and on the sand garden eels, a
     goby sharing a burrow with a pistol shrimp, a coconut octopus, a mimic octopus, a peacock flounder, a buried stargazer, an electric ray and a stingray. A tornado of chevron barracuda off the
     drop-off, a manta, a green turtle and a stream of
     turtle hatchlings heading out to sea; the kelp forest with a sea otter, sea lions, a giant Pacific octopus, garibaldi and blacksmith; a shipwreck at
