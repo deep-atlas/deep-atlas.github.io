@@ -630,6 +630,7 @@ function addLife() {
     vaquita:'up to ~1.5 m · fewer than a dozen left · the rarest marine mammal',
     leopardseal:'up to ~3.5 m · eats penguins, seals and lots of krill',
     bowhead:'up to ~18 m · can live ~200 years · baleen up to ~4 m',
+    opah:'up to ~2 m · blood ~5 °C warmer than the water · flies on its fins',
     blackswallower:'~25 cm · swallows fish twice its length and 10× its weight',
     lanternshark:'~20 cm · the smallest shark · a belly of light organs',
     glassoctopus:'up to ~45 cm · its eyes long and narrow to cast less shadow',

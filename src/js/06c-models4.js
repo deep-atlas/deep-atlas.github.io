@@ -223,6 +223,18 @@ function mkBlackSwallower() {
   tube(mb, { n:20, m:6, path:t => { const a = t * PI * 1.15; return [0.12 + Math.cos(a) * 0.12, -0.2 + Math.sin(a) * 0.09, 0]; }, r:t => 0.035 * Math.sin(Math.min(1, t * 1.2 + 0.1) * PI) + 0.006, col:fc([0.55, 0.5, 0.45]), anim:() => [0.2, 0, 0, 0] });
   return mb;
 }
+function mkOpah() {
+  // an opah (moonfish), one unit long: a deep round disc of a body, steel-blue above shading to rose below and speckled with white
+  // spots, with bright crimson fins and jaws, a big gold-ringed eye, and long sickle pectorals it flaps like wings
+  const blue = [0.3, 0.38, 0.6], rose = [0.85, 0.55, 0.6], spot = [0.95, 0.95, 0.95], red = [0.95, 0.15, 0.15];
+  return fish({ H:0.3, W:0.07, tm:0.42, nose:0.55, ped:0.07, bodyLen:0.84, back:blue, belly:rose, eye:[0.12, 0.25, 0.04], eyeRing:[1.0, 0.8, 0.3],
+    pattern:(t, sy, sz, p) => Math.sin(p[0] * 70) * Math.sin(p[1] * 60 + p[2] * 40) > 0.7 ? spot : (t < 0.05 ? red : mixc(rose, blue, smooth(-0.4, 0.3, sy))),
+    tail:'lunate', tailH:0.2, tailL:0.12, tailCol:red,
+    dorsal:[{ at:0.3, len:0.5, h:0.22, col:red, pts:[[0, 0], [0.05, 1], [-0.2, 0.55], [-1, 0.12], [-1, 0]] }],
+    anal:[{ at:0.45, len:0.4, h:0.07, col:red }],
+    pect:{ at:0.3, len:0.26, w:0.05, down:0.1, back:0.8, y:0, col:red }, pectFlap:1.4,
+    pelv:{ at:0.42, len:0.18, w:0.04, y:-0.8, col:red } });
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -541,6 +553,10 @@ function addDeepFolk(VENTS) {
     motion:{ type:'circle', R:2.5, v:0.4, bob:0.4, bank:0.1 },
     parts:[part(mkCookiecutter, { scale:0.45, mat:M_SKIN, ...FISH_SWIM(0.06, 1.2, 0.9, 2.2) })],
     views:[{ d:[0.3, -0.45, 1], k:2.2, hold:10, drift:0.02 }, { d:[0.15, 0.1, 1], k:2.0, hold:9, drift:0.02 }] });
+  addObj({ key:'opah', name:'opah', type:'Lampris guttatus · the warm-blooded fish', kind:'fish', at:[15400, -300, 300], size:1.2, rad:0.8,
+    fact:'The first fish known to be fully warm-blooded, found in 2015: it flaps its red pectoral fins like wings, and the work of those muscles heats its blood, which is kept warm by a counter-current heat exchanger in its gills. Its heart and brain stay about 5 °C above the cold water of the twilight zone, so it stays quick while its prey slows down.',
+    motion:{ type:'circle', R:6, v:0.8, bob:1, bank:0.1 },
+    parts:[part(mkOpah, { scale:1.2, mat:M_SILVER, swim:[0.01, 1, 0.8, 0], swim2:[1, 2.4, 0, 0] })], views:SIDE });
   addObj({ key:'humboldt', name:'Humboldt squid', type:'Dosidicus gigas · the red devils', kind:'cephs', at:[15200, -700, 550], size:1.2, vsize:7, rad:6, predator:true,
     fact:'Hunting in packs of hundreds, they rise from the twilight zone at night to feed. Their skin flickers between deep red and white in fractions of a second, perhaps signalling to each other as they hunt; fishermen call them red devils. They can swim at over 20 km/h.',
     // the whole pack flickering red and white, out of step across the body of the school
