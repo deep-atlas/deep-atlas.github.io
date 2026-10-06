@@ -455,6 +455,18 @@ function mobulaPost(o, t) {
     if (s < 0) { p._up = false; p._down = false; }
   });
 }
+// ---- spiny lobsters migrating in single file: the line walks a long loop over the sand, each one keeping touch with the one ahead
+function lobsterQueue(o, t) {
+  // (the object itself rides along with the middle of the line, so the camera follows the march)
+  const A = o.anchor, path = s => { const a = s / 9; return [Math.cos(a) * 9 + Math.sin(a * 3) * 0.6, 0, Math.sin(a) * 5]; };
+  const mid = path(t * 0.25 - o.parts.length * 0.21), mx = A[0] + mid[0], mz = A[2] + mid[2];
+  o.pos = [mx, floorY(mx, mz), mz]; o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
+  o.parts.forEach((p, i) => {
+    const s = t * 0.25 - i * 0.42, q = path(s), q2 = path(s + 0.05), w = [A[0] + q[0], 0, A[2] + q[2]];
+    p.off = [w[0] - mx, floorY(w[0], w[2]) + 0.05 - o.pos[1], w[2] - mz];
+    const f = vnorm(vsub(q2, q)); p._f = f; p._u = [0, 1, 0];
+  });
+}
 function spinnerPost(o, t) {
   const A = o.anchor; o.pos = A.slice(); o.fwd = [1, 0, 0]; o.up = [0, 1, 0]; o.side = [0, 0, 1];
   o.parts.forEach((p, i) => {
@@ -682,6 +694,7 @@ function addLife() {
     spanishdancer:'up to ~40 cm · swims by flapping its mantle · eats sponges',
     flamboyant:'~8 cm · walks rather than swims · one of the few toxic cuttlefish',
     trevally:'up to ~1.7 m and ~80 kg · some leap to catch seabirds',
+    lobsters:'queues of dozens · march day and night for days · curl into a ring when attacked',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',

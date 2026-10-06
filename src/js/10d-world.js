@@ -77,6 +77,7 @@ const WHERE = {
   mobulas:[24.2, -109.9, 'the Gulf of California, Mexico, each spring'],
   vaquita:[31, -114.6, 'only the far northern Gulf of California, Mexico'],
   trevally:[-9.4, 46.4, 'Indo-Pacific reefs; famous at Farquhar Atoll, Seychelles'],
+  lobsters:[25, -77.5, 'the Bahamas and Florida, each autumn after the first storms'],
   cots:[-16.5, 146, 'Indo-Pacific reefs; outbreaks on the Great Barrier Reef'],
   swordfish:[33, -45, 'tropical and temperate oceans worldwide'],
   icefish:[-62, -58, 'the Southern Ocean round Antarctica; the Antarctic Peninsula'],

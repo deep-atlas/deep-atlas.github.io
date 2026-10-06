@@ -786,6 +786,20 @@ function mkTrevally() {
     anal:[{ at:0.5, len:0.26, h:0.09, col:fin, pts:[[0, 0], [-0.08, 1], [-0.3, 0.45], [-1, 0.18], [-1, 0]] }],
     pect:{ at:0.24, len:0.2, w:0.03, down:0.3, back:0.7, col:[0.6, 0.62, 0.66] }, pelv:{ at:0.3, len:0.05, w:0.02, y:-0.85, col:fin } });
 }
+function mkSpinyLobster() {
+  // a Caribbean spiny lobster, one unit long without its antennae, head at +x: a spiny brown-orange carapace with two forward horns,
+  // a banded tail spotted with cream, a fan at the end, ten thin legs, and two long, thick, spiny antennae sweeping forward
+  const mb = new MB(), brown = [0.32, 0.13, 0.06], cream = [0.8, 0.65, 0.4], dark = [0.15, 0.06, 0.04];
+  loft(mb, { n:24, m:12, sec:t => { const w = 0.085 * Math.sin(Math.min(1, t * 2.5 + 0.2) * PI / 2) * lerp(1, 0.55, smooth(0.45, 1, t)); return { x:0.5 - t, y:0.04, w, h:w * 0.8, e:2 }; },
+    col:(t, u, p, sy) => t > 0.42 && Math.abs(Math.sin(t * 40)) < 0.25 ? dark : (Math.sin(p[0] * 90) * Math.sin(p[2] * 80) > 0.6 ? cream : brown), anim:() => [0, 0, 0, 0] });
+  fin(mb, [[0, 0.03], [-0.1, 0.08], [-0.12, 0], [-0.1, -0.08], [0, -0.03]], { origin:[-0.48, 0.03, 0], ua:[1, 0, 0], va:[0, 0, 1], col:fc(brown) });
+  for (const sz of [1, -1]) {
+    tube(mb, { n:3, m:3, path:t => [0.48 + t * 0.06, 0.07 + t * 0.04, sz * 0.025], r:t => 0.012 * (1 - t), col:fc(brown) });   // horns over the eyes
+    tube(mb, { n:16, m:4, path:t => [0.45 + t * 0.9, 0.05 + Math.sin(t * PI) * 0.12, sz * (0.04 + t * 0.25)], r:t => 0.022 * (1 - t * 0.85), col:t => Math.sin(t * 30) > 0.5 ? cream : brown, anim:t => [0, 0, t * 0.15, 0] });
+    for (let k = 0; k < 5; k++) tube(mb, { n:3, m:3, path:t => [0.32 - k * 0.07 + t * 0.03, 0.02 - t * 0.06, sz * (0.06 + Math.sin(Math.min(1, t * 2) * PI / 2) * 0.09)], r:0.006, col:fc(brown), anim:() => [0, 0, 0.1, 0] });
+  }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -1048,6 +1062,11 @@ function addShallows(REEF) {
     motion:{ type:'circle', R:6, v:2.2, bob:1.5, bank:0.25 },
     parts:[0, 1, 2].map(i => part(mkTrevally, { scale:1.4 - i * 0.15, off:[[0, 0, 0], [-1.6, 0.4, 1.0], [-2.4, -0.4, -0.9]][i], mat:M_SILVER, ...FISH_SWIM(0.04, 1.4 + i * 0.1, 0.85, 2.4) })),
     views:[{ d:[0.25, 0.1, 1], k:1.7, hold:10, drift:0.02 }, { d:[-0.5, -0.4, 1], k:1.6, hold:9, drift:0.02 }] });
+  addObj({ key:'lobsters', name:'migrating spiny lobsters', label:'lobster march', type:'Panulirus argus · walking in single file', kind:'floor', floor:[2600, -700, 0], size:0.35, vsize:3, rad:3,
+    fact:'After the first autumn storms in the Bahamas and Florida, Caribbean spiny lobsters leave the shallows by the thousand and march off into deeper water, day and night, in lines of up to dozens, each one keeping touch with the one in front with its antennae. Walking in file cuts the drag on each lobster, and a line under attack curls into a spiny defensive ring.',
+    motion:{ type:'still', fn:lobsterQueue },
+    parts:[...Array(14)].map((_, i) => part(mkSpinyLobster, { scale:0.32 + (i % 3) * 0.03, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, sway:[0.004, 3, 20, i] })),
+    views:[{ d:[0.5, 0.8, 1], k:0.9, hold:12, drift:0.012, frame:'world', off:[0, 0.1, 0] }, { d:[1, 0.25, 0.3], k:0.7, hold:10, drift:0.012, frame:'world', off:[0, 0.1, 0] }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],
