@@ -111,6 +111,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 | H | home (the reef) |
 | B, P, Z, I | ride along with Nautile, photo, screensaver, info panel |
 | N, X, O | day or night, disturb what you're locked on, map |
+| Q | quiz: which lives deeper? (1 / 2 to pick) |
 | V, Y, G, L, M | detail, travel speed, glow, labels, sound |
 
 ## How it renders
@@ -166,6 +167,7 @@ yellow hull is given a faint glow (its own work lights) so it reads as yellow at
 | `10-ui.js` | the interface, tours, atlas, search, ladder, labels, photo, compare, ride, screensaver |
 | `10c-map.js` | the map: cross-section and world tabs |
 | `10d-world.js` | the world map grid and each place's real location |
+| `10e-quiz.js` | the which-lives-deeper quiz |
 | `10b-journey.js` | the size journey, from a whale to a microbe |
 | `11-sound.js` | the generative soundscape |
 | `99-main.js` | the frame loop and test hooks (`window.__deep`; `__deep.save(name)` posts a PNG of the canvas to the dev server, which writes it to `.shots/`) |

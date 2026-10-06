@@ -32,6 +32,7 @@
   </label>
   <button class="btn primary" id="btnAtlas" aria-expanded="false" aria-controls="atlas">atlas</button>
   <button class="btn" id="btnMap" aria-expanded="false" aria-controls="mapPanel" title="Map of this ocean, shore to trench (O)">map</button>
+  <button class="btn" id="btnQuiz" aria-expanded="false" aria-controls="quizPanel" title="Quiz: which lives deeper? (Q)">quiz</button>
   <div class="tours-pair" role="group" aria-label="Tours"><button class="btn" id="tourPrev" title="Previous stop ([)">&lsaquo;</button><button class="btn" id="btnTours" aria-expanded="false" aria-controls="tours">tours</button><button class="btn" id="tourNext" title="Next stop (])">&rsaquo;</button></div>
   <button class="btn" id="btnTime" aria-expanded="false" aria-controls="timem">time</button>
   <button class="btn" id="btnSub" aria-pressed="false" title="Show where Nautile is">sub</button>
@@ -64,6 +65,16 @@
   <canvas id="mapCanvas" aria-label="Cross-section of the ocean with every place marked"></canvas>
   <div class="map-foot" id="mapFoot"></div>
   <div class="panel-foot" id="mapNote">distance out to sea and depth are both stretched near the top, so the crowded shallows have room · O opens and closes</div>
+</aside>
+<aside id="quizPanel" class="panel quizpanel" aria-label="Quiz: which lives deeper?" hidden>
+  <div class="panel-head"><span class="ptitle">which lives deeper?</span><button class="btn" id="quizClose">close</button></div>
+  <div class="quiz-cards">
+    <button class="qcard" id="quizA"><span class="qk">1</span><span class="qn"></span><span class="qt"></span><span class="qd">?</span></button>
+    <button class="qcard" id="quizB"><span class="qk">2</span><span class="qn"></span><span class="qt"></span><span class="qd">?</span></button>
+  </div>
+  <div class="quiz-res" id="quizRes" aria-live="polite"></div>
+  <div class="quiz-row"><span id="quizGo" hidden><button class="btn" id="quizGoA"></button> <button class="btn" id="quizGoB"></button></span><button class="btn primary" id="quizNext" hidden>next pair</button></div>
+  <div class="panel-foot"><span id="quizStreak"></span> · Q opens and closes · 1 / 2 to pick · enter for the next</div>
 </aside>
 <aside id="tours" class="panel" aria-label="Tours" hidden>
   <div class="panel-head"><span class="ptitle">tours</span><button class="btn" id="toursClose">close</button></div>
@@ -170,6 +181,7 @@
         <dt>P I Z</dt><dd>photo · info · screensaver</dd>
         <dt>N X</dt><dd>day or night · disturb it</dd>
         <dt>O</dt><dd>map, shore to trench</dd>
+        <dt>Q</dt><dd>quiz: which lives deeper?</dd>
         <dt>esc</dt><dd>close, then let go</dd>
       </dl></section>
     </div>
@@ -182,6 +194,7 @@
     <div class="help-top"><h2 id="notesTitle">what's new</h2><button class="btn" id="notesClose">close</button></div>
     <div class="notes-list">
       <details open><summary><span class="nv">0.16</span><span class="nt">rare, tiny and ancient</span></summary><ul>
+        <li>New: a quiz (Q). Which of two animals lives deeper? Keep a streak going, then jump to either one.</li>
         <li>Spiny lobsters march over the sand in single file, each keeping touch with the one in front.</li>
         <li>An opah, the only fully warm-blooded fish, flies through the twilight zone on red fins. The mantis shrimp now strikes now and then, with a flash.</li>
         <li>On the seamount, a basket star spreads its endlessly branching arms into the current.</li>
