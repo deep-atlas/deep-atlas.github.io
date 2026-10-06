@@ -34,18 +34,18 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 
 ## What's in it
 
-- **181 places** across five zones, plus Nautile. By zone:
+- **189 places** across five zones, plus Nautile. By zone:
   - **Surface and open water**: Snell's window seen from below, flying fish gliding over the waves, a Portuguese man o' war with a blue dragon sea slug feeding on it, a fleet of by-the-wind sailors,
     a sargassum raft with a sargassum fish hidden in it, moon jellies, a comb jelly, a sardine bait ball with dolphins,
     sailfish and a Bryde's whale lunging through it, spinner dolphins leaping and spinning, mobula rays leaping and belly-flopping, vaquitas (the rarest marine mammal), whale shark (with remoras), a basking shark, great white,
     hammerheads, a thresher shark tail-slapping sardines, bluefin tuna, a swordfish (deep by day, near the surface at night), sunfish, orcas, a leatherback turtle, humpbacks (breaching, and bubble-net feeding on a herring school), a
-    family of sperm whales asleep upright, an elephant seal asleep in a falling-leaf spiral on a deep dive, and the blue whale. Plankton: copepod, chains of salps, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
+    family of sperm whales asleep upright, an elephant seal asleep in a falling-leaf spiral on a deep dive, and the blue whale. Plankton: copepod, chains of salps, a pram bug in its salp barrel, diatoms, radiolarian, sea sparkle, Prochlorococcus, and a krill swarm with Adélie
     penguins hunting through it and a leopard seal stalking them.
   - **Reef, kelp and shallows**: a coral reef at 5 m with clownfish, seahorse, tangs, lionfish, parrotfish, moray, a
     camouflaged octopus, cuttlefish, mantis shrimp, nudibranchs, Christmas tree worms, a crown-of-thorns starfish bleaching a table coral, two pygmy seahorses hiding on a sea fan, a feather star, a giant clam, a frogfish, a sea krait, a pufferfish, a blue-ringed octopus,
-    blacktip reef sharks, a pack of giant trevallies, a resting nurse shark, snappers, a grouper at a cleaning station, flashlight fish, a bobtail squid and a swimming Spanish dancer at night, and on the sand garden eels, a
+    blacktip and grey reef sharks (with a threat display), a pack of giant trevallies, a tasselled wobbegong, a yellow boxfish, a decorator crab, a resting nurse shark, snappers, a grouper at a cleaning station, flashlight fish, a bobtail squid and a swimming Spanish dancer at night, and on the sand garden eels, a
     goby sharing a burrow with a pistol shrimp, a coconut octopus, a flamboyant cuttlefish walking the sand, a mimic octopus, a peacock flounder, a buried stargazer, spiny lobsters marching in single file, an electric ray and a stingray. A tornado of chevron barracuda off the
-    drop-off, a manta, a green turtle and a stream of
+    drop-off, a manta, a school of cownose rays, a green turtle and a stream of
     turtle hatchlings heading out to sea; the kelp forest with a sea otter, sea lions, a giant Pacific octopus, garibaldi and blacksmith; a shipwreck at
     30 m turned into a reef; a red-lipped batfish walking on the sand; a Galapagos marine iguana grazing algae off a lava boulder; a chambered nautilus on the deep reef slope.
   - **Coasts and poles**: mangroves with an archerfish shooting beetles off the leaves, a box jellyfish, a sawfish raking the sand and a manatee in the channel, a seagrass meadow with a dugong and a leafy
@@ -55,11 +55,11 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
     cock-eyed and Humboldt squid (flashing red and white), a see-through glass octopus, firefly squid at night, Atolla, the helmet jellyfish, a giant phantom jelly, a pyrosome, a warm-blooded opah, vampire squid, sperm whale,
     anglerfish, viperfish, a black swallower with a fish twice its size inside it, black dragonfish, stoplight loosejaw, gulper eel, fangtooth, oarfish (upright, as they hang),
     coelacanth, goblin, frilled, cookiecutter, dwarf lantern and Greenland sharks, a ghost shark, an Antarctic icefish with clear blood, blobfish, a beaked whale, Japanese spider crab and a
-    seamount's deep coral garden with orange roughy and a basket star spreading its branching arms.
+    glass sponge reef; a seamount's deep coral garden with orange roughy and a basket star spreading its branching arms.
   - **The deep floor**: black-smoker vents with giant tube worms, Pompeii worms in tubes on a chimney wall, yeti crabs and iron-armoured scaly-foot snails; the
     Lost City's white limestone towers; a cold seep
     whose brine pool is a lake on the seafloor, with a Venus' flower basket; a whale fall with hagfish and a sixgill shark; the Titanic's
-    bow; giant isopod; a giant sea spider; a meadow of sea pens that glow when disturbed; the Octopus Garden, thousands of brooding octopuses on a warm seep; dumbo octopus; a sea toad; the abyssal plain with the ghost octopus "Casper", sea pigs, xenophyophores, tripod fish, grenadiers and the
+    bow; giant isopod; a giant sea spider; a meadow of sea pens that glow when disturbed; squat lobsters at the seep; the Octopus Garden, thousands of brooding octopuses on a warm seep; dumbo octopus; a sea toad; the abyssal plain with the ghost octopus "Casper", sea pigs, xenophyophores, tripod fish, grenadiers and the
     swimming sea cucumber; the Mariana Trench with a supergiant amphipod, snailfish, hadal amphipods and the Challenger Deep.
 - **A living ocean**: schools part round sailfish and dolphins slashing through the bait ball, and give a diver room; glowing
   animals light what is near them (the anglerfish's lure, the loosejaw's red searchlight, Nautile's floodlights); defences you
@@ -111,7 +111,7 @@ This copy is published from https://github.com/deep-atlas/deep-atlas.github.io.
 | H | home (the reef) |
 | B, P, Z, I | ride along with Nautile, photo, screensaver, info panel |
 | N, X, O | day or night, disturb what you're locked on, map |
-| Q | quiz: which lives deeper? (1 / 2 to pick) |
+| Q | quiz: which lives deeper, or which is bigger? (1 / 2 to pick) |
 | V, Y, G, L, M | detail, travel speed, glow, labels, sound |
 
 ## How it renders

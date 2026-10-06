@@ -522,6 +522,7 @@ function addLife() {
     react:{ type:'wave', dur:8, text:'Touched, the pyrosome lights up: each tiny zooid answers its neighbour’s light, and a glow runs the length of the colony.' } });
   set('seapens', { lights:[{ at:[0, 0.3, 0], col:[0.35, 1.0, 0.6], power:o => (o.reactEnv || 0) * 0.4, reach:3, metres:true, flick:3 }],
     react:{ type:'wave', dur:9, text:'Disturbed, the sea pens glow: a wave of green light ripples across the meadow from colony to colony.' } });
+  set('greyreef', { react:{ type:'puff', dur:9, text:'Too close: the grey reef shark arches its back, lifts its snout and drops its fins in a stiff threat display. Back off: the next step is a bite.' } });
   set('blueringed', { react:{ type:'colour', dur:8, text:'Alarmed, the blue-ringed octopus flashes its rings electric blue: a warning that it carries enough venom to kill.' } });
   set('fireflysquid', { lights:[{ at:[0, 0, 0], col:[0.25, 0.6, 1.0], power:0.6, reach:1.8, flick:1.2 }] });
   set('cookiecutter', { lights:[{ at:[0, -0.05, 0], col:[0.3, 0.95, 0.75], power:0.25, reach:0.6 }] });
@@ -635,10 +636,14 @@ function addLife() {
     seapens:'colonies up to ~40 cm · glow green when touched',
     octopusgarden:'~6,000 octopuses · 3,200 m down · eggs hatch in ~21 months in the warm seep',
     seaspider:'legs up to ~70 cm across · breathes through its legs · no gills, no lungs',
+    phronima:'~3 cm · lives in a salp it has hollowed out · raises its young inside',
     salps:'chains up to several metres · some of the fastest-growing animals',
+    squatlobsters:'claws often longer than the body · tail tucked underneath',
+    spongereef:'some ~9,000 years old · built of glass · found alive only in 1987',
     basketstar:'arms up to ~70 cm across · branching into thousands of tips',
     horseshoecrabs:'shell up to ~60 cm · blue, copper-based blood · ~450 million years old',
     mobulas:'~1 m across · leap up to ~2 m clear of the water · schools of thousands',
+    cownose:'~1 m across · schools of hundreds or thousands',
     vaquita:'up to ~1.5 m · fewer than a dozen left · the rarest marine mammal',
     leopardseal:'up to ~3.5 m · eats penguins, seals and lots of krill',
     bowhead:'up to ~18 m · can live ~200 years · baleen up to ~4 m',
@@ -695,6 +700,9 @@ function addLife() {
     flamboyant:'~8 cm · walks rather than swims · one of the few toxic cuttlefish',
     trevally:'up to ~1.7 m and ~80 kg · some leap to catch seabirds',
     lobsters:'queues of dozens · march day and night for days · curl into a ring when attacked',
+    wobbegong:'up to ~1.8 m · lies in ambush · a beard of skin tassels',
+    boxfish:'young ~4 cm, adults ~45 cm · a body of fused plates · toxic skin',
+    decorator:'shell ~5 cm · wears sponge, weed and hydroids · moves them onto each new shell',
     cots:'up to ~80 cm across · up to 21 arms · eats up to ~10 m² of coral a year',
     swordfish:'up to ~4.5 m · eyes heated up to ~15 °C above the water · deep by day, shallow by night',
     icefish:'up to ~75 cm · no red blood cells, clear blood · antifreeze in its blood',

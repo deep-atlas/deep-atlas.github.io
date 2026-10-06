@@ -800,6 +800,64 @@ function mkSpinyLobster() {
   }
   return mb;
 }
+function mkWobbegong() {
+  // a tasselled wobbegong, one unit long: a flat, broad-headed carpet shark mottled in browns and cream like the rubble it lies on,
+  // its head fringed all round the jaw with branching skin tassels that break up its outline
+  const back = [0.32, 0.24, 0.15], cream = [0.9, 0.82, 0.62], dark = [0.1, 0.07, 0.05];
+  const mb = fish({ H:0.045, W:0.11, tm:0.2, nose:0.3, ped:0.08, bodyLen:0.82, back, belly:[0.75, 0.68, 0.55], eye:[0.07, 0.6, 0.01], e:2.4,
+    wShape:t => t < 0.25 ? lerp(1.15, 1, t / 0.25) : 1,
+    pattern:(t, sy, sz, p) => { const n = Math.sin(p[0] * 60 + p[2] * 20) * Math.sin(p[2] * 70 - p[0] * 15); return sy < -0.3 ? null : n > 0.45 ? cream : n < -0.5 ? dark : back; },
+    tail:'shark', tailH:0.05, tailL:0.18, tailCol:back,
+    dorsal:[{ at:0.55, len:0.08, h:0.045, col:back }, { at:0.7, len:0.07, h:0.04, col:back }],
+    pect:{ at:0.22, len:0.12, w:0.08, down:0.1, back:0.4, y:-0.6, col:back }, pelv:{ at:0.5, len:0.08, w:0.06, y:-0.7, col:back } });
+  // the beard of tassels round the front of the head, each forked at the tip
+  for (let k = 0; k < 22; k++) {
+    const a = (k / 21 - 0.5) * 2.6, base = [0.44 + Math.cos(a) * 0.04, -0.025, Math.sin(a) * 0.1], d = vnorm([Math.cos(a), -0.3, Math.sin(a) * 1.3]);
+    tube(mb, { n:3, m:3, path:t => vmad(base, d, t * 0.05), r:t => 0.006 * (1 - t * 0.5), col:fc(k % 3 ? back : cream), anim:t => [0, 0, t * 0.2, 0] });
+    const tip = vmad(base, d, 0.05);
+    for (const s of [-1, 1]) tube(mb, { n:2, m:3, path:t => vadd(tip, vmul(vnorm(vadd(d, [0, s * 0.6, 0])), t * 0.02)), r:0.003, col:fc(back), anim:t => [0, 0, 0.2 + t * 0.2, 0] });
+  }
+  return mb;
+}
+function mkBoxfish() {
+  // a young yellow boxfish, one unit long: a stiff box of fused bony plates (so only its fins move), bright yellow with black spots,
+  // a small pouting mouth, and a tail fin and small fins it sculls with like oars
+  const yellow = [1.0, 0.85, 0.1], black = [0.04, 0.04, 0.05];
+  return fish({ H:0.2, W:0.17, tm:0.4, nose:0.25, ped:0.1, bodyLen:0.8, back:yellow, belly:[1.0, 0.92, 0.5], eye:[0.15, 0.3, 0.045], e:4,
+    taper:2.2, pattern:(t, sy, sz, p) => Math.sin(p[0] * 55) * Math.sin(p[1] * 50 + p[2] * 45) > 0.75 ? black : null,
+    tail:'round', tailH:0.13, tailL:0.18, tailCol:[0.95, 0.8, 0.2],
+    dorsal:[{ at:0.72, len:0.06, h:0.06, col:[0.95, 0.8, 0.2] }], anal:[{ at:0.72, len:0.06, h:0.06, col:[0.95, 0.8, 0.2] }],
+    pect:{ at:0.3, len:0.07, w:0.05, down:0.2, back:0.3, y:-0.1, col:[0.95, 0.85, 0.4] }, pectFlap:2 });
+}
+function mkGreyReefShark(hunch) {
+  // a grey reef shark, one unit long: bronze-grey above, white below, a broad black edge to the tail; hunch (0..1) arches its back,
+  // lifts its snout and drops its pectoral fins: the threat display it gives before it will attack
+  const back = [0.45, 0.47, 0.5], belly = [0.95, 0.95, 0.93], black = [0.05, 0.05, 0.06];
+  const h = hunch || 0;
+  return fish({ H:0.08, W:0.07, tm:0.36, nose:0.7, ped:0.12, bodyLen:0.77, back, belly, eye:[0.07, 0.2, 0.012],
+    camber:t => h * (0.5 * Math.sin(t * PI) - 0.3 * Math.max(0, 0.3 - t) / 0.3),
+    pattern:(t, sy) => mixc(belly, back, smooth(-0.2, 0.05, sy)),
+    tail:'shark', tailH:0.12, tailL:0.22, tailPat:(a, b) => a < -0.12 ? black : back,
+    dorsal:[{ at:0.34, len:0.13, h:0.11, sweep:0.7, col:back }, { at:0.78, len:0.03, h:0.03, col:back }], anal:[{ at:0.8, len:0.03, h:0.025, col:back }],
+    pect:{ at:0.3, len:0.17, w:0.07, down:0.55 + h * 0.9, back:0.5, y:-0.45, col:back }, pelv:{ at:0.64, len:0.05, w:0.03, y:-0.7, col:back },
+    extra:(mb, b) => gills(mb, b, 0.21, 5) });
+}
+function mkDecoratorCrab() {
+  // a decorator crab, one unit across its legs: a pear-shaped spider crab whose shell and legs are covered with bits of sponge,
+  // seaweed and hydroid it has snipped off and stuck on its hooked hairs, so that it looks like a walking clump of reef
+  const mb = new MB(), shell = [0.55, 0.32, 0.25], r = rng(808), deco = [[0.95, 0.45, 0.2], [0.55, 0.75, 0.35], [0.85, 0.3, 0.55], [0.95, 0.85, 0.4], [0.4, 0.65, 0.6]];
+  ellip(mb, [0, 0.12, 0], [0.15, 0.09, 0.12], { n:7, m:10, col:fc(shell) });
+  for (const sz of [1, -1]) {
+    for (let k = 0; k < 4; k++) { const phi = 0.8 - k * 0.5, d = [Math.sin(phi), 0, sz * Math.cos(phi)], b = [0.05 - k * 0.04, 0.1, sz * 0.08];
+      tube(mb, { n:6, m:4, path:t => [b[0] + d[0] * t * 0.32, 0.1 + Math.sin(Math.min(1, t * 1.8) * PI / 2) * 0.08 - smooth(0.45, 1, t) * 0.18, b[2] + d[2] * t * 0.32], r:0.012, col:fc(shell), anim:t => [0, 0, t * 0.05, 0] }); }
+    tube(mb, { n:5, m:4, path:t => [0.12 + t * 0.12, 0.1 - t * 0.04, sz * (0.05 + t * 0.06)], r:0.014, col:fc(shell) });
+  }
+  // the decorations: little sponges, tufts of weed and hydroids stuck all over its back
+  for (let k = 0; k < 26; k++) { const a = r() * TAU, e = r() * 0.9, p = [Math.cos(a) * 0.14 * Math.cos(e), 0.12 + Math.sin(e) * 0.09, Math.sin(a) * 0.11 * Math.cos(e)], c = deco[k % deco.length];
+    if (k % 3 === 0) tube(mb, { n:3, m:3, path:t => [p[0] + (r() - 0.5) * 0.02 * t, p[1] + t * 0.08, p[2]], r:t => 0.012 * (1 - t * 0.6), col:fc(c), anim:t => [0, 0, t * 0.4, 0] });
+    else ellip(mb, p, [0.03 + r() * 0.02, 0.025, 0.03 + r() * 0.02], { n:3, m:6, col:fc(c) }); }
+  return mb;
+}
 function mkThresher() {
   // a pelagic thresher's body, one unit nose to tail tip with the tail drawn apart (mkThresherTail): the body is only the front
   // half, metallic blue-grey above and white below, with a big eye, a tall first dorsal, long pectorals and a tiny second dorsal
@@ -1067,6 +1125,31 @@ function addShallows(REEF) {
     motion:{ type:'still', fn:lobsterQueue },
     parts:[...Array(14)].map((_, i) => part(mkSpinyLobster, { scale:0.32 + (i % 3) * 0.03, fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, sway:[0.004, 3, 20, i] })),
     views:[{ d:[0.5, 0.8, 1], k:0.9, hold:12, drift:0.012, frame:'world', off:[0, 0.1, 0] }, { d:[1, 0.25, 0.3], k:0.7, hold:10, drift:0.012, frame:'world', off:[0, 0.1, 0] }] });
+  addObj({ key:'wobbegong', name:'tasselled wobbegong', type:'Eucrossorhinus dasypogon · a carpet shark', kind:'sharks', floor:[REEF[0] - 22, REEF[1] - 6, 0.06], size:1.4, rad:0.9, yaw:1.4,
+    fact:'A flat carpet shark that lies still on the reef by day, its mottled skin and the beard of branching tassels round its jaw hiding its outline so well that small fish swim right up to it. Then it lunges. It has even been seen to wave its tail like a small fish, as a lure.',
+    motion:{ type:'hover', amp:0.005, turn:0.03 },
+    parts:[part(mkWobbegong, { scale:1.4, mat:M_SKIN, ...FISH_SWIM(0.008, 0.3, 0.8, 2.4) })],
+    views:[{ d:[0.7, 0.55, 1], k:1.4, hold:10, drift:0.02 }, { d:[1, 0.15, 0.25], k:0.9, hold:9, drift:0.02 }] });
+  addObj({ key:'boxfish', name:'yellow boxfish', type:'Ostracion cubicus · young, a swimming dice', kind:'fish', floor:[REEF[0] + 6, REEF[1] + 9, 1.4], size:0.08, rad:0.08,
+    fact:'Its body is a rigid box of fused bony plates, so it cannot bend to swim: it sculls slowly along with its small fins and tail. The bright yellow and black spots are a warning. Stressed, it releases a toxin, ostracitoxin, through its skin that can kill other fish nearby.',
+    motion:{ type:'hover', amp:0.12, turn:0.6 },
+    parts:[part(mkBoxfish, { scale:0.08, mat:M_SKIN, swim:[0.002, 4, 1, 0], swim2:[0, 2, 0, 0] })],
+    views:[{ d:[0.3, 0.15, 1], k:2.6, hold:10, drift:0.02 }, { d:[1, 0.2, 0.3], k:2.6, hold:9, drift:0.02 }] });
+  addObj({ key:'greyreef', name:'grey reef sharks', type:'Carcharhinus amblyrhynchos · patrolling the drop-off', kind:'sharks', at:[2400, 350, 12], size:1.8, vsize:5, rad:4, predator:true,
+    fact:'They patrol reef drop-offs in loose packs by day, gathering in strong currents. Cornered, a grey reef shark gives one of the clearest warnings of any shark: it arches its back, raises its snout, drops its pectoral fins and swims in a stiff, exaggerated figure of eight. Back off: the next step is a fast slashing bite. Disturb one to see it.',
+    motion:{ type:'circle', R:6, v:1.3, bob:1.2, bank:0.2 },
+    // disturbed, the lead shark hunches into its threat display and swims stiffly
+    post:o => { const e = smooth(0.1, 0.7, o.reactEnv || 0); o.parts[0].scale = e > 0.3 ? 0 : 1.8; o.parts[1].scale = e > 0.3 ? 1.8 : 0; o.parts[1].swim[0] = 0.08; },
+    readout:() => BYKEY.greyreef.reactEnv > 0.3 ? 'threat display: back arched, snout up, fins down. Give it room' : 'up to ~2.5 m · packs patrol the drop-off by day',
+    parts:[part(() => mkGreyReefShark(0), { scale:1.8, mat:M_SKIN, ...FISH_SWIM(0.04, 0.9, 0.85, 2.4) }),
+      part(() => mkGreyReefShark(1), { scale:0, mat:M_SKIN, swim:[0.08, 1.6, 0.85, 0], swim2:[0, 2.4, 0, 0] }),
+      ...[0, 1].map(i => part(() => mkGreyReefShark(0), { scale:1.6, off:[[-3, 0.6, 2], [-4.5, -0.5, -1.8]][i], mat:M_SKIN, ...FISH_SWIM(0.04, 0.95 + i * 0.05, 0.85, 2.4) }))],
+    views:[{ d:[0.25, 0.1, 1], k:1.6, hold:10, drift:0.02 }, { d:[1, 0.25, 0.3], k:1.5, hold:9, drift:0.02 }] });
+  addObj({ key:'decorator', name:'decorator crab', type:'a spider crab dressed in sponge and weed', kind:'floor', floor:[REEF[0] + 28, REEF[1] + 8, 0], size:0.12, vsize:0.12, rad:0.1, yaw:0.6,
+    fact:'It snips bits of sponge, seaweed, hydroids and coral off the reef and sticks them onto hooked, Velcro-like hairs on its shell and legs, then walks about looking like a clump of reef. Some choose toxic sponges or stinging hydroids, so they are hidden and protected at once, and after a moult they move their decorations onto the new shell.',
+    motion:{ type:'crawl', R:0.2, v:0.008, h:0 },
+    parts:[part(mkDecoratorCrab, { scale:0.12, mat:M_SKIN, sway:[0.004, 1.5, 30, 0] })],
+    views:[{ d:[0.6, 0.6, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.2, 0.2], k:2.2, hold:9, drift:0.02 }] });
   addObj({ key:'cots', name:'crown-of-thorns starfish', label:'crown-of-thorns', type:'Acanthaster · eating a table coral', kind:'floor', floor:[REEF[0] - 14, REEF[1] + 14, 0], size:0.6, vsize:1.1, rad:0.6, yaw:0.3,
     fact:'A starfish up to about 80 cm across with as many as 21 arms, covered in venomous spines. It eats coral by pushing its stomach out over a colony and digesting the living tissue, leaving a bare white skeleton. In outbreaks, tens of thousands strip whole reefs; they are one of the main causes of coral loss on the Great Barrier Reef.',
     parts:[part(mkCrownOfThorns, { mat:M_SOLID, sway:[0.004, 0.4, 3, 0] })],

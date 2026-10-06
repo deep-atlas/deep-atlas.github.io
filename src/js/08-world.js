@@ -323,6 +323,10 @@ function buildCatalog() {
     parts:[...Array(12)].map((_, i) => part(() => mkManta({ back:[0.12, 0.12, 0.16], patch:[0.12, 0.12, 0.16] }), { scale:0.9 + (i % 3) * 0.12,
       fwd:function () { return this._f || [1, 0, 0]; }, up:function () { return this._u || [0, 1, 0]; }, mat:M_SKIN, swim2:[0, 2, 0.04, 2.2 + (i % 4) * 0.2] })),
     views:[{ d:[0.3, 0.12, 1], k:1.6, hold:14, drift:0.01, frame:'world', air:true, off:[0, 1.2, 0] }, { d:[0.3, -0.45, 1], k:0.9, hold:12, drift:0.01, frame:'world', off:[0, -1.4, 0] }] });
+  addObj({ key:'cownose', name:'cownose rays', type:'a school of Rhinoptera bonasus', kind:'sharks', at:[2700, -500, 9], size:0.9, vsize:7, rad:6,
+    fact:'They migrate along warm coasts in schools of hundreds, sometimes thousands, flying in formation. Their notched, cow-like snout holds sensitive pits for finding buried clams, which they dig out by flapping their fins against the sand and crush with plates of teeth.',
+    parts:[part(() => mkManta({ back:[0.42, 0.3, 0.18], patch:[0.42, 0.3, 0.18] }), { inst:schoolMill(60, 4, 2.5, 3131, 0.6), school:[0, 0.9, 1, 0], mat:M_SKIN, shy:2, swim2:[0, 2, 0.05, 1.6] })],
+    views:[{ d:[0.3, 0.2, 1], k:1.3, hold:12, drift:0.015, frame:'world' }, { d:[0.2, 1, 0.3], k:1.4, hold:10, drift:0.015, frame:'world' }] });
   addObj({ key:'sleepingwhales', name:'sleeping sperm whales', label:'sleeping whales', type:'a family of Physeter macrocephalus, napping upright', kind:'air', at:[11800, 600, 14], size:12, vsize:18, rad:14,
     fact:'Sperm whales sleep in short naps of a few minutes, hanging motionless and upright just below the surface, heads up, often a whole family together. They were only discovered doing this in 2008, when a research boat drifted into a sleeping group that did not wake.',
     // hanging upright, swaying very slightly; every so often the family stirs

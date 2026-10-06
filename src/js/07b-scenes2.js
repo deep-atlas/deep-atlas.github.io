@@ -415,6 +415,35 @@ function mkBasketStar() {
   for (let k = 0; k < 5; k++) { const a = k / 5 * TAU; branch([Math.cos(a) * 0.05, 0.53, Math.sin(a) * 0.05], vnorm([Math.cos(a), 0.6, Math.sin(a)]), 0.12, 0.012, 5); }
   return mb;
 }
+function buildSpongeReef(A) {
+  // a glass sponge reef, in metres: mounds of pale, vase- and chimney-shaped sponges with skeletons of glass (silica) built on the
+  // dead skeletons of their ancestors, a few rockfish sheltering among them
+  const mb = new MB(), r = rng(1987), glass = [1.0, 0.98, 0.9, 0.35], lattice = [0.8, 0.76, 0.62], dead = [0.22, 0.2, 0.17];
+  // the old reef underneath: silt-filled skeletons in low mounds
+  for (let k = 0; k < 7; k++) { const a = r() * TAU, d = Math.sqrt(r()) * 5, x = Math.cos(a) * d, z = Math.sin(a) * d, s = 1.4 + r() * 1.4;
+    ellip(mb, [x, groundAt(A, x, z) - s * 0.2, z], [s, s * 0.35, s * 0.8], { n:6, m:12, col:(u, v, p) => Math.sin(p[0] * 13) * Math.sin(p[2] * 11) > 0.4 ? lattice : dead }); }
+  // living sponges: thin-walled vases and chimneys, flaring open at the top, the wall a lattice of glass
+  for (let k = 0; k < 70; k++) {
+    const a = r() * TAU, d = Math.sqrt(r()) * 6, x = Math.cos(a) * d, z = Math.sin(a) * d, H = 0.5 + r() * 0.9, w = 0.12 + r() * 0.18, lean = (r() - 0.5) * 0.3;
+    const y0 = groundAt(A, x, z) + Math.max(0, 0.5 * (1 - d / 6)) - 0.1;
+    tube(mb, { n:7, m:9, path:t => [x + lean * t * H, y0 + t * H, z], r:t => w * (0.55 + 0.6 * t * t), capEnd:false,
+      col:(t, u) => Math.abs(Math.sin(u * TAU * 4 + t * 9)) < 0.3 ? lattice : glass, anim:t => [0, 0, t * 0.08, 0] });
+  }
+  return mb;
+}
+function mkSquatLobster() {
+  // a deep-sea squat lobster (Munidopsis), one unit long with its claws: a small pale carapace, the tail tucked under it, and two
+  // long, spiny, white claws held out in front, much longer than its body
+  const mb = new MB(), white = [0.95, 0.92, 0.88], pink = [0.95, 0.75, 0.72];
+  ellip(mb, [-0.1, 0.06, 0], [0.13, 0.06, 0.1], { n:6, m:10, col:(u, v, p) => Math.sin(p[0] * 120) * Math.sin(p[2] * 110) > 0.6 ? pink : white });
+  ellip(mb, [-0.25, 0.03, 0], [0.07, 0.035, 0.07], { n:5, m:8, col:fc(white) });
+  for (const sz of [1, -1]) {
+    tube(mb, { n:10, m:4, path:t => [0.02 + t * 0.45, 0.07 + Math.sin(t * PI) * 0.05, sz * (0.06 + t * 0.12)], r:t => 0.016 * (1 - t * 0.3), col:t => Math.sin(t * 40) > 0.6 ? pink : white, anim:t => [0, 0, t * 0.1, 0] });
+    for (let k = 0; k < 3; k++) tube(mb, { n:3, m:3, path:t => [-0.02 - k * 0.07, 0.04 - t * 0.07, sz * (0.08 + Math.sin(Math.min(1, t * 2) * PI / 2) * 0.13)], r:0.008, col:fc(white), anim:() => [0, 0, 0.05, 0] });
+    tube(mb, { n:5, m:3, path:t => [0.03 + t * 0.2, 0.08 + t * 0.06, sz * (0.02 + t * 0.06)], r:0.003, col:fc(pink), anim:t => [0, 0, t * 0.3, 0] });
+  }
+  return mb;
+}
 function mkManatee() {
   // West Indian manatee: a stout grey body, often green with algae, a blunt bristly muzzle, small paddle flippers with nails,
   // and a broad round paddle of a tail (a dugong's is a fluke)
@@ -452,9 +481,19 @@ function addPlaces2() {
     fact:'A relative of brittle stars whose five arms fork again and again into thousands of fine curling tips. By day it curls up on a coral; at night it climbs to the top and spreads its arms into the current like a living net, coiling the tips round small drifting animals and passing them to its mouth.',
     parts:[part(mkBasketStar, { mat:M_SKIN, sway:[0.025, 0.5, 3, 0] })],
     views:[{ d:[0.5, 0.35, 1], k:1.3, hold:10, drift:0.02, off:[0, 0.6, 0] }, { d:[0.2, 1, 0.3], k:1.2, hold:9, drift:0.02, off:[0, 0.6, 0] }] });
+  addObj({ key:'spongereef', name:'glass sponge reef', type:'reef-building glass sponges · Hecate Strait', kind:'places', floor:[9000, 1200, 0], size:12, rad:8,
+    fact:'Reefs built by sponges with skeletons of glass were thought to have died out with the dinosaurs, until living ones were found off British Columbia in 1987, 150 to 250 m down. Some are around 9,000 years old, each generation growing on the skeletons of the last, and between them they filter vast amounts of water. A trawl net can flatten in minutes what took millennia.',
+    parts:[part(() => buildSpongeReef(BYKEY.spongereef.anchor), { mat:[1, 0.9, 0.6, 0.4], sway:[0.01, 0.4, 2, 0] }),
+      part(mkGrouper, { inst:schoolCloud(12, 4, 0.8, 1988, 1, 0.5), school:[1, 0.45, 0.6, 0], off:[0, 1.2, 0], tint:[1.1, 0.55, 0.35], mat:M_SKIN, shy:3, ...FISH_SWIM(0.04, 1, 0.9, 2) })],
+    views:[{ d:[0.4, 0.45, 1], k:0.3, hold:12, drift:0.015, frame:'world', off:[0, 0.8, 0] }, { d:[0.6, 0.9, 0.4], k:0.45, hold:10, drift:0.015, frame:'world', off:[0, 0.8, 0] }] });
   addObj({ key:'roughy', name:'orange roughy', type:'Hoplostethus atlanticus', kind:'fish', place:true, floor:[SM[0], SM[1], 7], size:0.35, vsize:10, rad:7,
     fact:'They gather over seamounts to feed and spawn, and can live for 150 years or more, not breeding until they are about 30. Fished hard from the 1980s, many populations collapsed before anyone knew how slowly they grow.',
     views:[{ d:[0.3, 0.15, 1], k:0.45, hold:10, drift:0.02, frame:'world', off:[4, 0, 0] }, { d:[1, 0.1, 0.3], k:0.35, hold:9, drift:0.02, frame:'world', off:[0, 0, 4] }] });
+  addObj({ key:'squatlobsters', name:'squat lobsters', type:'Munidopsis · on the edge of a cold seep', kind:'floor', floor:[SEEP[0] + 12, SEEP[1] + 8, 0.02], size:0.12, vsize:0.35, rad:0.45,
+    fact:'Not true lobsters but closer to hermit crabs, with their tails folded under their bodies. Deep-sea squat lobsters crowd round seeps, vents and whale falls, picking bacteria and scraps from the rocks with claws that may be far longer than their bodies.',
+    parts:[0, 1, 2, 3, 4].map(i => part(mkSquatLobster, { scale:0.12 - (i % 2) * 0.02, off:[[0, 0, 0], [0.25, 0, 0.2], [-0.2, 0, 0.25], [0.15, 0, -0.3], [-0.3, 0, -0.15]][i],
+      fwd:() => dirYP(i * 1.3 + 0.2, 0), up:() => [0, 1, 0], mat:M_SKIN, sway:[0.004, 1.4, 20, i] })),
+    views:[{ d:[0.6, 0.6, 1], k:1.4, hold:10, drift:0.02, frame:'world' }, { d:[1, 0.2, 0.3], k:1, hold:9, drift:0.02, frame:'world' }] });
   addObj({ key:'seep', name:'cold seep & brine pool', label:'brine pool', type:'a lake at the bottom of the sea', kind:'places', floor:[SEEP[0], SEEP[1], 0], size:20, rad:13,
     fact:'Brine seeping up through ancient salt beds is so much denser than seawater that it pools on the floor as a lake, with a shore and waves of its own. Mussels and tube worms line its edge, living on bacteria fed by methane; animals that swim into the brine can die there.',
     parts:[part(() => buildSeep(BYKEY.seep.anchor, 41), { mat:[1, 0.3, 1, 1.4], sway:[0.15, 0.7, 0.8, 0] })],

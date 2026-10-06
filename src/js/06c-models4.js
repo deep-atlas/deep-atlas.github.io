@@ -235,6 +235,17 @@ function mkOpah() {
     pect:{ at:0.3, len:0.26, w:0.05, down:0.1, back:0.8, y:0, col:red }, pectFlap:1.4,
     pelv:{ at:0.42, len:0.18, w:0.04, y:-0.8, col:red } });
 }
+function mkPhronima() {
+  // a pram bug (Phronima), one unit = its barrel, about 3 cm: a clear, hollowed-out salp barrel open at both ends, and inside it the
+  // see-through amphipod with huge red eyes and grasping legs, pushing it along
+  const mb = new MB(), clear = [0.85, 0.93, 1.0, 0.15], ring = [0.92, 0.97, 1.0, 0.3], body = [0.95, 0.85, 0.85], eye = [0.95, 0.2, 0.15];
+  tube(mb, { n:8, m:14, path:t => [0.3 - t * 0.6, 0, 0], r:t => 0.2 - 0.03 * Math.sin(t * PI), capEnd:false, col:(t) => Math.abs(Math.sin(t * 18)) < 0.2 ? ring : clear, anim:t => [0, 0, 0, 0.06] });
+  // the amphipod, clinging in the barrel's mouth
+  loft(mb, { n:10, m:8, sec:t => ({ x:0.32 - t * 0.35, y:0.04, w:0.05 * Math.sin(Math.min(1, t * 2 + 0.2) * PI / 2) * (1 - t * 0.5), h:0.06 * (1 - t * 0.5), e:2 }), col:fc(body), anim:() => [0, 0, 0, 0] });
+  for (const sz of [1, -1]) ellip(mb, [0.33, 0.1, sz * 0.04], [0.06, 0.06, 0.045], { n:5, m:8, col:fc(eye) });
+  for (const sz of [1, -1]) for (let k = 0; k < 3; k++) tube(mb, { n:4, m:3, path:t => [0.25 - k * 0.06 + t * 0.05, 0.02 - t * 0.12, sz * (0.03 + t * 0.12)], r:0.01, col:fc(body), anim:t => [0, 0, t * 0.3, 0] });
+  return mb;
+}
 function mkSeaSpider() {
   // a giant sea spider (Colossendeis), legs spanning one unit: almost no body, just a thin trunk with a long proboscis in front and
   // eight stilt legs, banded at the joints. Its gut runs out into the legs, which do its breathing and pump its blood
@@ -535,6 +546,11 @@ function addDeepFolk(VENTS) {
     motion:{ type:'hover', amp:0.12, turn:0.3 },
     parts:[part(mkBlackSwallower, { scale:0.25, mat:M_SKIN, trans:true, ...FISH_SWIM(0.02, 0.6, 0.8, 2) })],
     views:[{ d:[0.15, 0.1, 1], k:2.6, hold:10, drift:0.02 }, { d:[0.5, -0.6, 0.6], k:2.6, hold:9, drift:0.02 }] });
+  addObj({ key:'phronima', name:'pram bug', type:'Phronima · an amphipod in a hollowed-out salp', kind:'micro', at:[14705, -797, 82], size:0.03, vsize:0.045, rad:0.04,
+    fact:'A small see-through amphipod that catches a salp, eats out its insides and moves into the empty barrel. The female lays her eggs inside it and swims the barrel along like a pram, pushing her young about until they can fend for themselves. Its two pairs of huge eyes are thought to have inspired the creature in the film Alien.',
+    motion:{ type:'hover', amp:0.08, turn:0.6 },
+    parts:[part(mkPhronima, { scale:0.03, mat:[0.4, 1.3, 1, 0.8], trans:true, pulse:[0.4, 0.4, 0, 0], sway:[0.004, 2, 30, 0] })],
+    views:[{ d:[0.3, 0.15, 1], k:2.4, hold:10, drift:0.02 }, { d:[1, 0.3, 0.3], k:2.4, hold:9, drift:0.02 }] });
   addObj({ key:'pyrosome', name:'pyrosome', type:'a glowing colony · Pyrosoma atlanticum', kind:'jellies', at:[15400, 500, 550], size:0.5, rad:0.4,
     fact:'Not one animal but thousands of tiny clones sharing a tube, each pumping water through the wall to feed. Touch it and it glows: one zooid lights up, its neighbours see the light and answer, and a wave of blue-green light runs along the colony. Some kinds grow to over 10 m long.',
     motion:{ type:'hover', amp:0.3, turn:0.25, pitch:-0.15 },
