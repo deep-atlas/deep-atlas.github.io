@@ -165,7 +165,7 @@ yellow hull is given a faint glow (its own work lights) so it reads as yellow at
 | `08b-life.js` | living lights, reactions, schools parting round predators, plankton flashes |
 | `09-camera.js` | orbit, angle loop, flights, free swimming, picking |
 | `10-ui.js` | the interface, tours, atlas, search, ladder, labels, photo, compare, ride, screensaver |
-| `10c-map.js` | the map: cross-section and world tabs |
+| `10c-map.js` | the map: cross-section and world tabs, zoom and drag, names, find |
 | `10d-world.js` | the world map grid and each place's real location |
 | `10e-quiz.js` | the which-lives-deeper quiz |
 | `10b-journey.js` | the size journey, from a whale to a microbe |

@@ -172,7 +172,11 @@ body.info-hidden .info{display:none}
 .qcard.wrong{border-color:#ff7a7a;box-shadow:inset 0 0 0 1px #ff7a7a}
 .quiz-res{min-height:2.6em;margin:4px 12px 8px;color:var(--ink);font-size:calc(12px*var(--ts))}
 .quiz-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;margin:0 12px 10px}
-.mappanel canvas{display:block;width:100%;cursor:crosshair;touch-action:manipulation}
+.mappanel canvas{display:block;width:100%;cursor:crosshair;touch-action:none}
+.map-tools{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:6px 12px}
+.map-tools .btn{padding:3px 8px;font-size:calc(10.5px*var(--ts))}
+.map-find input{width:calc(150px*var(--ts));font:inherit;font-size:calc(11px*var(--ts));color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:3px 6px}
+.map-zoom{margin-left:auto;color:var(--faint);font-size:calc(10px*var(--ts))}
 .map-foot{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px;min-height:30px;align-items:center;color:var(--dim);font-size:calc(10.5px*var(--ts));border-top:1px solid var(--line)}
 .map-foot .btn{padding:2px 7px;font-size:calc(10.5px*var(--ts))}
 .map-tabs{display:flex;gap:4px;margin-right:auto}

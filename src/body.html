@@ -62,9 +62,12 @@
 
 <aside id="mapPanel" class="panel mappanel" aria-label="Map of this ocean" hidden>
   <div class="panel-head"><span class="ptitle">map</span><span class="map-tabs" id="mapTabs" role="group" aria-label="Map"><button class="btn" data-v="ocean" aria-pressed="true">this ocean</button><button class="btn" data-v="world" aria-pressed="false">the world</button></span><button class="btn" id="mapClose">close</button></div>
-  <canvas id="mapCanvas" aria-label="Cross-section of the ocean with every place marked"></canvas>
+  <div class="map-tools"><label class="map-find"><span class="sr">Find on the map</span><input id="mapFind" type="search" placeholder="find on map" autocomplete="off" spellcheck="false"></label>
+    <button class="btn" id="mapIn" title="Zoom in">+</button><button class="btn" id="mapOut" title="Zoom out">&minus;</button><button class="btn" id="mapFit">whole map</button><button class="btn" id="mapShallow">shallows</button>
+    <span class="map-zoom" id="mapZoomTxt"></span></div>
+  <canvas id="mapCanvas" aria-label="Map with every place marked: scroll to zoom, drag to move, click a dot to swim there"></canvas>
   <div class="map-foot" id="mapFoot"></div>
-  <div class="panel-foot" id="mapNote">distance out to sea and depth are both stretched near the top, so the crowded shallows have room · O opens and closes</div>
+  <div class="panel-foot" id="mapNote">distance out to sea and depth are both stretched near the top, so the crowded shallows have room · dots spread apart where crowded; a thin line points to the true spot · O opens and closes</div>
 </aside>
 <aside id="quizPanel" class="panel quizpanel" aria-label="Quiz" hidden>
   <div class="panel-head"><span class="ptitle" id="quizTitle">which lives deeper?</span><span class="map-tabs" id="quizTabs" role="group" aria-label="Quiz"><button class="btn" data-v="deeper" aria-pressed="true">deeper</button><button class="btn" data-v="bigger" aria-pressed="false">bigger</button></span><button class="btn" id="quizClose">close</button></div>
@@ -194,6 +197,7 @@
     <div class="help-top"><h2 id="notesTitle">what's new</h2><button class="btn" id="notesClose">close</button></div>
     <div class="notes-list">
       <details open><summary><span class="nv">0.17</span><span class="nt">quizzes, sharks and glass</span></summary><ul>
+        <li>A much better map (O): scroll or click a crowd to zoom, drag to move, a "shallows" button for the crowded coast, names wherever they fit, dots spread apart where they would overlap, and a find box ("shark", or on the world tab "Japan").</li>
         <li>The quiz has a second round: which is bigger? Switch between "deeper" and "bigger" at the top; each keeps its own best streak.</li>
         <li>Grey reef sharks patrol the drop-off. Disturb the lead shark (X) and it gives its threat display: back arched, snout up, fins down.</li>
         <li>A glass sponge reef, built by sponges with skeletons of glass, some reefs around 9,000 years old.</li>
